@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<!-- NOTE: This client IS NOT BlueSky's. I am merely only wrapping their API in a web interface. BlueSky Social is still not publicly released yet. -->
+<html>
+  <head>
+    <title>BlueSky Wrapper</title>
+    <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
+    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
+  </head>
+  <body>
+    <header>
+      <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
+    </header>
+    <main-content>
+      <div id="introMessage" class="hidden">
+        <br>
+        <h4>Hello everyone. I decided to make a BlueSky Social API wrapper for those who wanted to see the posts on the platform before they had an account. Enjoy!</h4>
+        <br>
+      </div>
+      <grid>
+        <rolodex>
+          <h2>Rolodex</h2>
+          <spacer>
+            <div class="rolo-container">
+              <h3>Get User</h3>
+              <form name="GetUser">
+                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
+                <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Run Query">
+              </form>
+            </div>
+            <div class="rolo-container">
+              <h3>Get Post</h3>
+              <form name="GetPost">
+                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
+                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
+                <input type="submit" class="rolo-click" value="Run Query">
+              </form>
+            </div>
+          </spacer>
+        </rolodex>
+        <feed>
+          <div id="feed">
+            <h2>Feed</h2>
+            <div id="feedStruct">
+              <div class="feed-container">Newest posts appear here!</div>
+            </div>
+          </div>
+          <div id="post" class="hidden">
+            <a href="./" title="Go back to Feed" class="back-button">
+              <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
+              <h2 style="color: inherit;">Post</h2>
+            </a>
+            <div class="hidden" id="rootpost">
+              <div class="feed-container" id="rootpost-container">A root post</div>
+              <div class="dotted-spacer" id="separationrtp">
+              <brand onclick="loadParent();" style="font-size: 15px;" id="loadButton">Show more replies...</brand>
+              </div>
+            </div>
+            <div class="hidden" id="parentposts">
+              <div>
+                <div class="feed-container">A parent post</div>
+                <div class="lined-spacer"></div>
+              </div>
+            </div>
+            <div class="feed-container">
+              <h3 id="post-username"></h3>
+              <h3 style="color: #555;" id="post-userid"></h3>
+              <br>
+              <div id="post-text">A specified post appears here!</div>
+              <br>
+              <flex>
+                <div id="post-date" style="color: #333;">With a date here!</div>
+                <div id="post-id" style="color: #333;">With an id here!</div>
+              </flex>
+            </div>
+          </div>
+          <div id="user" class="hidden">
+            <a href="./" title="Go back to Feed" class="back-button">
+              <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
+              <h2 style="color: inherit;">User</h2>
+            </a>
+            <div id="userPostStruct">
+              <spacer>
+                <div class="feed-container">
+                  <h3 id="user-name"></h3>
+                  <h3 style="color: #555;" id="user-id"></h3>
+                  <br>
+                  <div id="user-description"></div>
+                  <flex>
+                    <div id="user-follows"></div>
+                  </flex>
+                </div>
+                <div id="user-posts"></div>
+              </spacer>
+            </div>
+          </div>
+        </feed>
+        <beta>
+          <h2>Beta</h2>
+          <div class="beta-container">Content.</div>
+        </beta>
+      </grid>
+    </main-content>
+    <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.</footer>
+  </body>
+  <style>
+    @font-face {
+      font-family: 'Mona Sans';
+      src:
+        url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2-variations');
+      font-weight: 200 900;
+      font-stretch: 75% 125%;
+    }
+    header {
+      background: #f5f5f5;
+      padding: 1rem;
+      top: 0px;
+      position: sticky;
+    }
+    main-content {
+      display: block;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-areas: "rolodex feed";
+      grid-template-columns: 25rem auto;
+    }
+    h1, h2, h3, h4, footer, .rolo-container, .rolo-text, .feed-container, .beta-container, .dotted-spacer {
+      font-family: "Mona Sans";
+    }
+    h1, h2 {
+      font-size: 1.5em;
+      font-weight: 900 !important;
+      color: #222;
+    }
+    h3, #user-follows, .dotted-spacer {
+      font-weight: 800 !important;
+      color: #222;
+      margin: 0px;
+    }
+    h4 {
+      font-size: 20px;
+    }
+    flex {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    brand {
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .dotted-spacer {
+      display: block;
+      border-width: 0.3rem;
+      border-left-color: #222;
+      border-left-style: dashed;
+      margin: 0.5rem;
+      padding-top: 1rem;
+      padding-left: 1rem;
+    }
+    .lined-spacer {
+      display: block;
+      border-width: 0.3rem;
+      border-left-color: #222;
+      border-left-style: solid;
+      margin: 0.5rem;
+      padding: 1rem;
+    }
+    spacer {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    rolodex {
+      grid-area: rolodex;
+      width: 25rem;
+    }
+    .rolo-text {
+      border-radius: 0.5rem;
+      border-width: 0.1px;
+      border-color: black;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+      padding: 0.25rem;
+    }
+    .rolo-click {
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      -webkit-text-fill-color: white;
+      padding: 0.25rem;
+      border-radius: 0.5rem;
+      border-width: 0px;
+      width: 100%;
+    }
+    #loadButton {
+      cursor: pointer;
+    }
+    .rolo-click:hover, #loadButton:hover {
+      background-image: linear-gradient(to bottom right, #22bbffAA, #5d94f8FF);
+    }
+    .rolo-click:active, #loadButton:active {
+      background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+    }
+    .back-button {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    .back-button:hover {
+      color: #888;
+      cursor: pointer;
+      fill: #888;
+    }
+    feed {
+      grid-area: feed;
+    }
+    beta {
+      grid-area: beta;
+      display: none;
+    }
+    .rolo-container, .feed-container, .beta-container {
+      overflow-wrap: anywhere;
+      width: inherit;
+      background: #f5f5f5;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+    }
+    footer {
+      padding: 1rem;
+      display: block;
+      text-align: center;
+    }
+    @media screen and (max-width: 861px) {
+      grid {
+        grid-template-columns: 15rem auto;
+      }
+      rolodex {
+        width: 15rem;
+      }
+    }
+    @media screen and (max-width: 589px) {
+      header {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+      }
+      grid {
+        grid-template-areas:
+          "rolodex"
+          "feed";
+        grid-template-columns: auto;
+      }
+      rolodex {
+        grid-area: rolodex;
+        width: auto;
+      }
+    }
+    body {
+      margin: 0px;
+      padding: 0px;
+    }
+    .hidden {
+      display: none;
+    }
+    a {
+      color: inherit;
+    }
+    a:hover {
+      color: #888;
+    }
+  </style>
+  <script type="module">
+    import { userCache, modifyFlow } from "./feed.js";
+    import { embeds } from "./mods.js";
+    import { loadParent, loadRoot } from "./replies.js";
+    
+    const url = document.location.search;
+    const urlParams = new URLSearchParams(url);
+    
+    if (localStorage.getItem("introViewed") === null) {
+      
+      document.getElementById("introMessage").classList.remove("hidden");
+      localStorage.setItem("introViewed", true);
+    }
+    
+    checkUrl();
+    
+    function checkUrl() {
+      
+      if (urlParams.get("username") != null) {
+      
+        if (urlParams.get("username").includes(".bsky.social") || urlParams.get("username").includes("did:plc:")) {
+
+          if (urlParams.get("postid") != null) {
+            
+            getPost(urlParams.get("username"), urlParams.get("postid"));
+          } else {
+            
+            getUser(urlParams.get("username"));
+          }
+        } else {
+          
+          console.log("URL doesn't have any proper user id!")
+          return;
+        }
+      } else {
+        
+        modifyFlow();
+        return;
+      }
+    }
+    
+    async function getPost(userid, postid) {
+      
+      document.getElementById("feed").classList.toggle("hidden");
+      document.getElementById("post").classList.toggle("hidden");
+      
+      try {
+        
+        const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
+        const userparsed = JSON.parse(rawuser);
+        
+        var username = "";
+        
+        if ((userparsed.records.length > 0) && (userparsed.records[0].value.displayName != undefined)) {
+          
+          username = userparsed.records[0].value.displayName;
+          document.getElementById("post-username").innerHTML = username;
+        } else {
+          
+          document.getElementById("post-username").classList.toggle("hidden");
+        }
+        
+        var handle = userid;
+        
+        if (!userid.includes(".bsky.social")) {
+          
+          const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
+          const user2parsed = JSON.parse(rawuser2);
+          
+          handle = user2parsed.handle
+        } 
+        
+        document.getElementById("post-userid").innerHTML = `@<a href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">` + handle + "</a>";
+        
+        const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
+        const parsedres = JSON.parse(rawres);
+        
+        var posttext;
+        
+        if (parsedres.value.embed != undefined) {
+          
+          if (parsedres.value.text != "") {
+            
+            posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(parsedres.value.embed);
+          } else {
+            
+            posttext = embeds(parsedres.value.embed);
+          }
+        } else {
+          
+          posttext = parsedres.value.text.replaceAll("\n", "<br>");
+        }
+        
+        const postdate = new Date(parsedres.value.createdAt);
+        
+        document.getElementById("post-text").innerHTML = posttext;
+        document.getElementById("post-date").innerHTML = postdate;
+        document.getElementById("post-id").innerHTML = `<a href="${document.location.origin + document.location.pathname}?username=${userid}&postid=${postid}">id#` + postid + "</a>";
+
+        if (parsedres.value.reply != undefined) {
+          
+          if (parsedres.value.reply.root.cid === parsedres.value.reply.parent.cid) {
+            
+            document.getElementById("parentposts").classList.remove("hidden");
+            loadParent(parsedres.value.reply);
+          } else {
+            
+            document.getElementById("rootpost").classList.remove("hidden");
+            document.getElementById("parentposts").classList.remove("hidden");
+            loadParent(parsedres.value.reply);
+            loadRoot(parsedres.value.reply);
+          }
+        }
+      } catch(e) {
+        
+        console.log(e);
+        return;
+      }
+    }
+    
+    async function getUser(userid) {
+      
+      document.getElementById("feed").classList.toggle("hidden");
+      document.getElementById("user").classList.toggle("hidden");
+
+      try {
+        
+        const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
+        const userparsed = JSON.parse(rawuser);
+        
+        var username = "";
+        var userClasses;
+        
+        if ((userparsed.records.length > 0) && (userparsed.records[0].value.displayName != undefined)) {
+          
+          username = userparsed.records[0].value.displayName;
+          document.getElementById("user-name").innerHTML = username;
+        } else {
+          
+          document.getElementById("user-name").classList.toggle("hidden");
+          userClasses = "hidden";
+        }
+        
+        const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
+        const user2parsed = JSON.parse(rawuser2);
+          
+        const handle = user2parsed.handle;
+        
+        if (userparsed.records.length === 0) {
+          
+          username = handle;
+        }
+        var did = user2parsed.did;
+        
+        document.getElementById("user-id").innerHTML = "@" + handle + " / " + did;
+        
+        if (userparsed.records.length > 0) {
+          
+          document.getElementById("user-description").innerHTML = userparsed.records[0].value.description.replaceAll("\n", "<br>");
+        } else {
+          
+          document.getElementById("user-description").innerHTML = "";
+        }
+        
+        var isFollowingOthers = false;
+        
+        for (var i = 0; i < user2parsed.collections.length; i++) {
+          
+          if (user2parsed.collections[i] === "app.bsky.graph.follow") {
+            
+            isFollowingOthers = true;
+          }
+        }
+        
+        if (isFollowingOthers === true) {
+          
+          const userFollows = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${did}&collection=app.bsky.graph.follow`).then(r => r.text()));
+          
+          if (userFollows.records.length > 1) {
+            
+            document.getElementById("user-follows").innerHTML = `<br>Following: ${userFollows.records.length} users`;
+          } else {
+            
+            document.getElementById("user-follows").innerHTML = `<br>Following: ${userFollows.records.length} user`;
+          }
+        } else {
+          
+          document.getElementById("user-follows").classList.add("hidden");
+        }
+        
+        var hasPosts = false;
+        
+        for (var i = 0; i < user2parsed.collections.length; i++) {
+          
+          if (user2parsed.collections[i] === "app.bsky.feed.post") {
+            
+            hasPosts = true;
+          }
+        }
+        
+        if (hasPosts === true) {
+          
+          var postCache = "";
+          
+          const userPosts = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.feed.post`).then(r => r.text()));
+          
+          for (var i = 0; i < userPosts.records.length; i++) {
+            
+            var posttext;
+      
+            if (userPosts.records[i].value.embed != undefined) {
+
+              if (userPosts.records[i].value.text != "") {
+
+                posttext = userPosts.records[i].value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(userPosts.records[i].value.embed);
+              } else {
+
+                posttext = embeds(userPosts.records[i].value.embed);
+              }
+            } else {
+
+              posttext = userPosts.records[i].value.text.replaceAll("\n", "<br>");
+            }
+            
+            postCache = postCache + 
+              `<div class="feed-container">
+                <h3 class="${userClasses}">${username}</h3>
+                <h3 style="color: #555;">@<a href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></h3>
+                <br>
+                <div>${posttext}</div>
+                <br>
+                <flex>
+                  <div style="color: #333;">${new Date(userPosts.records[i].value.createdAt)}</div>
+                  <div style="color: #333;"><a href="${document.location.origin + document.location.pathname}?username=${handle}&postid=${userPosts.records[i].uri.split("/")[userPosts.records[i].uri.split("/").length - 1]}">id#${userPosts.records[i].uri.split("/")[userPosts.records[i].uri.split("/").length - 1]}</a></div>
+                </flex>
+              </div>`;
+            
+            document.getElementById("user-posts").innerHTML = `<br><h3>${username}'s Posts:</h3><br><spacer>` + postCache + "</spacer>";
+          }
+        } else {
+          return;
+        }
+      } catch(e) {
+        
+        console.log(e);
+      }
+    }
+  </script>
+</html>
