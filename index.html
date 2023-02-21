@@ -61,37 +61,14 @@
                 <div class="lined-spacer"></div>
               </div>
             </div>
-            <div class="feed-container">
-              <h3 id="post-username"></h3>
-              <h3 style="color: #555;" id="post-userid"></h3>
-              <br>
-              <div id="post-text">A specified post appears here!</div>
-              <br>
-              <flex>
-                <div id="post-date" style="color: #333;">With a date here!</div>
-                <div id="post-id" style="color: #333;">With an id here!</div>
-              </flex>
-            </div>
+            <div id="postContainer"></div>
           </div>
           <div id="user" class="hidden">
             <a href="./" title="Go back to Feed" class="back-button">
               <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
               <h2 style="color: inherit;">User</h2>
             </a>
-            <div id="userPostStruct">
-              <spacer>
-                <div class="feed-container">
-                  <h3 id="user-name"></h3>
-                  <h3 style="color: #555;" id="user-id"></h3>
-                  <br>
-                  <div id="user-description"></div>
-                  <flex>
-                    <div id="user-follows"></div>
-                  </flex>
-                </div>
-                <div id="user-posts"></div>
-              </spacer>
-            </div>
+            <div id="userStruct"></div>
           </div>
         </feed>
         <beta>
@@ -116,6 +93,7 @@
       padding: 1rem;
       top: 0px;
       position: sticky;
+      z-index: 1;
     }
     main-content {
       display: block;
@@ -183,6 +161,7 @@
     rolodex {
       grid-area: rolodex;
       width: 25rem;
+      position: fixed;
     }
     .rolo-text {
       border-radius: 0.5rem;
@@ -213,6 +192,11 @@
       text-decoration: none;
       display: flex;
       align-items: center;
+      
+      position: sticky;
+      top: 92.16px;
+      
+      background-color: white;
     }
     .back-button:hover {
       color: #888;
@@ -239,6 +223,9 @@
       padding: 1rem;
       display: block;
       text-align: center;
+      z-index: 1;
+      position: sticky;
+      background-color: white;
     }
     @media screen and (max-width: 861px) {
       grid {
@@ -262,6 +249,10 @@
       rolodex {
         grid-area: rolodex;
         width: auto;
+        position: relative;
+      }
+      .back-button {
+        top: 68.16px;
       }
     }
     body {
@@ -280,8 +271,10 @@
   </style>
   <script type="module">
     import { userCache, modifyFlow } from "./feed.js";
-    import { embeds } from "./mods.js";
+    import { embeds, nameResolver } from "./mods.js";
     import { loadParent, loadRoot } from "./replies.js";
+    import { getPost, getUserRepo, listRecords } from "./api.js";
+    import { post, user, userLight } from "./struct.js";
     
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
@@ -302,10 +295,21 @@
 
           if (urlParams.get("postid") != null) {
             
-            getPost(urlParams.get("username"), urlParams.get("postid"));
+            loadPost(urlParams.get("username"), urlParams.get("postid"));
           } else {
             
-            getUser(urlParams.get("username"));
+            if (urlParams.get("type") != null) {
+              
+              switch (urlParams.get("type")) {
+                case "follows":
+                  getUserFollows(urlParams.get("username"));
+                default:
+                  modifyFlow();
+              }
+            } else {
+              
+              getUser(urlParams.get("username"));
+            }
           }
         } else {
           
@@ -315,80 +319,32 @@
       } else {
         
         modifyFlow();
-        return;
       }
     }
     
-    async function getPost(userid, postid) {
+    async function loadPost(userId, postId) {
       
       document.getElementById("feed").classList.toggle("hidden");
       document.getElementById("post").classList.toggle("hidden");
       
       try {
         
-        const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
-        const userparsed = JSON.parse(rawuser);
+        const postObj = await getPost(userId, postId);
         
-        var username = "";
+        document.getElementById("postContainer").innerHTML = await post(userId, postObj);
         
-        if ((userparsed.records.length > 0) && (userparsed.records[0].value.displayName != undefined)) {
+        if (postObj.value.reply != undefined) {
           
-          username = userparsed.records[0].value.displayName;
-          document.getElementById("post-username").innerHTML = username;
-        } else {
-          
-          document.getElementById("post-username").classList.toggle("hidden");
-        }
-        
-        var handle = userid;
-        
-        if (!userid.includes(".bsky.social")) {
-          
-          const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
-          const user2parsed = JSON.parse(rawuser2);
-          
-          handle = user2parsed.handle
-        } 
-        
-        document.getElementById("post-userid").innerHTML = `@<a href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">` + handle + "</a>";
-        
-        const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
-        const parsedres = JSON.parse(rawres);
-        
-        var posttext;
-        
-        if (parsedres.value.embed != undefined) {
-          
-          if (parsedres.value.text != "") {
-            
-            posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(parsedres.value.embed);
-          } else {
-            
-            posttext = embeds(parsedres.value.embed);
-          }
-        } else {
-          
-          posttext = parsedres.value.text.replaceAll("\n", "<br>");
-        }
-        
-        const postdate = new Date(parsedres.value.createdAt);
-        
-        document.getElementById("post-text").innerHTML = posttext;
-        document.getElementById("post-date").innerHTML = postdate;
-        document.getElementById("post-id").innerHTML = `<a href="${document.location.origin + document.location.pathname}?username=${userid}&postid=${postid}">id#` + postid + "</a>";
-
-        if (parsedres.value.reply != undefined) {
-          
-          if (parsedres.value.reply.root.cid === parsedres.value.reply.parent.cid) {
+          if (postObj.value.reply.root.cid === postObj.value.reply.parent.cid) {
             
             document.getElementById("parentposts").classList.remove("hidden");
-            loadParent(parsedres.value.reply);
+            loadParent(postObj.value.reply);
           } else {
             
             document.getElementById("rootpost").classList.remove("hidden");
             document.getElementById("parentposts").classList.remove("hidden");
-            loadParent(parsedres.value.reply);
-            loadRoot(parsedres.value.reply);
+            loadParent(postObj.value.reply);
+            loadRoot(postObj.value.reply);
           }
         }
       } catch(e) {
@@ -398,81 +354,22 @@
       }
     }
     
-    async function getUser(userid) {
+    async function getUser(userId) {
       
       document.getElementById("feed").classList.toggle("hidden");
       document.getElementById("user").classList.toggle("hidden");
 
       try {
         
-        const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
-        const userparsed = JSON.parse(rawuser);
+        const userObj = await getUserRepo(userId);
         
-        var username = "";
-        var userClasses;
-        
-        if ((userparsed.records.length > 0) && (userparsed.records[0].value.displayName != undefined)) {
-          
-          username = userparsed.records[0].value.displayName;
-          document.getElementById("user-name").innerHTML = username;
-        } else {
-          
-          document.getElementById("user-name").classList.toggle("hidden");
-          userClasses = "hidden";
-        }
-        
-        const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
-        const user2parsed = JSON.parse(rawuser2);
-          
-        const handle = user2parsed.handle;
-        
-        if (userparsed.records.length === 0) {
-          
-          username = handle;
-        }
-        var did = user2parsed.did;
-        
-        document.getElementById("user-id").innerHTML = "@" + handle + " / " + did;
-        
-        if (userparsed.records.length > 0) {
-          
-          document.getElementById("user-description").innerHTML = userparsed.records[0].value.description.replaceAll("\n", "<br>");
-        } else {
-          
-          document.getElementById("user-description").innerHTML = "";
-        }
-        
-        var isFollowingOthers = false;
-        
-        for (var i = 0; i < user2parsed.collections.length; i++) {
-          
-          if (user2parsed.collections[i] === "app.bsky.graph.follow") {
-            
-            isFollowingOthers = true;
-          }
-        }
-        
-        if (isFollowingOthers === true) {
-          
-          const userFollows = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${did}&collection=app.bsky.graph.follow`).then(r => r.text()));
-          
-          if (userFollows.records.length > 1) {
-            
-            document.getElementById("user-follows").innerHTML = `<br>Following: ${userFollows.records.length} users`;
-          } else {
-            
-            document.getElementById("user-follows").innerHTML = `<br>Following: ${userFollows.records.length} user`;
-          }
-        } else {
-          
-          document.getElementById("user-follows").classList.add("hidden");
-        }
+        userId = userObj.did;
         
         var hasPosts = false;
         
-        for (var i = 0; i < user2parsed.collections.length; i++) {
+        for (var i = 0; i < userObj.collections.length; i++) {
           
-          if (user2parsed.collections[i] === "app.bsky.feed.post") {
+          if (userObj.collections[i] === "app.bsky.feed.post") {
             
             hasPosts = true;
           }
@@ -480,45 +377,63 @@
         
         if (hasPosts === true) {
           
-          var postCache = "";
+          const userModal = await user(userId) + `<br><br><h3>${await nameResolver(userId)}'s Posts:</h3><br>`;
           
-          const userPosts = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.feed.post`).then(r => r.text()));
+          const userPosts = await listRecords(userId, "app.bsky.feed.post");
+          var tempPosts = "";
           
-          for (var i = 0; i < userPosts.records.length; i++) {
+          for (var postData of userPosts) {
             
-            var posttext;
-      
-            if (userPosts.records[i].value.embed != undefined) {
-
-              if (userPosts.records[i].value.text != "") {
-
-                posttext = userPosts.records[i].value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(userPosts.records[i].value.embed);
-              } else {
-
-                posttext = embeds(userPosts.records[i].value.embed);
-              }
-            } else {
-
-              posttext = userPosts.records[i].value.text.replaceAll("\n", "<br>");
-            }
-            
-            postCache = postCache + 
-              `<div class="feed-container">
-                <h3 class="${userClasses}">${username}</h3>
-                <h3 style="color: #555;">@<a href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></h3>
-                <br>
-                <div>${posttext}</div>
-                <br>
-                <flex>
-                  <div style="color: #333;">${new Date(userPosts.records[i].value.createdAt)}</div>
-                  <div style="color: #333;"><a href="${document.location.origin + document.location.pathname}?username=${handle}&postid=${userPosts.records[i].uri.split("/")[userPosts.records[i].uri.split("/").length - 1]}">id#${userPosts.records[i].uri.split("/")[userPosts.records[i].uri.split("/").length - 1]}</a></div>
-                </flex>
-              </div>`;
-            
-            document.getElementById("user-posts").innerHTML = `<br><h3>${username}'s Posts:</h3><br><spacer>` + postCache + "</spacer>";
+            tempPosts = tempPosts + await post(userId, postData);
+            document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempPosts + "</spacer>";
           }
         } else {
-          return;
+          
+          document.getElementById("userStruct").innerHTML = await user(userId);
+        }
+      } catch(e) {
+        
+        console.log(e);
+      }
+    }
+    
+    async function getUserFollows(userId) {
+      
+      document.getElementById("feed").classList.toggle("hidden");
+      document.getElementById("user").classList.toggle("hidden");
+
+      try {
+        
+        const userObj = await getUserRepo(userId);
+        
+        userId = userObj.did;
+        
+        var hasFollows = false;
+        
+        for (var i = 0; i < userObj.collections.length; i++) {
+          
+          if (userObj.collections[i] === "app.bsky.graph.follow") {
+            
+            hasFollows = true;
+          }
+        }
+        
+        if (hasFollows === true) {
+          
+          const userModal = await user(userId) + `<br><br><h3>${await nameResolver(userId)}'s Following:</h3><br>`;
+          
+          const userFollows = await listRecords(userId, "app.bsky.graph.follow");
+          var tempUsers = "";
+          
+          for (var followedUser of userFollows) {
+            
+            console.log(followedUser.value.subject.did);
+            tempUsers = tempUsers + await userLight(followedUser.value.subject.did);
+            document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempUsers + "</spacer>";
+          }
+        } else {
+          
+          document.getElementById("userStruct").innerHTML = "<h3>This user is not following any other users!</h3>";
         }
       } catch(e) {
         
