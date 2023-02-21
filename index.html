@@ -377,7 +377,7 @@
         
         if (hasPosts === true) {
           
-          const userModal = await user(userId) + `<br><br><h3>${await nameResolver(userId)}'s Posts:</h3><br>`;
+          const userModal = await user(userId) + `<br><br><h3 style="padding-left: 0.5rem;">${await nameResolver(userId)}'s Posts:</h3><br>`;
           
           const userPosts = await listRecords(userId, "app.bsky.feed.post");
           var tempPosts = "";
@@ -420,7 +420,7 @@
         
         if (hasFollows === true) {
           
-          const userModal = await user(userId) + `<br><br><h3>${await nameResolver(userId)}'s Following:</h3><br>`;
+          const userModal = await user(userId) + `<br><br><h3 style="padding-left: 0.5rem;">${await nameResolver(userId)}'s Following:</h3><br>`;
           
           const userFollows = await listRecords(userId, "app.bsky.graph.follow");
           var tempUsers = "";
