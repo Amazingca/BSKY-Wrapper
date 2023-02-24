@@ -7,10 +7,12 @@ export async function post(userId, post) {
   const userObj = await getUserRepo(userId);
   
   var postObj;
+  var isObj = false;
   
   if (typeof post === 'object' && post.constructor === Object) {
     
     postObj = post;
+    isObj = true;
   } else {
     
     postObj = await getPost(userId, post);
@@ -20,6 +22,42 @@ export async function post(userId, post) {
     
     return null;
   } else {
+    
+    var replySumElement = "";
+    
+    if (isObj === true) {
+      
+      if (post.value.reply != null) {
+        
+        try {
+          
+          const replyAuthorDid = post.value.reply.parent.uri.split("//")[1].split("/")[0];
+          
+          var replyAuthorName;
+          
+          const replyAuthorProfile = await listRecords(replyAuthorDid, "app.bsky.actor.profile");
+        
+          if (replyAuthorProfile[0].value.displayName === "") {
+            
+            replyAuthorName = "@" + (await getUserRepo(replyAuthorDid)).handle;
+          } else {
+            
+            replyAuthorName = replyAuthorProfile[0].value.displayName;
+          }
+          
+          replySumElement = 
+            `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">
+              <flex class="reply-sum">
+                <svg fill="#555" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M6.78 1.97a.75.75 0 0 1 0 1.06L3.81 6h6.44A4.75 4.75 0 0 1 15 10.75v2.5a.75.75 0 0 1-1.5 0v-2.5a3.25 3.25 0 0 0-3.25-3.25H3.81l2.97 2.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L1.47 7.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"></path></svg>
+                <h5>Replied to ${replyAuthorName}</h5>
+              </flex>
+            </a>`;
+        } catch(e) {
+          
+          console.log(e);
+        }
+      }
+    }
     
     var usernameElement;
     
@@ -48,16 +86,19 @@ export async function post(userId, post) {
     }
     
     const postElement = 
-      `<div class="feed-container">
-        ${usernameElement}
-        <h3 style="color: #555;">@<a href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
-        <br>
-        <div>${postText}</div>
-        <br>
-        <flex>
-          <div style="color: #333;">${new Date(postObj.value.createdAt)}</div>
-          <div style="color: #333;"><a href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
-        </flex>
+      `<div>
+        ${replySumElement}
+        <div class="feed-container">
+          ${usernameElement}
+          <h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+          <br>
+          <div>${postText}</div>
+          <br>
+          <flex>
+            <div style="color: #333;">${new Date(postObj.value.createdAt)}</div>
+            <div style="color: #333;"><a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
+          </flex>
+        </div>
       </div>`;
     
     return postElement;
@@ -89,10 +130,10 @@ export async function user(userId) {
     
     if ((userFollows.length === 0) || (userFollows.length > 1)) {
       
-      userFollowing = `Following: <a href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} users</a>`;
+      userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} users</a>`;
     } else {
       
-      userFollowing = `Following: <a href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} user</a>`;
+      userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} user</a>`;
     }
     
     const userElement = 
@@ -100,7 +141,7 @@ export async function user(userId) {
         ${usernameElement}
         <h3 style="color: #555;">@${userObj.handle} / ${userObj.did}</h3>
         <br>
-        <div id="user-description">${userProfileObj[0].value.description}</div>
+        <div id="user-description">${userProfileObj[0].value.description.replaceAll("\n", "<br>")}</div>
         <br>
         <flex>
           <div id="user-follows">${userFollowing}</div>
@@ -134,7 +175,7 @@ export async function userLight(userId) {
     const userElement = 
       `<div class="feed-container">
         ${usernameElement}
-        <h3 style="color: #555;">@<a href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+        <h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
       </div>`;
     
     return userElement;

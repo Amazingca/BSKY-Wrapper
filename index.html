@@ -5,10 +5,60 @@
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
+    <script type="text/javascript">
+      function toggleNav() {
+      
+        if (localStorage.getItem("rolodexVisible") === null) {
+
+          document.getElementsByTagName('rolodex')[0].classList.add('visible');
+          document.getElementsByTagName('grid')[0].classList.add('nav');
+          localStorage.setItem("rolodexVisible", true);
+        } else if (localStorage.getItem("rolodexVisible") === "true") {
+
+          document.getElementsByTagName('rolodex')[0].classList.remove('visible');
+          document.getElementsByTagName('grid')[0].classList.remove('nav');
+          localStorage.removeItem("rolodexVisible");
+        }
+      }
+      
+      function addLocation() {
+      
+        if ((localStorage.getItem("recent") === null) && (window.location.search != "")) {
+          
+          localStorage.setItem("recent", "[\"" + document.location.href + "\"]");
+        } else {
+          
+          var urls = JSON.parse(localStorage.getItem("recent"));
+          urls.push(document.location.href);
+          localStorage.setItem("recent", JSON.stringify(urls));
+        }
+      }
+      
+      function goBack() {
+      
+        if ((localStorage.getItem("recent") === "[]") || (localStorage.getItem("recent") === null)) {
+          
+          document.location.href = "./";
+        } else {
+          
+          var urls = JSON.parse(localStorage.getItem("recent"));
+          var url = urls[urls.length - 1];
+          urls.pop();
+          localStorage.setItem("recent", JSON.stringify(urls));
+
+          document.location.href = url;
+        }
+      }
+    </script>
   </head>
   <body>
     <header>
-      <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
+      <flex style="justify-content: space-between;">
+        <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
+        <div onclick="toggleNav()" id="navmenu">
+         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
+        </div>
+      </flex>
     </header>
     <main-content>
       <div id="introMessage" class="hidden">
@@ -18,59 +68,81 @@
       </div>
       <grid>
         <rolodex>
-          <h2>Rolodex</h2>
-          <spacer>
-            <div class="rolo-container">
-              <h3>Get User</h3>
-              <form name="GetUser">
-                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
-                <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Run Query">
-              </form>
-            </div>
-            <div class="rolo-container">
-              <h3>Get Post</h3>
-              <form name="GetPost">
-                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
-                <input type="text" autocomplete="off" autocapitalize="none" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
-                <input type="submit" class="rolo-click" value="Run Query">
-              </form>
-            </div>
-          </spacer>
+          <menu>
+            <h2 style="margin-top: 0px;">Rolodex</h2>
+            <spacer>
+              <div class="rolo-container">
+                <h3>Get User</h3>
+                <form name="GetUser">
+                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
+                  <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Run Query">
+                </form>
+              </div>
+              <div class="rolo-container">
+                <h3>Get Post</h3>
+                <form name="GetPost">
+                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
+                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
+                  <input type="submit" class="rolo-click" value="Run Query">
+                </form>
+              </div>
+            </spacer>
+          </menu>
         </rolodex>
         <feed>
           <div id="feed">
             <h2>Feed</h2>
             <div id="feedStruct">
-              <div class="feed-container">Newest posts appear here!</div>
+              <div class="feed-container">
+                <div style="text-align: center;">
+                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                </div>
+              </div>
             </div>
           </div>
           <div id="post" class="hidden">
-            <a href="./" title="Go back to Feed" class="back-button">
+            <a onclick="goBack();" title="Go back to Feed" class="back-button">
               <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
               <h2 style="color: inherit;">Post</h2>
             </a>
             <div class="hidden" id="rootpost">
-              <div class="feed-container" id="rootpost-container">A root post</div>
+              <div class="feed-container" id="rootpost-container">
+                <div style="text-align: center;">
+                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                </div>
+              </div>
               <div class="dotted-spacer" id="separationrtp">
               <brand onclick="loadParent();" style="font-size: 15px;" id="loadButton">Show more replies...</brand>
               </div>
             </div>
             <div class="hidden" id="parentposts">
               <div>
-                <div class="feed-container">A parent post</div>
+                <div class="feed-container">
+                  <div style="text-align: center;">
+                    <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                  </div>
+                </div>
                 <div class="lined-spacer"></div>
               </div>
             </div>
-            <div id="postContainer"></div>
+            <div id="postContainer">
+              <div style="text-align: center;">
+                <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+              </div>
+            </div>
           </div>
           <div id="user" class="hidden">
-            <a href="./" title="Go back to Feed" class="back-button">
+            <a onclick="goBack();" title="Go back to Feed" class="back-button">
               <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
               <h2 style="color: inherit;">User</h2>
             </a>
-            <div id="userStruct"></div>
+            <div id="userStruct">
+              <div style="text-align: center;">
+                <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+              </div>
+            </div>
           </div>
-          <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.</footer>
+          <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub</footer>
         </feed>
         <beta>
           <h2>Beta</h2>
@@ -95,6 +167,9 @@
       position: sticky;
       z-index: 1;
     }
+    #navmenu {
+      display: none;
+    }
     main-content {
       display: block;
       padding-left: 1rem;
@@ -106,7 +181,7 @@
       grid-template-areas: "rolodex feed";
       grid-template-columns: 25rem auto;
     }
-    h1, h2, h3, h4, footer, .rolo-container, .rolo-text, .feed-container, .beta-container, .dotted-spacer {
+    h1, h2, h3, h4, h5, footer, .rolo-container, .rolo-text, .feed-container, .beta-container, .dotted-spacer {
       font-family: "Mona Sans";
     }
     h1, h2 {
@@ -121,6 +196,11 @@
     }
     h4 {
       font-size: 20px;
+    }
+    h5 {
+      font-weight: 700 !important;
+      color: #555;
+      margin: 0px;
     }
     flex {
       display: flex;
@@ -161,7 +241,15 @@
     rolodex {
       grid-area: rolodex;
       width: 25rem;
-      position: fixed;
+      position: relative;
+      background-color: white;
+    }
+    menu {
+      position: sticky;
+      top: 92.16px;
+      margin: 0px;
+      padding: 0px;
+      padding-top: 19.92px;
     }
     .rolo-text {
       border-radius: 0.5rem;
@@ -210,6 +298,11 @@
       grid-area: beta;
       display: none;
     }
+    .reply-sum {
+      margin-left: 0.5rem;
+      margin-bottom: 0.25rem;
+      cursor: pointer;
+    }
     .rolo-container, .feed-container, .beta-container {
       overflow-wrap: anywhere;
       width: inherit;
@@ -226,6 +319,10 @@
       z-index: 1;
       background-color: white;
     }
+    @keyframes spin {
+      0% { transform: rotateZ(0deg); }
+      100% { transform: rotateZ(-360deg); }
+    }
     @media screen and (max-width: 861px) {
       grid {
         grid-template-columns: 15rem auto;
@@ -239,16 +336,28 @@
         padding-top: 0.25rem;
         padding-bottom: 0.25rem;
       }
+      #navmenu {
+        display: block;
+        cursor: pointer;
+      }
       grid {
         grid-template-areas:
           "rolodex"
           "feed";
         grid-template-columns: auto;
+        gap: 0px;
+      }
+      grid.nav {
+        gap: 1rem;
       }
       rolodex {
         grid-area: rolodex;
         width: auto;
+        display: none;
+      }
+      menu {
         position: relative;
+        top: 0px;
       }
       .back-button {
         top: 68.16px;
@@ -260,6 +369,9 @@
     }
     .hidden {
       display: none;
+    }
+    .visible {
+      display: block;
     }
     a {
       color: inherit;
@@ -281,8 +393,31 @@
     if (localStorage.getItem("introViewed") === null) {
       
       document.getElementById("introMessage").classList.remove("hidden");
+      localStorage.setItem("recent", "[]");
       localStorage.setItem("introViewed", true);
     }
+    
+    if (localStorage.getItem("rolodexVisible") != null) {
+      
+      if (localStorage.getItem("rolodexVisible") === "true") {
+        
+        document.getElementsByTagName('rolodex')[0].classList.add('visible');
+        document.getElementsByTagName('grid')[0].classList.add('nav');
+      }
+    }
+    
+    /*function toggleNav() {
+      
+      if (localStorage.getItem("rolodexVisible") != null) {
+        
+        localStorage.setItem("rolodexVisible", false);
+      } else if (localStorage.getItem("rolodexVisible") === true) {
+        
+        document.getElementsByTagName('rolodex')[0].classList.remove('visible');
+        document.getElementsByTagName('grid')[0].classList.remove('nav');
+        localStorage.removeItem("rolodexVisible", false);
+      }
+    }*/
     
     checkUrl();
     
@@ -330,7 +465,7 @@
         
         const postObj = await getPost(userId, postId);
         
-        document.getElementById("postContainer").innerHTML = await post(userId, postObj);
+        document.getElementById("postContainer").innerHTML = await post(userId, postId);
         
         if (postObj.value.reply != undefined) {
           
