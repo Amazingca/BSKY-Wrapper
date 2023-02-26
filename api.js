@@ -61,3 +61,80 @@ export async function listRecords(userId, collection) {
     return null;
   }
 }
+
+export async function getUserInfo() {
+  
+  const userId = localStorage.getItem("userDid");
+  const token = await getToken();
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const reqObj = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + userId, req).then(r => r.text()));
+    
+    return reqObj;
+  } catch (e) {
+    
+    console.log(e);
+  }
+}
+
+export async function getToken() {
+        
+  var refreshToken = localStorage.getItem("refreshJwt");
+        
+  try {
+          
+    const req = {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + refreshToken
+      }
+    }
+
+    const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
+
+    localStorage.setItem("accessJwt", newTokens.accessJwt);
+    localStorage.setItem("refreshJwt", newTokens.refreshJwt);
+
+    return newTokens.accessJwt;
+  } catch (e) {
+
+    console.log(e);
+  }
+}
+
+/*export async function loginReq(handle, password) {
+  
+  if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
+    
+    return null;
+  }
+  
+  const reqObj = {
+    body: JSON.stringify({
+      "handle": handle,
+      "password": password
+    }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
+  
+  try {
+    
+    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
+    
+    return authObj;
+  } catch (e) {
+    
+    return null;
+  }
+}*/

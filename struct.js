@@ -1,4 +1,4 @@
-import { getPost, getUserRepo, listRecords} from "./api.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "./api.js";
 import { embeds } from "./mods.js";
 
 export async function post(userId, post) {
@@ -46,7 +46,7 @@ export async function post(userId, post) {
           }
           
           replySumElement = 
-            `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">
+            `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread">
               <flex class="reply-sum">
                 <svg fill="#555" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M6.78 1.97a.75.75 0 0 1 0 1.06L3.81 6h6.44A4.75 4.75 0 0 1 15 10.75v2.5a.75.75 0 0 1-1.5 0v-2.5a3.25 3.25 0 0 0-3.25-3.25H3.81l2.97 2.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L1.47 7.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"></path></svg>
                 <h5>Replied to ${replyAuthorName}</h5>
@@ -61,7 +61,7 @@ export async function post(userId, post) {
     
     var usernameElement;
     
-    if ((userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
+    if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
     } else {
@@ -118,7 +118,7 @@ export async function user(userId) {
     
     var usernameElement;
     
-    if (userProfileObj[0].value.displayName === "") {
+    if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
     } else {
@@ -181,4 +181,13 @@ export async function userLight(userId) {
     return userElement;
   }
   
+}
+
+export async function postModalBuild() {
+  
+  const userInfo = await getUserInfo();
+  
+  document.getElementById("flex-post-area").innerHTML =
+    `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
+    <textarea type="text" id="post-text"></textarea>`;
 }

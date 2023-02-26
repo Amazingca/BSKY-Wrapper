@@ -17,10 +17,10 @@ export function embeds(obj) {
           
           if ((i + 1) != obj.images.length) {
             
-            newElement = newElement + `alt: "${obj.images[0].alt}" cid: ${obj.images[0].image.cid}, `;
+            newElement = newElement + `alt: "${obj.images[i].alt}" cid: ${obj.images[i].image.cid}, `;
           } else {
             
-            newElement = newElement + `alt: "${obj.images[0].alt}" cid: ${obj.images[0].image.cid}'>`;
+            newElement = newElement + `alt: "${obj.images[i].alt}" cid: ${obj.images[i].image.cid}'>`;
           }
         }
         

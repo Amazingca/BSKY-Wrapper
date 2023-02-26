@@ -5,7 +5,10 @@
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
-    <script type="text/javascript">
+    <script>
+      var postObj = {};
+      var file;
+      
       function toggleNav() {
       
         if (localStorage.getItem("rolodexVisible") === null) {
@@ -49,6 +52,304 @@
           document.location.href = url;
         }
       }
+      
+      async function login(event) {
+        
+        event.preventDefault();
+        
+        const handle = document.forms["Login"]["username"].value;
+        const password = document.forms["Login"]["password"].value;
+        
+        if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
+    
+          console.log("Login credential requirements not met!");
+        }
+
+        const reqObj = {
+          body: JSON.stringify({
+            "handle": handle,
+            "password": password
+          }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+
+        try {
+
+          let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
+
+          localStorage.setItem("accessJwt", authObj.accessJwt);
+          localStorage.setItem("refreshJwt", authObj.refreshJwt);
+          localStorage.setItem("userDid", authObj.did);
+          
+          document.getElementById("user-info-panel").classList.remove("hidden");
+          
+          const userInfo = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + authObj.did, { method: "GET", headers: { "Authorization": "Bearer " + authObj.accessJwt } }).then(r => r.text()));
+          
+          document.getElementById("flex-post-area").innerHTML =
+            `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
+            <textarea type="text" id="post-text"></textarea>`;
+          document.getElementById("new-post").classList.remove("hidden");
+        } catch (e) {
+
+          console.log(e);
+        }
+      }
+      
+      function newPostToggle() {
+        
+        document.getElementById("new-post").classList.toggle("hidden");
+        
+        document.getElementById("post-container").classList.toggle("invisiblepc");
+        document.getElementById("post-container").classList.toggle("visiblepc");
+        
+        if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          
+          document.getElementById("post-options").classList.toggle("hidden");
+        } else {
+          
+          document.getElementsByClassName("cover")[1].classList.toggle("hidden");
+          document.getElementsByTagName("body")[0].classList.toggle("nooverflow");
+        }
+      }
+      
+      function addLink() {
+        
+        let link = prompt("Please enter your link.");
+        
+        if (link != "") {
+          
+          postObj = {
+            "record": {
+              "embed": {
+                "$type": "app.bsky.embed.external",
+                "external": {
+                  "uri": link,
+                  "title": "",
+                  "description": ""
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      function chooseImage() {
+        
+        var input = document.createElement("input");
+        input.style.display = "none";
+        input.type = "file";
+        input.accept = ".png,.jpg,.jpeg";
+        input.click();
+        
+        input.onchange = e => { 
+          
+          file = e.target.files[0];
+          
+          if (file.size > 976560) {
+            
+            alert("File size must not exceed 976.56KB!");
+            file = "";
+          } else {
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+              const data = reader.result;
+              
+              // Turn provided file into Uint8Array
+              const uint8array = new Uint8Array(data);
+              
+              // Send Uint8Array to async to process request
+              addImage(uint8array);
+            };
+          
+            // Read Array Buffer from our file, will trigger above ^ once done
+            reader.readAsArrayBuffer(file);
+          }
+        }
+      }
+      
+      async function addImage(data) {
+          
+          
+        var token;
+
+        try {
+
+          token = await getToken();
+        } catch (e) {
+
+          console.log(e);
+        }
+        
+        // Assign request properties, data is our Uint8Array from before
+        const blobObj = {
+          method: "POST",
+          body: data,
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": file.type
+          }
+        };
+          
+        console.log(blobObj);
+
+        try {
+            
+          // Make a fetch request with 'blobObj' properties, then take our response and convert it to JSON object.
+          const blobResTemp = await fetch("https://bsky.social/xrpc/com.atproto.blob.upload", blobObj).then(r => r.text());
+          const blobRes = JSON.parse(blobResTemp);
+          
+          
+          var images = [];
+          if (postObj.record != undefined) {
+            
+            images = postObj.record.embed.images;
+          }
+
+          let alt = prompt("Include any alt text for this image...");
+
+          images.push({
+            "alt": alt,
+            "image": {
+              "cid": blobRes.cid,
+              "mimeType": file.type
+            }
+          });
+            
+          console.log(blobRes.cid);
+
+          postObj = {
+            "record": {
+              "embed": {
+                "$type": "app.bsky.embed.images",
+                "images": images
+              }
+            }
+          };
+          
+          console.log(postObj);
+        } catch (e) {
+
+          console.log(e);
+          warn("The file could not be uploaded!");
+        }
+      }
+      
+      async function sendPost() {
+        
+        var token;
+
+        try {
+
+          token = await getToken();
+        } catch (e) {
+
+          console.log(e);
+        }
+        
+        const postText = document.getElementById("post-text").value;
+        
+        const userDid = localStorage.getItem("userDid");
+        const creationDate = new Date().toISOString();
+        
+        if (postObj.record === undefined) {
+          
+          postObj = {
+            "did": userDid,
+            "collection": "app.bsky.feed.post",
+            "record": {
+              "text": postText,
+              "createdAt": creationDate
+            }
+          }
+        } else {
+          
+          postObj.did = userDid;
+          postObj.collection = "app.bsky.feed.post";
+          postObj.record.text = postText;
+          postObj.record.createdAt = creationDate;
+        }
+        
+        console.log(postObj);
+        
+        const postReqObj = {
+          method: "POST",
+          body: JSON.stringify(postObj),
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+          }
+        }
+        
+        try {
+          
+          const tryUpload = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", postReqObj).then(r => r.text());
+          
+          if (tryUpload.includes("uri")) {
+            
+            postObj = {};
+            const uriJson = JSON.parse(tryUpload);
+            
+            document.location.href = document.location.origin + document.location.pathname + "?username=" + userDid + "&postid=" + uriJson.uri.split("/")[uriJson.uri.split("/").length - 1];
+          } else {
+            
+            console.log(tryUpload);
+            window.alert("Your post could not be sent!");
+          }
+        } catch (e) {
+          
+          console.log(e);
+          window.alert("Your post could not be sent!");
+        }
+      }
+      
+      async function getToken() {
+        
+        var refreshToken = localStorage.getItem("refreshJwt");
+        
+        try {
+          
+          const req = {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + refreshToken
+            }
+          }
+          
+          const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
+          
+          localStorage.setItem("accessJwt", newTokens.accessJwt);
+          localStorage.setItem("refreshJwt", newTokens.refreshJwt);
+          
+          return newTokens.accessJwt;
+        } catch (e) {
+          
+          console.log(e);
+        }
+      }
+      
+      function logout() {
+        
+        localStorage.removeItem("refreshJwt");
+        localStorage.removeItem("accessJwt");
+        localStorage.removeItem("userDid");
+        
+        document.getElementById("user-info-panel").classList.add("hidden");
+        document.getElementById("flex-post-area").innerHTML = "";
+        document.getElementById("new-post").classList.add("hidden");
+      }
+      
+      function goToProfile() {
+        
+        const userId = localStorage.getItem("userDid");
+        
+        document.location.href = document.location.origin + document.location.pathname + "?username=" + userId;
+      }
     </script>
   </head>
   <body>
@@ -87,6 +388,25 @@
                 </form>
               </div>
             </spacer>
+            <h2 style="margin-top: 1rem;">Beta</h2>
+            <spacer>
+              <div class="rolo-container">
+                <h3>Login</h3>
+                <form name="Login" onsubmit="login(event);">
+                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social" name="username" required="true" class="rolo-text">
+                  <input type="password" autocomplete="off" autocapitalize="none" placeholder="Password" name="password" required="true" class="rolo-text">
+                  <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Login">
+                </form>
+              </div>
+              <div class="rolo-container hidden" id="user-info-panel">
+                <h3>User</h3>
+                <br>
+                <spacer>
+                  <button onclick="goToProfile();" class="rolo-click">Go to profile</button>
+                  <button onclick="logout();" class="rolo-click">Logout</button>
+                </spacer>
+              </div>
+            </spacer>
           </menu>
         </rolodex>
         <feed>
@@ -101,7 +421,7 @@
             </div>
           </div>
           <div id="post" class="hidden">
-            <a onclick="goBack();" title="Go back to Feed" class="back-button">
+            <a onclick="goBack();" title="Go back to previous page" class="back-button">
               <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
               <h2 style="color: inherit;">Post</h2>
             </a>
@@ -132,7 +452,7 @@
             </div>
           </div>
           <div id="user" class="hidden">
-            <a onclick="goBack();" title="Go back to Feed" class="back-button">
+            <a onclick="goBack();" title="Go back to previous page" class="back-button">
               <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
               <h2 style="color: inherit;">User</h2>
             </a>
@@ -143,13 +463,33 @@
             </div>
           </div>
           <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub</footer>
+          <div class="invisiblepc" id="post-container">
+            <flex style="justify-content: space-between; margin: 1rem;">
+              <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
+              <h3 id="submit-post" onclick="sendPost();">Post</h3>
+            </flex>
+            <hr style="border-color: #888;">
+            <div id="post-content">
+              <flex style="margin: 1rem; align-items: flex-start;" id="flex-post-area">
+                <img style="border-radius: 50%;" src="https://cdn.amazingca.dev/assets/nostr/profilepicture.JPG" width="64" height="64">
+                <textarea type="text" id="post-text"></textarea>
+              </flex>
+            </div>
+          </div>
         </feed>
-        <beta>
-          <h2>Beta</h2>
-          <div class="beta-container">Content.</div>
-        </beta>
       </grid>
     </main-content>
+    <button class="hidden" onclick="newPostToggle();" id="new-post">
+      <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path></svg>
+    </button>
+    <div class="hidden" id="post-options">
+      <button class="cover" onclick="addLink();">
+        <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+      </button>
+      <button class="cover" onclick="chooseImage();">
+        <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M12.212 3.02a1.753 1.753 0 0 0-2.478.003l-5.83 5.83a3.007 3.007 0 0 0-.88 2.127c0 .795.315 1.551.88 2.116.567.567 1.333.89 2.126.89.79 0 1.548-.321 2.116-.89l5.48-5.48a.75.75 0 0 1 1.061 1.06l-5.48 5.48a4.492 4.492 0 0 1-3.177 1.33c-1.2 0-2.345-.487-3.187-1.33a4.483 4.483 0 0 1-1.32-3.177c0-1.195.475-2.341 1.32-3.186l5.83-5.83a3.25 3.25 0 0 1 5.553 2.297c0 .863-.343 1.691-.953 2.301L7.439 12.39c-.375.377-.884.59-1.416.593a1.998 1.998 0 0 1-1.412-.593 1.992 1.992 0 0 1 0-2.828l5.48-5.48a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-5.48 5.48a.492.492 0 0 0 0 .707.499.499 0 0 0 .352.154.51.51 0 0 0 .356-.154l5.833-5.827a1.755 1.755 0 0 0 0-2.481Z"></path></svg>
+      </button>
+    </div>
   </body>
   <style>
     @font-face {
@@ -181,7 +521,7 @@
       grid-template-areas: "rolodex feed";
       grid-template-columns: 25rem auto;
     }
-    h1, h2, h3, h4, h5, footer, .rolo-container, .rolo-text, .feed-container, .beta-container, .dotted-spacer {
+    h1, h2, h3, h4, h5, footer, .rolo-container, .rolo-text, .feed-container, .dotted-spacer, #post-text {
       font-family: "Mona Sans";
     }
     h1, h2 {
@@ -207,7 +547,7 @@
       gap: 0.5rem;
       align-items: center;
     }
-    brand {
+    brand, #submit-post {
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -270,10 +610,10 @@
     #loadButton {
       cursor: pointer;
     }
-    .rolo-click:hover, #loadButton:hover {
+    .rolo-click:hover, #loadButton:hover, #new-post:hover, #submit-post:hover, .cover:hover {
       background-image: linear-gradient(to bottom right, #22bbffAA, #5d94f8FF);
     }
-    .rolo-click:active, #loadButton:active {
+    .rolo-click:active, #loadButton:active, #new-post:active, #submit-post:active, .cover.:active {
       background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
     }
     .back-button {
@@ -303,7 +643,7 @@
       margin-bottom: 0.25rem;
       cursor: pointer;
     }
-    .rolo-container, .feed-container, .beta-container {
+    .rolo-container, .feed-container {
       overflow-wrap: anywhere;
       width: inherit;
       background: #f5f5f5;
@@ -318,6 +658,70 @@
       text-align: center;
       z-index: 1;
       background-color: white;
+    }
+    #new-post {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      height: 4rem;
+      width: 4rem;
+      border-radius: 50%;
+      border-width: 0px;
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      cursor: pointer;
+    }
+    #post-options {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+    }
+    .cover {
+      height: 4rem;
+      width: 4rem;
+      border-radius: 50%;
+      border-width: 0px;
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      cursor: pointer;
+    }
+    #cancel-post {
+      color: #888;
+      cursor: pointer;
+    }
+    #cancel-post:hover {
+      color: #999;
+    }
+    #cancel-post:active {
+      color: #aaa;
+    }
+    #submit-post {
+      cursor: pointer;
+    }
+    #post-container {
+      position: fixed;
+      width: -webkit-fill-available;
+      background-color: #f5f5f5;
+      overflow-wrap: anywhere;
+      margin-right: 1rem;
+      bottom: 0px;
+      margin-top: 0.5rem;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+      transition-duration: 0.45s;
+    }
+    .invisiblepc {
+      top: 100vh;
+    }
+    .visiblepc {
+      top: 92.16px;
+    }
+    #post-text {
+      border-color: #00000000;
+      border-radius: 10px;
+      height: 80vh;
+      font-size: 24px;
+      width: -webkit-fill-available;
+      padding: 0.5rem;
+      resize: none;
     }
     @keyframes spin {
       0% { transform: rotateZ(0deg); }
@@ -359,7 +763,14 @@
         position: relative;
         top: 0px;
       }
+      #post-container {
+        width: 100vw;
+        left: 0px;
+      }
       .back-button {
+        top: 68.16px;
+      }
+      .visiblepc {
         top: 68.16px;
       }
     }
@@ -369,6 +780,9 @@
     }
     .hidden {
       display: none;
+    }
+    .nooverflow {
+      overflow: hidden;
     }
     .visible {
       display: block;
@@ -384,8 +798,8 @@
     import { userCache, modifyFlow } from "./feed.js";
     import { embeds, nameResolver } from "./mods.js";
     import { loadParent, loadRoot } from "./replies.js";
-    import { getPost, getUserRepo, listRecords } from "./api.js";
-    import { post, user, userLight } from "./struct.js";
+    import { getPost, getUserRepo, listRecords, getToken } from "./api.js";
+    import { post, user, userLight, postModalBuild } from "./struct.js";
     
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
@@ -406,18 +820,17 @@
       }
     }
     
-    /*function toggleNav() {
+    if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
       
-      if (localStorage.getItem("rolodexVisible") != null) {
-        
-        localStorage.setItem("rolodexVisible", false);
-      } else if (localStorage.getItem("rolodexVisible") === true) {
-        
-        document.getElementsByTagName('rolodex')[0].classList.remove('visible');
-        document.getElementsByTagName('grid')[0].classList.remove('nav');
-        localStorage.removeItem("rolodexVisible", false);
-      }
-    }*/
+      document.getElementById("user-info-panel").classList.remove("hidden");
+      postModalBuild();
+      document.getElementById("new-post").classList.remove("hidden");
+    }
+    
+    if (document.location.search === "") {
+      
+      localStorage.setItem("recent", "[]");
+    }
     
     checkUrl();
     
@@ -437,8 +850,6 @@
               switch (urlParams.get("type")) {
                 case "follows":
                   getUserFollows(urlParams.get("username"));
-                default:
-                  modifyFlow();
               }
             } else {
               
