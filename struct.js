@@ -189,5 +189,5 @@ export async function postModalBuild() {
   
   document.getElementById("flex-post-area").innerHTML =
     `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
-    <textarea type="text" id="post-text"></textarea>`;
+    <textarea type="text" placeholder="Your post goes here..." id="post-text"></textarea>`;
 }
