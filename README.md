@@ -19,5 +19,7 @@
       - [x] - Alt text including
       - [ ] - Automatic image resizing & size limiter
     - [x] - Link attachment
+  - [ ] - Reposting
+  - [ ] - Liking
   - [ ] - Custom feed viewer
   - [ ] - Notifications viewer
