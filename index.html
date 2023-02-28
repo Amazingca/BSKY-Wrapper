@@ -763,23 +763,16 @@
         display: block;
         cursor: pointer;
       }
-      grid {
-        grid-template-areas:
-          "rolodex"
-          "feed";
-        grid-template-columns: auto;
-        gap: 0px;
-      }
-      grid.nav {
-        gap: 1rem;
-      }
-      grid.visiblepc {
+      grid, grid.visiblepc {
         grid-template-areas:
           "rolodex"
           "feed"
           "postbox";
         grid-template-columns: auto;
         gap: 0px;
+      }
+      grid.nav {
+        gap: 1rem;
       }
       rolodex {
         grid-area: rolodex;
