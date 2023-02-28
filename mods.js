@@ -27,7 +27,7 @@ export function embeds(obj) {
         return newElement + `Attached: ${amount} images</h3>`;
       }
     case "app.bsky.embed.external":
-      return newElement + `${obj.external.uri}'>Attached: <a href='${obj.external.uri}'>1 link</a></h3>`;
+      return newElement + `${obj.external.uri}'>Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`;
   }
 }
 
