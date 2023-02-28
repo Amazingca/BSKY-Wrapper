@@ -102,6 +102,7 @@
         
         document.getElementById("new-post").classList.toggle("hidden");
         
+        document.getElementsByTagName("grid")[0].classList.toggle("visiblepc");
         document.getElementById("post-container").classList.toggle("invisiblepc");
         document.getElementById("post-container").classList.toggle("visiblepc");
         
@@ -110,7 +111,7 @@
           document.getElementById("post-options").classList.toggle("hidden");
         } else {
           
-          document.getElementsByClassName("cover")[1].classList.toggle("hidden");
+          document.getElementById("post-options").classList.toggle("hidden");
           document.getElementsByTagName("body")[0].classList.toggle("nooverflow");
         }
       }
@@ -463,20 +464,20 @@
             </div>
           </div>
           <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub</footer>
-          <div class="invisiblepc" id="post-container">
-            <flex style="justify-content: space-between; margin: 1rem;">
-              <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
-              <h3 id="submit-post" onclick="sendPost();">Post</h3>
-            </flex>
-            <hr style="border-color: #888;">
-            <div id="post-content">
-              <flex style="margin: 1rem; align-items: flex-start;" id="flex-post-area">
-                <img style="border-radius: 50%;" src="https://cdn.amazingca.dev/assets/nostr/profilepicture.JPG" width="64" height="64">
-                <textarea type="text" id="post-text"></textarea>
-              </flex>
-            </div>
-          </div>
         </feed>
+        <div class="invisiblepc" id="post-container">
+          <flex style="justify-content: space-between; margin: 1rem;">
+            <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
+            <h3 id="submit-post" onclick="sendPost();">Post</h3>
+          </flex>
+          <hr style="border-color: #888;">
+          <div id="post-content">
+            <flex style="margin: 1rem; align-items: flex-start;" id="flex-post-area">
+              <img style="border-radius: 50%;" src="https://cdn.amazingca.dev/assets/nostr/profilepicture.JPG" width="64" height="64">
+              <textarea type="text" id="post-text"></textarea>
+            </flex>
+          </div>
+        </div>
       </grid>
     </main-content>
     <button class="hidden" onclick="newPostToggle();" id="new-post">
@@ -520,6 +521,10 @@
       gap: 1rem;
       grid-template-areas: "rolodex feed";
       grid-template-columns: 25rem auto;
+    }
+    grid.visiblepc {
+      grid-template-areas: "rolodex feed postbox";
+      grid-template-columns: 25rem auto 25rem;
     }
     h1, h2, h3, h4, h5, footer, .rolo-container, .rolo-text, .feed-container, .dotted-spacer, #post-text {
       font-family: "Mona Sans";
@@ -603,6 +608,7 @@
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
       -webkit-text-fill-color: white;
       padding: 0.25rem;
+      cursor: pointer;
       border-radius: 0.5rem;
       border-width: 0px;
       width: 100%;
@@ -697,12 +703,14 @@
       cursor: pointer;
     }
     #post-container {
+      grid-area: postbox;
       position: fixed;
-      width: -webkit-fill-available;
+      width: 25rem;
       background-color: #f5f5f5;
       overflow-wrap: anywhere;
       margin-right: 1rem;
       bottom: 0px;
+      right: 0px;
       margin-top: 0.5rem;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
@@ -727,12 +735,23 @@
       0% { transform: rotateZ(0deg); }
       100% { transform: rotateZ(-360deg); }
     }
+    @media screen and (max-width: 1131px) {
+      grid {
+        grid-template-columns: 15rem auto;
+      }
+      grid.visiblepc {
+        grid-template-columns: 15rem auto 25rem;
+      }
+      rolodex {
+        width: 15rem;
+      }
+    }
     @media screen and (max-width: 861px) {
       grid {
         grid-template-columns: 15rem auto;
       }
-      rolodex {
-        width: 15rem;
+      #post-container {
+        width: calc(100vw - 18.75rem);
       }
     }
     @media screen and (max-width: 589px) {
@@ -753,6 +772,14 @@
       }
       grid.nav {
         gap: 1rem;
+      }
+      grid.visiblepc {
+        grid-template-areas:
+          "rolodex"
+          "feed"
+          "postbox";
+        grid-template-columns: auto;
+        gap: 0px;
       }
       rolodex {
         grid-area: rolodex;
