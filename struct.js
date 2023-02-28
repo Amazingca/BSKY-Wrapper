@@ -94,7 +94,7 @@ export async function post(userId, post) {
           <br>
           <div>${postText}</div>
           <br>
-          <flex>
+          <flex style="justify-content: space-between;">
             <div style="color: #333;">${new Date(postObj.value.createdAt)}</div>
             <div style="color: #333;"><a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
           </flex>
