@@ -59,7 +59,7 @@ export async function loadParent(replies) {
         <br>
         <div>${posttext}</div>
         <br>
-        <flex>
+        <flex style="justify-content: space-between;">
           <div style="color: #333;">${new Date(parsedres.value.createdAt)}</div>
           <div style="color: #333;"><a href="${document.location.origin + document.location.pathname}?username=${handle}&postid=${parsedres.uri.split("/")[parsedres.uri.split("/").length - 1]}">id#${parsedres.uri.split("/")[parsedres.uri.split("/").length - 1]}</a></div>
         </flex>
@@ -143,7 +143,7 @@ export async function loadRoot(replies) {
         <br>
         <div>${posttext}</div>
         <br>
-        <flex>
+        <flex style="justify-content: space-between;">
           <div style="color: #333;">${new Date(parsedres.value.createdAt)}</div>
           <div style="color: #333;"><a href="${document.location.origin + document.location.pathname}?username=${handle}&postid=${parsedres.uri.split("/")[parsedres.uri.split("/").length - 1]}">id#${parsedres.uri.split("/")[parsedres.uri.split("/").length - 1]}</a></div>
         </flex>`;
