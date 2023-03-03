@@ -40,10 +40,10 @@ export async function loadParent(replies) {
           
       if (parsedres.value.text != "") {
             
-        posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(parsedres.value.embed);
+        posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + await embeds(parsedres.value.embed);
       } else {
             
-        posttext = embeds(parsedres.value.embed);
+        posttext = await embeds(parsedres.value.embed);
       }
     } else {
           
@@ -125,10 +125,10 @@ export async function loadRoot(replies) {
           
       if (parsedres.value.text != "") {
             
-        posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(parsedres.value.embed);
+        posttext = parsedres.value.text.replaceAll("\n", "<br>") + "<br><br>" + await embeds(parsedres.value.embed);
       } else {
             
-        posttext = embeds(parsedres.value.embed);
+        posttext = await embeds(parsedres.value.embed);
       }
     } else {
           
