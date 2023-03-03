@@ -8,11 +8,14 @@
   - [x] - User nickname
   - [x] - User description
   - [x] - User posts
+    - [x] Post Embeds
+      - [ ] - Image embedding
+        - [x] - Alt text viewing
+      - [x] - Link embedding
+      - [x] - Post embedding
   - [ ] - Followers
   - [ ] - Reposts
 - [ ] - Full-view threads
-- [ ] - Image embeds
-  - [x] - Alt text viewing
 - [x] - Account login
   - [x] - Posting
     - [x] - Image upload
