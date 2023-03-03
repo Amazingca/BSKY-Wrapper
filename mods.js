@@ -1,6 +1,7 @@
 import { getUserRepo, listRecords } from "./api.js";
+import { post } from "./struct.js";
 
-export function embeds(obj) {
+export async function embeds(obj) {
   
   var newElement = "<h3 title='";
   
@@ -26,6 +27,10 @@ export function embeds(obj) {
         
         return newElement + `Attached: ${amount} images</h3>`;
       }
+    case "app.bsky.embed.record":
+      console.log("going through");
+      const quotePostUri = obj.record.uri;
+      return await post(quotePostUri.split("//")[1].split("/")[0], quotePostUri.split("//")[1].split("/")[quotePostUri.split("//")[1].split("/").length - 1], true);
     case "app.bsky.embed.external":
       return newElement + `${obj.external.uri}'>Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`;
   }
