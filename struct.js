@@ -75,10 +75,10 @@ export async function post(userId, post) {
       
       if (postObj.value.text != "") {
         
-        postText = postObj.value.text.replaceAll("\n", "<br>") + "<br><br>" + embeds(postObj.value.embed);
+        postText = postObj.value.text.replaceAll("\n", "<br>") + "<br><br>" + await embeds(postObj.value.embed);
       } else {
         
-        postText = embeds(postObj.value.embed);
+        postText = await embeds(postObj.value.embed);
       }
     } else {
       
