@@ -3,7 +3,7 @@ import { post } from "./struct.js";
 
 export async function embeds(obj) {
   
-  var newElement = `<h3 title=\"`;
+  var newElement = `<h3 title="`;
   
   switch (obj["$type"]) {
     case "app.bsky.embed.images":
@@ -31,7 +31,7 @@ export async function embeds(obj) {
       const quotePostUri = obj.record.uri;
       return await post(quotePostUri.split("//")[1].split("/")[0], quotePostUri.split("//")[1].split("/")[quotePostUri.split("//")[1].split("/").length - 1], true);
     case "app.bsky.embed.external":
-      return newElement + `${obj.external.uri}'>Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`;
+      return newElement + `${obj.external.uri}">Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`;
   }
 }
 
