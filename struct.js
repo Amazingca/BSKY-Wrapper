@@ -198,7 +198,7 @@ export async function postModalBuild() {
   const userInfo = await getUserInfo();
   
   var userProfileImage;
-  if (userProfileImage != undefined) {
+  if (userInfo.avatar != undefined) {
     userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
   } else {
     userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;

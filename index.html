@@ -563,9 +563,16 @@
         document.getElementById("user-info-panel").classList.remove("hidden");
           
         const userInfo = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + authObj.did, { method: "GET", headers: { "Authorization": "Bearer " + authObj.accessJwt } }).then(r => r.text()));
-          
+        
+        var userProfileImage;
+        if (userInfo.avatar != undefined) {
+            userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
+        } else {
+            userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;
+        }
+        
         document.getElementById("flex-post-area").innerHTML =
-          `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
+          `${userProfileImage}
           <textarea type="text" placeholder="Your post goes here..." id="post-text"></textarea>`;
         document.getElementById("new-post").classList.remove("hidden");
       } catch (e) {
