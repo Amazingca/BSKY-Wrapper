@@ -5,6 +5,353 @@
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
+    <script>
+      var postObj = {};
+      var file;
+      
+      function toggleNav() {
+      
+        if (localStorage.getItem("rolodexVisible") === null) {
+
+          document.getElementsByTagName('rolodex')[0].classList.add('visible');
+          document.getElementsByTagName('grid')[0].classList.add('nav');
+          localStorage.setItem("rolodexVisible", true);
+        } else if (localStorage.getItem("rolodexVisible") === "true") {
+
+          document.getElementsByTagName('rolodex')[0].classList.remove('visible');
+          document.getElementsByTagName('grid')[0].classList.remove('nav');
+          localStorage.removeItem("rolodexVisible");
+        }
+      }
+      
+      function addLocation() {
+      
+        if ((localStorage.getItem("recent") === null) && (window.location.search != "")) {
+          
+          localStorage.setItem("recent", "[\"" + document.location.href + "\"]");
+        } else {
+          
+          var urls = JSON.parse(localStorage.getItem("recent"));
+          urls.push(document.location.href);
+          localStorage.setItem("recent", JSON.stringify(urls));
+        }
+      }
+      
+      function goBack() {
+      
+        if ((localStorage.getItem("recent") === "[]") || (localStorage.getItem("recent") === null)) {
+          
+          document.location.href = "./";
+        } else {
+          
+          var urls = JSON.parse(localStorage.getItem("recent"));
+          var url = urls[urls.length - 1];
+          urls.pop();
+          localStorage.setItem("recent", JSON.stringify(urls));
+
+          document.location.href = url;
+        }
+      }
+      
+      async function login(event) {
+        
+        event.preventDefault();
+        
+        const handle = document.forms["Login"]["username"].value;
+        const password = document.forms["Login"]["password"].value;
+        
+        if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
+    
+          console.log("Login credential requirements not met!");
+        }
+
+        const reqObj = {
+          body: JSON.stringify({
+            "handle": handle,
+            "password": password
+          }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+
+        try {
+
+          let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
+
+          localStorage.setItem("accessJwt", authObj.accessJwt);
+          localStorage.setItem("refreshJwt", authObj.refreshJwt);
+          localStorage.setItem("userDid", authObj.did);
+          
+          document.getElementById("user-info-panel").classList.remove("hidden");
+          
+          const userInfo = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + authObj.did, { method: "GET", headers: { "Authorization": "Bearer " + authObj.accessJwt } }).then(r => r.text()));
+          
+          document.getElementById("flex-post-area").innerHTML =
+            `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
+            <textarea type="text" placeholder="Your post goes here..." id="post-text"></textarea>`;
+          document.getElementById("new-post").classList.remove("hidden");
+        } catch (e) {
+
+          console.log(e);
+        }
+      }
+      
+      function newPostToggle() {
+        
+        document.getElementById("new-post").classList.toggle("hidden");
+        
+        document.getElementsByTagName("grid")[0].classList.toggle("visiblepc");
+        document.getElementById("post-container").classList.toggle("invisiblepc");
+        document.getElementById("post-container").classList.toggle("visiblepc");
+        
+        if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          
+          document.getElementById("post-options").classList.toggle("hidden");
+        } else {
+          
+          document.getElementById("post-options").classList.toggle("hidden");
+          document.getElementsByTagName("body")[0].classList.toggle("nooverflow");
+        }
+      }
+      
+      function addLink() {
+        
+        let link = prompt("Please enter your link.");
+        
+        if (link != "") {
+          
+          postObj = {
+            "record": {
+              "embed": {
+                "$type": "app.bsky.embed.external",
+                "external": {
+                  "uri": link,
+                  "title": "",
+                  "description": ""
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      function chooseImage() {
+        
+        var input = document.createElement("input");
+        input.style.display = "none";
+        input.type = "file";
+        input.accept = ".png,.jpg,.jpeg";
+        input.click();
+        
+        input.onchange = e => { 
+          
+          file = e.target.files[0];
+          
+          if (file.size > 976560) {
+            
+            alert("File size must not exceed 976.56KB!");
+            file = "";
+          } else {
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+              const data = reader.result;
+              
+              // Turn provided file into Uint8Array
+              const uint8array = new Uint8Array(data);
+              
+              // Send Uint8Array to async to process request
+              addImage(uint8array);
+            };
+          
+            // Read Array Buffer from our file, will trigger above ^ once done
+            reader.readAsArrayBuffer(file);
+          }
+        }
+      }
+      
+      async function addImage(data) {
+          
+          
+        var token;
+
+        try {
+
+          token = await getToken();
+        } catch (e) {
+
+          console.log(e);
+        }
+        
+        // Assign request properties, data is our Uint8Array from before
+        const blobObj = {
+          method: "POST",
+          body: data,
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": file.type
+          }
+        };
+          
+        console.log(blobObj);
+
+        try {
+            
+          // Make a fetch request with 'blobObj' properties, then take our response and convert it to JSON object.
+          const blobResTemp = await fetch("https://bsky.social/xrpc/com.atproto.blob.upload", blobObj).then(r => r.text());
+          const blobRes = JSON.parse(blobResTemp);
+          
+          
+          var images = [];
+          if (postObj.record != undefined) {
+            
+            images = postObj.record.embed.images;
+          }
+
+          let alt = prompt("Include any alt text for this image...");
+
+          images.push({
+            "alt": alt,
+            "image": {
+              "cid": blobRes.cid,
+              "mimeType": file.type
+            }
+          });
+            
+          console.log(blobRes.cid);
+
+          postObj = {
+            "record": {
+              "embed": {
+                "$type": "app.bsky.embed.images",
+                "images": images
+              }
+            }
+          };
+          
+          console.log(postObj);
+        } catch (e) {
+
+          console.log(e);
+          warn("The file could not be uploaded!");
+        }
+      }
+      
+      async function sendPost() {
+        
+        var token;
+
+        try {
+
+          token = await getToken();
+        } catch (e) {
+
+          console.log(e);
+        }
+        
+        const postText = document.getElementById("post-text").value;
+        
+        const userDid = localStorage.getItem("userDid");
+        const creationDate = new Date().toISOString();
+        
+        if (postObj.record === undefined) {
+          
+          postObj = {
+            "did": userDid,
+            "collection": "app.bsky.feed.post",
+            "record": {
+              "text": postText,
+              "createdAt": creationDate
+            }
+          }
+        } else {
+          
+          postObj.did = userDid;
+          postObj.collection = "app.bsky.feed.post";
+          postObj.record.text = postText;
+          postObj.record.createdAt = creationDate;
+        }
+        
+        console.log(postObj);
+        
+        const postReqObj = {
+          method: "POST",
+          body: JSON.stringify(postObj),
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+          }
+        }
+        
+        try {
+          
+          const tryUpload = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", postReqObj).then(r => r.text());
+          
+          if (tryUpload.includes("uri")) {
+            
+            postObj = {};
+            const uriJson = JSON.parse(tryUpload);
+            
+            document.location.href = document.location.origin + document.location.pathname + "?username=" + userDid + "&postid=" + uriJson.uri.split("/")[uriJson.uri.split("/").length - 1];
+          } else {
+            
+            console.log(tryUpload);
+            window.alert("Your post could not be sent!");
+          }
+        } catch (e) {
+          
+          console.log(e);
+          window.alert("Your post could not be sent!");
+        }
+      }
+      
+      async function getToken() {
+        
+        var refreshToken = localStorage.getItem("refreshJwt");
+        
+        try {
+          
+          const req = {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + refreshToken
+            }
+          }
+          
+          const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
+          
+          localStorage.setItem("accessJwt", newTokens.accessJwt);
+          localStorage.setItem("refreshJwt", newTokens.refreshJwt);
+          
+          return newTokens.accessJwt;
+        } catch (e) {
+          
+          console.log(e);
+        }
+      }
+      
+      function logout() {
+        
+        localStorage.removeItem("refreshJwt");
+        localStorage.removeItem("accessJwt");
+        localStorage.removeItem("userDid");
+        
+        document.getElementById("user-info-panel").classList.add("hidden");
+        document.getElementById("flex-post-area").innerHTML = "";
+        document.getElementById("new-post").classList.add("hidden");
+      }
+      
+      function goToProfile() {
+        
+        const userId = localStorage.getItem("userDid");
+        
+        document.location.href = document.location.origin + document.location.pathname + "?username=" + userId;
+      }
+    </script>
   </head>
   <body>
     <header>
@@ -329,23 +676,8 @@
     }
     #post-options {
       position: fixed;
-      z-index: 3;
       bottom: 1rem;
       right: 1rem;
-    }
-    .default-user-photo {
-      height: 50px;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
-      -webkit-text-fill-color: white;
-      font-family: sans-serif;
-      font-size: 2.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-      -webkit-user-select: none;
     }
     .cover {
       height: 4rem;
@@ -377,7 +709,6 @@
       margin-right: 1rem;
       bottom: 0px;
       right: 0px;
-      z-index: 2;
       margin-top: 0.5rem;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
@@ -481,349 +812,6 @@
       color: #888;
     }
   </style>
-  <script>
-    var postObj = {};
-    var file;
-      
-    function toggleNav() {
-      
-      if (localStorage.getItem("rolodexVisible") === null) {
-
-        document.getElementsByTagName('rolodex')[0].classList.add('visible');
-        document.getElementsByTagName('grid')[0].classList.add('nav');
-        localStorage.setItem("rolodexVisible", true);
-      } else if (localStorage.getItem("rolodexVisible") === "true") {
-
-        document.getElementsByTagName('rolodex')[0].classList.remove('visible');
-        document.getElementsByTagName('grid')[0].classList.remove('nav');
-        localStorage.removeItem("rolodexVisible");
-      }
-    }
-      
-    function addLocation() {
-      
-      if ((localStorage.getItem("recent") === null) && (window.location.search != "")) {
-          
-        localStorage.setItem("recent", "[\"" + document.location.href + "\"]");
-      } else {
-          
-        var urls = JSON.parse(localStorage.getItem("recent"));
-        urls.push(document.location.href);
-        localStorage.setItem("recent", JSON.stringify(urls));
-      }
-    }
-      
-    function goBack() {
-      
-      if ((localStorage.getItem("recent") === "[]") || (localStorage.getItem("recent") === null)) {
-          
-        document.location.href = "./";
-      } else {
-          
-        var urls = JSON.parse(localStorage.getItem("recent"));
-        var url = urls[urls.length - 1];
-        urls.pop();
-        localStorage.setItem("recent", JSON.stringify(urls));
-
-        document.location.href = url;
-      }
-    }
-      
-    async function login(event) {
-        
-      event.preventDefault();
-        
-      const handle = document.forms["Login"]["username"].value;
-      const password = document.forms["Login"]["password"].value;
-        
-      if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
-    
-        console.log("Login credential requirements not met!");
-      }
-
-      const reqObj = {
-        body: JSON.stringify({
-          "handle": handle,
-          "password": password
-        }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-      try {
-
-        let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
-
-        localStorage.setItem("accessJwt", authObj.accessJwt);
-        localStorage.setItem("refreshJwt", authObj.refreshJwt);
-        localStorage.setItem("userDid", authObj.did);
-          
-        document.getElementById("user-info-panel").classList.remove("hidden");
-          
-        const userInfo = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + authObj.did, { method: "GET", headers: { "Authorization": "Bearer " + authObj.accessJwt } }).then(r => r.text()));
-          
-        document.getElementById("flex-post-area").innerHTML =
-          `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
-          <textarea type="text" placeholder="Your post goes here..." id="post-text"></textarea>`;
-        document.getElementById("new-post").classList.remove("hidden");
-      } catch (e) {
-
-        console.log(e);
-      }
-    }
-      
-    function newPostToggle() {
-        
-      document.getElementById("new-post").classList.toggle("hidden");
-        
-      document.getElementsByTagName("grid")[0].classList.toggle("visiblepc");
-      document.getElementById("post-container").classList.toggle("invisiblepc");
-      document.getElementById("post-container").classList.toggle("visiblepc");
-        
-      if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          
-        document.getElementById("post-options").classList.toggle("hidden");
-      } else {
-          
-        document.getElementById("post-options").classList.toggle("hidden");
-        document.getElementsByTagName("body")[0].classList.toggle("nooverflow");
-      }
-    }
-      
-    function addLink() {
-        
-      let link = prompt("Please enter your link.");
-        
-      if (link != "") {
-          
-        postObj = {
-          "record": {
-            "embed": {
-              "$type": "app.bsky.embed.external",
-              "external": {
-                "uri": link,
-                "title": "",
-                "description": ""
-              }
-            }
-          }
-        }
-      }
-    }
-      
-    function chooseImage() {
-        
-      var input = document.createElement("input");
-      input.style.display = "none";
-      input.type = "file";
-      input.accept = ".png,.jpg,.jpeg";
-      input.click();
-        
-      input.onchange = e => { 
-          
-        file = e.target.files[0];
-          
-        if (file.size > 976560) {
-            
-          alert("File size must not exceed 976.56KB!");
-          file = "";
-        } else {
-
-          const reader = new FileReader();
-
-          reader.onload = () => {
-
-            const data = reader.result;
-              
-            // Turn provided file into Uint8Array
-            const uint8array = new Uint8Array(data);
-              
-            // Send Uint8Array to async to process request
-            addImage(uint8array);
-          };
-          
-          // Read Array Buffer from our file, will trigger above ^ once done
-          reader.readAsArrayBuffer(file);
-        }
-      }
-    }
-      
-    async function addImage(data) {
-          
-          
-      var token;
-
-      try {
-
-        token = await getToken();
-      } catch (e) {
-
-        console.log(e);
-      }
-        
-      // Assign request properties, data is our Uint8Array from before
-      const blobObj = {
-        method: "POST",
-        body: data,
-        headers: {
-          "Authorization": "Bearer " + token,
-          "Content-Type": file.type
-        }
-      };
-
-      try {
-            
-        // Make a fetch request with 'blobObj' properties, then take our response and convert it to JSON object.
-        const blobResTemp = await fetch("https://bsky.social/xrpc/com.atproto.blob.upload", blobObj).then(r => r.text());
-        const blobRes = JSON.parse(blobResTemp);
-          
-          
-        var images = [];
-        if (postObj.record != undefined) {
-            
-          images = postObj.record.embed.images;
-        }
-
-        let alt = prompt("Include any alt text for this image...");
-
-        images.push({
-          "alt": alt,
-          "image": {
-            "cid": blobRes.cid,
-            "mimeType": file.type
-          }
-        });
-            
-        console.log(blobRes.cid);
-
-        postObj = {
-          "record": {
-            "embed": {
-              "$type": "app.bsky.embed.images",
-              "images": images
-            }
-          }
-        };
-          
-        console.log(postObj);
-      } catch (e) {
-
-        console.log(e);
-        warn("The file could not be uploaded!");
-      }
-    }
-      
-    async function sendPost() {
-        
-      var token;
-
-      try {
-
-        token = await getToken();
-      } catch (e) {
-
-        console.log(e);
-      }
-        
-      const postText = document.getElementById("post-text").value;
-        
-      const userDid = localStorage.getItem("userDid");
-      const creationDate = new Date().toISOString();
-        
-      if (postObj.record === undefined) {
-          
-        postObj = {
-          "did": userDid,
-          "collection": "app.bsky.feed.post",
-          "record": {
-            "text": postText,
-            "createdAt": creationDate
-          }
-        }
-      } else {
-          
-        postObj.did = userDid;
-        postObj.collection = "app.bsky.feed.post";
-        postObj.record.text = postText;
-        postObj.record.createdAt = creationDate;
-      }
-        
-      const postReqObj = {
-        method: "POST",
-        body: JSON.stringify(postObj),
-        headers: {
-          "Authorization": "Bearer " + token,
-          "Content-Type": "application/json"
-        }
-      }
-        
-      try {
-          
-        const tryUpload = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", postReqObj).then(r => r.text());
-          
-        if (tryUpload.includes("uri")) {
-            
-          postObj = {};
-          const uriJson = JSON.parse(tryUpload);
-            
-          document.location.href = document.location.origin + document.location.pathname + "?username=" + userDid + "&postid=" + uriJson.uri.split("/")[uriJson.uri.split("/").length - 1];
-        } else {
-            
-          console.log(tryUpload);
-          window.alert("Your post could not be sent!");
-        }
-      } catch (e) {
-          
-        console.log(e);
-        window.alert("Your post could not be sent!");
-      }
-    }
-      
-    async function getToken() {
-        
-      var refreshToken = localStorage.getItem("refreshJwt");
-        
-      try {
-          
-        const req = {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + refreshToken
-          }
-        }
-          
-        const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
-          
-        localStorage.setItem("accessJwt", newTokens.accessJwt);
-        localStorage.setItem("refreshJwt", newTokens.refreshJwt);
-          
-        return newTokens.accessJwt;
-      } catch (e) {
-          
-        console.log(e);
-      }
-    }
-      
-    function logout() {
-        
-      localStorage.removeItem("refreshJwt");
-      localStorage.removeItem("accessJwt");
-      localStorage.removeItem("userDid");
-        
-      document.getElementById("user-info-panel").classList.add("hidden");
-      document.getElementById("flex-post-area").innerHTML = "";
-      document.getElementById("new-post").classList.add("hidden");
-    }
-      
-    function goToProfile() {
-        
-      const userId = localStorage.getItem("userDid");
-        
-      document.location.href = document.location.origin + document.location.pathname + "?username=" + userId;
-    }
-  </script>
   <script type="module">
     import { userCache, modifyFlow } from "./feed.js";
     import { embeds, nameResolver } from "./mods.js";

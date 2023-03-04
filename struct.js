@@ -128,10 +128,7 @@ export async function user(userId) {
     
     var userFollowing;
     
-    if (userFollows === null) {
-      
-      userFollowing = "Following: None";
-    } else if (userFollows.length > 1) {
+    if ((userFollows.length === 0) || (userFollows.length > 1)) {
       
       userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} users</a>`;
     } else {
@@ -139,20 +136,13 @@ export async function user(userId) {
       userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} user</a>`;
     }
     
-    var userDescription;
-    
-    if (userProfileObj != null) {
-      userDescription = `<div id="user-description">${userProfileObj[0].value.description.replaceAll("\n", "<br>")}</div><br>`;
-    } else {
-      userDescription = "";
-    }
-    
     const userElement = 
       `<div class="feed-container">
         ${usernameElement}
         <h3 style="color: #555;">@${userObj.handle} / ${userObj.did}</h3>
         <br>
-        ${userDescription}
+        <div id="user-description">${userProfileObj[0].value.description.replaceAll("\n", "<br>")}</div>
+        <br>
         <flex>
           <div id="user-follows">${userFollowing}</div>
         </flex>
@@ -197,14 +187,7 @@ export async function postModalBuild() {
   
   const userInfo = await getUserInfo();
   
-  var userProfileImage;
-  if (userProfileImage != undefined) {
-    userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
-  } else {
-    userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;
-  }
-  
   document.getElementById("flex-post-area").innerHTML =
-    `${userProfileImage}
+    `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">
     <textarea type="text" placeholder="Your post goes here..." id="post-text"></textarea>`;
 }
