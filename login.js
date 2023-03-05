@@ -2,7 +2,7 @@ import { loginReq } from "./api.js";
 
 if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
      
-  window.location.href = "./";
+  window.location.href = "../";
 }
 
 document.getElementById("loginButton").addEventListener("click", async function() {
@@ -18,7 +18,7 @@ document.getElementById("loginButton").addEventListener("click", async function(
     localStorage.setItem("refreshJwt", reqObj.refreshJwt);
     localStorage.setItem("userDid", reqObj.did);
     
-    window.location.href = "./";
+    window.location.href = "../";
   } else {
     
     window.alert("The provided username/password do not have an associated account!");
