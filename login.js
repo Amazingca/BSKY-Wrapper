@@ -1,4 +1,4 @@
-import { loginReq } from "../api.js";
+import { loginReq } from "./api.js";
 
 if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
      
