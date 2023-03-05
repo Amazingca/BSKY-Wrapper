@@ -110,11 +110,16 @@ export async function getToken() {
   }
 }
 
-/*export async function loginReq(handle, password) {
+export async function loginReq(handle, password) {
   
-  if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
+  if (password.split("").length === 0) {
     
     return null;
+  }
+  
+  if (!handle.includes(".bsky.social")) {
+    
+    handle = handle + ".bsky.social";
   }
   
   const reqObj = {
@@ -130,11 +135,17 @@ export async function getToken() {
   
   try {
     
-    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
+    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => {
+      if (!r.ok) {
+        throw new Error('Login not successful');
+      } else {
+        return r.text();
+      }}));
     
     return authObj;
   } catch (e) {
     
-    return null;
+    console.log(e);
+    return undefined;
   }
-}*/
+}

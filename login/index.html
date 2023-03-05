@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!-- NOTE: This client IS NOT BlueSky's. I am merely only wrapping their API in a web interface. BlueSky Social is still not publicly released yet. -->
+<html>
+  <head>
+    <title>BlueSky Wrapper</title>
+    <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
+    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
+     <script type="module" src="./login/login.js"></script>
+  </head>
+  <body>
+    <wrapper>
+      <br>
+      <titling>
+        <h1><brand>Bluesky</brand> Social Wrapper</h1>
+        <spacer>
+          <h4>Login:</h4>
+          <input type="text" placeholder="Handle" autocomplete="off" autocapitalize="none" spellcheck="false" id="username">
+          <input type="password" placeholder="Password" id="password">
+        </spacer>
+        <h3 class="hidden" id="desc">Link your stats to Discord and get sweet perks on select servers. </h3>
+        <br><br><br>
+        <brow>
+          <div style="grid-area: authenticate;">
+            <div id="loginButton" class="button">Login</div>
+            <div class="buttonfloater"></div>
+          </div>
+          <div style="grid-area: login;">
+            <div onclick="window.location.href = './';" class="button">Continue without logging in</div>
+            <div class="buttonfloater"></div>
+          </div>
+        </brow>
+        <footer>
+          <a href="https://glitch.com" target="_blank">
+             <img src="https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/favicon">
+          </a>
+        </footer>
+      </titling>
+      <br>
+    </wrapper>
+    <style>
+      @font-face {
+        font-family: 'Mona Sans';
+        src:
+          url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2 supports variations'),
+          url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2-variations');
+        font-weight: 200 900;
+        font-stretch: 75% 125%;
+      }
+      h1, h3, h4, .button, input[type="text"], input[type="password"] {
+        font-family: "Mona Sans";
+      }
+      h1 {
+        font-size: 3em;
+        font-weight: 900 !important;
+        color: #222;
+      }
+      h3 {
+        font-size: 2em;
+        font-weight: 700 !important;
+        color: #888;
+      }
+      h3 img {
+        width: 17px;
+        height: 17px;
+        user-select: none;
+        --webkit-user-select: none;
+      }
+      h4 {
+        font-size: 1.25em;
+        font-weight: 800 !important;
+        color: #222;
+      }
+      wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+      }
+      titling {
+        padding: 0.5rem;
+        margin-top: 20vh;
+        width: 50vw;
+      }
+      brand {
+        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      brow {
+        display: grid;
+        grid-template-areas: "authenticate login";
+        gap: 0.5rem;
+        width: 550px;
+      }
+      spacer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      input[type="text"], input[type="password"] {
+        font-size: 1rem;
+        padding: 0.5rem;
+        width: 250px;
+        border-color: #0099ffAA;
+        border-width: 4px;
+        border-bottom-color: #222;
+        border-bottom-width: 6px;
+        border-style: solid;
+        border-image-slice: 1;
+        border-radius: 6px;
+        outline: none;
+      }
+      input[type="text"]:active, input[type="password"]:active {
+        /*outline: 2px solid white;*/
+      }
+      .button {
+        border-radius: 6px;
+        background-color: white;
+        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        padding: 1rem;
+        transition-duration: 0.25s;
+        
+        text-decoration: none;
+        color: white;
+        font-weight: 600 !important;
+        border-radius: 6px;
+        
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .button:hover, #loginButton.trigger {
+        transform: translateY(10px);
+        cursor: pointer;
+        border-radius: 6px;
+      }
+      .button:active {
+        background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+      }
+      .buttonfloater {
+        z-index: -1;
+        transform: translateY(-22px);
+        border-radius: 6px;
+        position: sticky;
+        background-color: #222;
+        padding: 1rem;
+        width: auto;
+        --webkit-user-select: none;
+        user-select: none;
+      }
+      footer {
+        position: absolute;
+        bottom: 1em;
+        display: none;
+      }
+      footer img {
+        width: 75px;
+        height: 75px;
+      }
+      @media screen and (max-width: 780px) {
+        wrapper {
+          justify-content: flex-start;
+        }
+      }
+      @media screen and (max-width: 589px) {
+        titling {
+          margin-top: 0.5vh;
+          width: auto;
+        }
+        h1 {
+          font-size: 2.5em;
+        }
+        h3 {
+          font-size: 1.5em;
+        }
+        brow {
+          width: auto;
+        }
+        footer {
+          position: absolute;
+          bottom: 0.5rem;
+        }
+        footer img {
+          width: 50px;
+          height: 50px;
+        }
+        input[type="text"], input[type="password"] {
+          width: auto;
+        }
+      }
+      :not(input)::selection {
+        background: black;
+        -webkit-text-fill-color: white;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </body>
+</html>

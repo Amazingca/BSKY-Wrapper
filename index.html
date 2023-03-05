@@ -10,9 +10,19 @@
     <header>
       <flex style="justify-content: space-between;">
         <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
-        <div onclick="toggleNav()" id="navmenu">
-         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
-        </div>
+        <flex>
+          <div onclick="toggleNav()" id="navmenu">
+           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
+          </div>
+          <div id="loginButton">
+            <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
+            <a class="hidden" style="text-decoration: none;" href="./login"><h3><brand>Login</brand></h3></a>
+          </div>
+          <div class="hidden" id="logoutButton">
+            <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Logout</button>
+            <a class="hidden" style="text-decoration: none; cursor: pointer;" onclick="logout();"><h3><brand>Logout</brand></h3></a>
+          </div>
+        </flex>
       </flex>
     </header>
     <main-content>
@@ -24,6 +34,13 @@
       <grid>
         <rolodex>
           <menu>
+            <div class="hidden" style="margin-bottom: 1.25rem;" id="user-info-panel">
+              <h2 style="margin-top: 0px;">Profile</h2>
+              <spacer>
+                <button onclick="goToProfile();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem;" class="rolo-click">Go to profile</button>
+                <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem;" class="rolo-click" id="logoutMobile">Logout</button>
+              </spacer>
+            </div>
             <h2 style="margin-top: 0px;">Rolodex</h2>
             <spacer>
               <div class="rolo-container">
@@ -41,10 +58,11 @@
                   <input type="submit" class="rolo-click" value="Run Query">
                 </form>
               </div>
+              <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
             </spacer>
-            <h2 style="margin-top: 1rem;">Beta</h2>
+            <h2 class="hidden" style="margin-top: 1rem;">Beta</h2>
             <spacer>
-              <div class="rolo-container">
+              <div class="rolo-container hidden">
                 <h3>Login</h3>
                 <form name="Login" onsubmit="login(event);">
                   <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social" name="username" required="true" class="rolo-text">
@@ -52,7 +70,7 @@
                   <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Login">
                 </form>
               </div>
-              <div class="rolo-container hidden" id="user-info-panel">
+              <div class="rolo-container hidden" id="user-info-panel-dep">
                 <h3>User</h3>
                 <br>
                 <spacer>
@@ -161,6 +179,7 @@
     }
     #navmenu {
       display: none;
+      height: 24px;
     }
     main-content {
       display: block;
@@ -239,6 +258,12 @@
       width: 25rem;
       position: relative;
       background-color: white;
+    }
+    #loginMobile {
+      display: none;
+    }
+    #logoutMobile {
+      display: none;
     }
     menu {
       position: sticky;
@@ -381,7 +406,6 @@
       margin-top: 0.5rem;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
-      transition-duration: 0.45s;
     }
     .invisiblepc {
       top: 100vh;
@@ -430,6 +454,12 @@
         display: block;
         cursor: pointer;
       }
+      #loginButton {
+        display: none;
+      }
+      #logoutButton {
+        display: none;
+      }
       grid, grid.visiblepc {
         grid-template-areas:
           "rolodex"
@@ -445,6 +475,12 @@
         grid-area: rolodex;
         width: auto;
         display: none;
+      }
+      #loginMobile.active {
+        display: block;
+      }
+      #logoutMobile {
+        display: block;
       }
       menu {
         position: relative;
@@ -586,11 +622,18 @@
       document.getElementById("new-post").classList.toggle("hidden");
         
       document.getElementsByTagName("grid")[0].classList.toggle("visiblepc");
+      
+      document.getElementById("post-container").style.transitionDuration = "0.45s"
       document.getElementById("post-container").classList.toggle("invisiblepc");
       document.getElementById("post-container").classList.toggle("visiblepc");
+      
+      setTimeout(function(){
+        
+        document.getElementById("post-container").style.transitionDuration = "0s";
+      }, 450);
         
       if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          
+        
         document.getElementById("post-options").classList.toggle("hidden");
       } else {
           
@@ -818,6 +861,10 @@
       localStorage.removeItem("refreshJwt");
       localStorage.removeItem("accessJwt");
       localStorage.removeItem("userDid");
+      
+      document.getElementById("logoutButton").classList.add("hidden");
+      document.getElementById("loginMobile").classList.add("active");
+      document.getElementById("loginButton").classList.remove("hidden");
         
       document.getElementById("user-info-panel").classList.add("hidden");
       document.getElementById("flex-post-area").innerHTML = "";
@@ -859,6 +906,10 @@
     
     if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
       
+      
+      document.getElementById("loginMobile").classList.remove("active");
+      document.getElementById("loginButton").classList.add("hidden");
+      document.getElementById("logoutButton").classList.remove("hidden");
       document.getElementById("user-info-panel").classList.remove("hidden");
       postModalBuild();
       document.getElementById("new-post").classList.remove("hidden");
