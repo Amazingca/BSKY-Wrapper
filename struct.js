@@ -73,23 +73,28 @@ export async function post(userId, post) {
     
     if (postObj.value.entities != undefined) {
       
+      var selection = [];
+      
       for (var i = 0; i < postObj.value.entities.length; i++) {
         
         if (postObj.value.entities[i].type === "mention") {
-          
-          var mentionSelection = "";
           
           const startPos = postObj.value.entities[i].index.start;
           const endPos = postObj.value.entities[i].index.end;
           const mentionLength = endPos - startPos;
           
+          selection[i] = "";
+          
           for (var o = 0; o < mentionLength; o++) {
             
-            mentionSelection = mentionSelection + postObj.value.text.split("")[o + startPos];
+            selection[i] = selection[i] + postObj.value.text.split("")[o + startPos];
           }
-          
-          postObj.value.text = postObj.value.text.replaceAll(mentionSelection, `<a href="${document.location.origin + document.location.pathname}?username=${postObj.value.entities[i].value}" class="mention">${mentionSelection}</a>`);
         }
+      }
+      
+      for (var i = 0; i < selection.length; i++) {
+        
+        postObj.value.text = postObj.value.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.value.entities[i].value}" class="mention">${selection[i]}</a>`);
       }
     }
     
