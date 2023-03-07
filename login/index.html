@@ -4,8 +4,11 @@
   <head>
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
-    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
-     <script type="module" src="../login.js"></script>
+    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon?v=1678141797361">
+    <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/pwa-logo?v=1678133674084">
+    <meta name="theme-color" content="#ffffff">
+    <script type="module" src="../login.js"></script>
+    <link rel="manifest" href="../manifest.json">
   </head>
   <body>
     <wrapper>
@@ -17,7 +20,7 @@
           <input type="text" placeholder="Handle" autocomplete="off" autocapitalize="none" spellcheck="false" id="username">
           <input type="password" placeholder="Password" id="password">
         </spacer>
-        <h3 class="hidden" id="desc">Link your stats to Discord and get sweet perks on select servers. </h3>
+        <h3 class="hidden" id="desc">This is a placeholder for additional context in the future.</h3>
         <br><br><br>
         <brow>
           <div style="grid-area: authenticate;">
@@ -25,7 +28,7 @@
             <div class="buttonfloater"></div>
           </div>
           <div style="grid-area: login;">
-            <div onclick="window.location.href = '../';" class="button">Continue without logging in</div>
+            <div onclick="localStorage.setItem('viewFeed', true); window.location.href = '../';" class="button">Continue without logging in</div>
             <div class="buttonfloater"></div>
           </div>
         </brow>
@@ -132,7 +135,7 @@
         cursor: pointer;
         border-radius: 6px;
       }
-      .button:active {
+      .button:active, #loginButton.trigger {
         background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
       }
       .buttonfloater {

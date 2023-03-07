@@ -4,7 +4,9 @@
   <head>
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
-    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon.png?v=1676683711391">
+    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/bsky-wrap-favicon?v=1678141797361">
+    <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/pwa-logo?v=1678133674084">
+    <link rel="manifest" href="manifest.json">
   </head>
   <body>
     <header>
@@ -15,12 +17,10 @@
            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
           </div>
           <div id="loginButton">
-            <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
-            <a class="hidden" style="text-decoration: none;" href="./login"><h3><brand>Login</brand></h3></a>
+            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
           </div>
           <div class="hidden" id="logoutButton">
             <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Logout</button>
-            <a class="hidden" style="text-decoration: none; cursor: pointer;" onclick="logout();"><h3><brand>Logout</brand></h3></a>
           </div>
         </flex>
       </flex>
@@ -46,19 +46,19 @@
               <div class="rolo-container">
                 <h3>Get User</h3>
                 <form name="GetUser">
-                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
-                  <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Run Query">
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
+                  <input type="submit" class="rolo-click" value="Run Query">
                 </form>
               </div>
               <div class="rolo-container">
                 <h3>Get Post</h3>
                 <form name="GetPost">
-                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social or did:plc:*" name="username" required="true" class="rolo-text">
-                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
                   <input type="submit" class="rolo-click" value="Run Query">
                 </form>
               </div>
-              <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
+              <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
             </spacer>
             <h2 class="hidden" style="margin-top: 1rem;">Beta</h2>
             <spacer>
@@ -86,7 +86,7 @@
             <h2>Feed</h2>
             <div id="feedStruct">
               <div class="feed-container">
-                <div style="text-align: center;">
+                <div class="spinner">
                   <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
                 </div>
               </div>
@@ -99,7 +99,7 @@
             </a>
             <div class="hidden" id="rootpost">
               <div class="feed-container" id="rootpost-container">
-                <div style="text-align: center;">
+                <div class="spinner">
                   <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
                 </div>
               </div>
@@ -110,7 +110,7 @@
             <div class="hidden" id="parentposts">
               <div>
                 <div class="feed-container">
-                  <div style="text-align: center;">
+                  <div class="spinner">
                     <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
                   </div>
                 </div>
@@ -118,7 +118,7 @@
               </div>
             </div>
             <div id="postContainer">
-              <div style="text-align: center;">
+              <div class="spinner">
                 <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
               </div>
             </div>
@@ -129,12 +129,12 @@
               <h2 style="color: inherit;">User</h2>
             </a>
             <div id="userStruct">
-              <div style="text-align: center;">
+              <div class="spinner">
                 <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
               </div>
             </div>
           </div>
-          <footer>This client is not owned or managed by Bluesky.<br>Client restraints include: No image generation. No thread info. No user reposts.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub</footer>
+          <footer>This client is not owned or managed by Bluesky.<br>View this project's <a href="https://github.com/Amazingca/BSKY-Wrapper" target="_blank">repo</a> and <a href="https://github.com/users/Amazingca/projects/2/views/5" target="_blank">roadmap</a> on GitHub.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub.</footer>
         </feed>
         <div class="invisiblepc" id="post-container">
           <flex style="justify-content: space-between; margin: 1rem;">
@@ -227,6 +227,12 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .spinner {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
     .dotted-spacer {
       display: block;
       border-width: 0.3rem;
@@ -271,6 +277,11 @@
       margin: 0px;
       padding: 0px;
       padding-top: 19.92px;
+    }
+    .mention {
+      font-weight: 600 !important;
+      text-decoration: none;
+      color: #555;
     }
     .rolo-text {
       border-radius: 0.5rem;
@@ -347,6 +358,7 @@
       right: 1rem;
       height: 4rem;
       width: 4rem;
+      z-index: 1;
       border-radius: 50%;
       border-width: 0px;
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
@@ -890,7 +902,7 @@
     
     if (localStorage.getItem("introViewed") === null) {
       
-      document.getElementById("introMessage").classList.remove("hidden");
+      //document.getElementById("introMessage").classList.remove("hidden");
       localStorage.setItem("recent", "[]");
       localStorage.setItem("introViewed", true);
     }
@@ -926,7 +938,7 @@
       
       if (urlParams.get("username") != null) {
       
-        if (urlParams.get("username").includes(".bsky.social") || urlParams.get("username").includes("did:plc:")) {
+        if ((urlParams.get("username").split("").length > 0) || urlParams.get("username").includes("did:plc:")) {
 
           if (urlParams.get("postid") != null) {
             
@@ -960,6 +972,11 @@
       document.getElementById("feed").classList.toggle("hidden");
       document.getElementById("post").classList.toggle("hidden");
       
+      if ((!userId.includes(".bsky.social")) && (!userId.includes(".")) && (!userId.includes("did:plc:"))) {
+        
+        userId = userId + ".bsky.social";
+      }
+      
       try {
         
         const postObj = await getPost(userId, postId);
@@ -992,6 +1009,11 @@
       document.getElementById("feed").classList.toggle("hidden");
       document.getElementById("user").classList.toggle("hidden");
 
+      if ((!userId.includes(".bsky.social")) && (!userId.includes(".")) && (!userId.includes("did:plc:"))) {
+        
+        userId = userId + ".bsky.social";
+      }
+      
       try {
         
         const userObj = await getUserRepo(userId);
