@@ -9,7 +9,7 @@
     "theme_color": "#f5f5f5",
      "icons": [
       {
-       "src": "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/pwa-logo?v=1678133674084",
+       "src": "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/pwa-logo",
        "type": "image/png",
        "sizes": "1024x1024"
       }
