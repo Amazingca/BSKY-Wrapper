@@ -46,7 +46,7 @@ export async function listRecords(userId, collection) {
   
   try {
     
-    const records = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userId}&collection=${collection}`).then(r => r.text())).records;
+    const records = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userId}&collection=${collection}&limit=100`).then(r => r.text())).records;
     
     if (records.length === 0) {
       
@@ -117,7 +117,7 @@ export async function loginReq(handle, password) {
     return null;
   }
   
-  if (!handle.includes(".bsky.social")) {
+  if ((!handle.includes(".bsky.social")) && (!handle.includes("."))) {
     
     handle = handle + ".bsky.social";
   }
