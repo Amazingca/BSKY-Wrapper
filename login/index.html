@@ -17,7 +17,7 @@
           <input type="text" placeholder="Handle" autocomplete="off" autocapitalize="none" spellcheck="false" id="username">
           <input type="password" placeholder="Password" id="password">
         </spacer>
-        <h3 class="hidden" id="desc">Link your stats to Discord and get sweet perks on select servers. </h3>
+        <h3 class="hidden" id="desc">This is a placeholder for additional context in the future.</h3>
         <br><br><br>
         <brow>
           <div style="grid-area: authenticate;">
@@ -25,7 +25,7 @@
             <div class="buttonfloater"></div>
           </div>
           <div style="grid-area: login;">
-            <div onclick="window.location.href = '../';" class="button">Continue without logging in</div>
+            <div onclick="localStorage.setItem('viewFeed', true); window.location.href = '../';" class="button">Continue without logging in</div>
             <div class="buttonfloater"></div>
           </div>
         </brow>
