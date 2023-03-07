@@ -17,12 +17,10 @@
            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
           </div>
           <div id="loginButton">
-            <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
-            <a class="hidden" style="text-decoration: none;" href="./login"><h3><brand>Login</brand></h3></a>
+            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
           </div>
           <div class="hidden" id="logoutButton">
             <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Logout</button>
-            <a class="hidden" style="text-decoration: none; cursor: pointer;" onclick="logout();"><h3><brand>Logout</brand></h3></a>
           </div>
         </flex>
       </flex>
@@ -60,7 +58,7 @@
                   <input type="submit" class="rolo-click" value="Run Query">
                 </form>
               </div>
-              <button onclick="window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
+              <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
             </spacer>
             <h2 class="hidden" style="margin-top: 1rem;">Beta</h2>
             <spacer>
