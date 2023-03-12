@@ -62,10 +62,93 @@ export async function listRecords(userId, collection) {
   }
 }
 
+export async function getUserFeed() {
+  
+  const userIf = localStorage.getItem("userDid");
+  const token = await getToken();
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const feedReq = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline", req).then(r => r.text()));
+    
+    return feedReq;
+  } catch (e) {
+    
+    return null;
+    console.log(e);
+  }
+}
+
+export async function getUserNotifCount() {
+  
+  const userId = localStorage.getItem("userDid");
+  const token = localStorage.getItem("accessJwt");
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const notifCountObj = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.notification.getCount", req).then(r => r.text()));
+    
+    return notifCountObj.count;
+  } catch (e) {
+    
+    return "no"
+  }
+}
+
+export async function upvotePost(postUri, postCid) {
+  
+  const userId = localStorage.getItem("userDid");
+  const token = localStorage.getItem("accessJwt");
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      "subject": {
+        "uri": postUri,
+        "cid": postCid
+      },
+      "direction": "up"
+    })
+  }
+  
+  try {
+    
+    const res = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.setVote", req).then(r => r.text()));
+    
+    if (res.uri != undefined) {
+      
+      return res.uri;
+    } else {
+      
+      return null;
+    }
+  } catch (e) {
+    
+    return null
+  }
+}
+
 export async function getUserInfo() {
   
   const userId = localStorage.getItem("userDid");
-  const token = await getToken();
+  const token = localStorage.getItem("accessJwt");
   
   const req = {
     method: "GET",
@@ -145,6 +228,7 @@ export async function loginReq(handle, password) {
     return authObj;
   } catch (e) {
     
+    window.alert("User could not be authenticated! This could be due to expired tokens–please re-login to your account.");
     console.log(e);
     return undefined;
   }

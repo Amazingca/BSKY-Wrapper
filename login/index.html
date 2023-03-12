@@ -16,19 +16,42 @@
       <titling>
         <h1><brand>Bluesky</brand> Social Wrapper</h1>
         <spacer>
-          <h4>Login:</h4>
-          <input type="text" placeholder="Handle" autocomplete="off" autocapitalize="none" spellcheck="false" id="username">
-          <input type="password" placeholder="Password" id="password">
+          <chooser>
+            <h4 style="grid-area: login;" class="typeChoose" id="changeToLogin">Login</h4>
+            <div style="grid-area: split; border:0.5px solid black; height: 1.5em;"></div>
+            <h4 style="grid-area: signup;" class="typeChoose" id="changeToSignup">Signup</h4>
+            <div id="selected"></div>
+          </chooser>
+          <div class="maskItem" id="loginView">
+            <input type="email" placeholder="Handle" autocomplete="username" autocapitalize="none" spellcheck="false" id="username">
+            <input type="password" placeholder="Password" id="password" autocomplete="current-password">
+          </div>
+          <div class="maskItem hidden" id="signupView">
+            <p>1. First, you'll need to provide an invite code:</p>
+            <input type="text" placeholder="Invite Code" autocomplete="off" autocapitalize="none" spellcheck="false" id="signupInviteCode">
+            <spacer class="hidden" id="nextSignupStage">
+              <p>2. Great! Now choose a handle, then provide an email/password.</p>
+              <input type="email" placeholder="Email" autocomplete="email" autocapitalize="none" spellcheck="false" id="signupEmail">
+              <input type="username" placeholder="Handle" id="signupUsername" autocapitalize="none" spellcheck="false">
+              <input type="password" placeholder="Password" id="signupPassword">
+            </spacer>
+          </div>
         </spacer>
         <h3 class="hidden" id="desc">This is a placeholder for additional context in the future.</h3>
         <br><br><br>
-        <brow>
+        <brow id="loginModal">
           <div style="grid-area: authenticate;">
             <div id="loginButton" class="button">Login</div>
             <div class="buttonfloater"></div>
           </div>
-          <div style="grid-area: login;">
+          <div style="grid-area: proceed;">
             <div onclick="localStorage.setItem('viewFeed', true); window.location.href = '../';" class="button">Continue without logging in</div>
+            <div class="buttonfloater"></div>
+          </div>
+        </brow>
+        <brow class="hidden" style="grid-template-areas: 'signup';" id="signupModal">
+          <div style="grid-area: signup;">
+            <div id="signupButton" class="button disabled">Complete Signup</div>
             <div class="buttonfloater"></div>
           </div>
         </brow>
@@ -44,13 +67,24 @@
       @font-face {
         font-family: 'Mona Sans';
         src:
-          url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2 supports variations'),
-          url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2-variations');
+          url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2 supports variations'),
+          url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2-variations');
         font-weight: 200 900;
         font-stretch: 75% 125%;
       }
-      h1, h3, h4, .button, input[type="text"], input[type="password"] {
+      @font-face {
+        font-family: 'Hubot Sans';
+        src:
+          url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2 supports variations'),
+          url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2-variations');
+        font-weight: 200 900;
+        font-stretch: 75% 125%;
+      }
+      h1, h3, h4, .button {
         font-family: "Mona Sans";
+      }
+      p, h5, input[type="email"], input[type="password"], input[type="text"], input[type="username"] {
+       font-family: "Hubot Sans";
       }
       h1 {
         font-size: 3em;
@@ -73,6 +107,15 @@
         font-weight: 800 !important;
         color: #222;
       }
+      h5 {
+        font-size: 1.25em;
+        font-weight: 700 !important;
+        color: #222;
+      }
+      p {
+        font-weight: 700 !important;
+        color: #222;
+      }
       wrapper {
         display: flex;
         flex-wrap: nowrap;
@@ -88,18 +131,48 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
+      chooser {
+        display: grid;
+        grid-template-areas: "login split signup";
+        align-items: center;
+        gap: 0.5rem;
+        width: 140px;
+      }
       brow {
         display: grid;
-        grid-template-areas: "authenticate login";
+        grid-template-areas: "authenticate proceed";
         gap: 0.5rem;
-        width: 550px;
+        width: 400px;
       }
       spacer {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
       }
-      input[type="text"], input[type="password"] {
+      flex {
+        display: flex;
+        align-items: center;
+      }
+      .typeChoose {
+        cursor: pointer;
+      }
+      .typeChoose:hover {
+        color: #666;
+      }
+      #selected {
+        position: absolute;
+        margin-bottom: 26.6px;
+        padding-top: 0px;
+        background-color: white;
+        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        transition: padding-top 0.1s ease-out 0s;
+      }
+      #loginView, #signupView {
+        width: 250px;
+      }
+      input[type="email"], input[type="password"], input[type="text"], input[type="username"] {
         font-size: 1rem;
         padding: 0.5rem;
         width: 250px;
@@ -111,9 +184,24 @@
         border-image-slice: 1;
         border-radius: 6px;
         outline: none;
+        transition: border-color 0.75s cubic-bezier(0.13,0.82,0.47,0.98) 0s;
       }
-      input[type="text"]:active, input[type="password"]:active {
-        /*outline: 2px solid white;*/
+      input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="username"]:focus {
+        border-color: #3b82f6FF;
+        border-bottom-color: #222;
+      }
+      mask {
+        width: 274px;
+        display: flex;
+        gap: 1.55rem;
+        overflow: hidden;
+      }
+      .maskItem {
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: 0.4s cubic-bezier(0.34,0.14,0.28,1.13) 0s;
       }
       .button {
         border-radius: 6px;
@@ -159,6 +247,9 @@
         height: 75px;
       }
       @media screen and (max-width: 780px) {
+        titling {
+          margin-top: 10vh;
+        }
         wrapper {
           justify-content: flex-start;
         }
@@ -177,6 +268,13 @@
         brow {
           width: auto;
         }
+        mask {
+          width: auto;
+          gap: 0px;
+        }
+        #loginView, #signupView {
+          width: auto;
+        }
         footer {
           position: absolute;
           bottom: 0.5rem;
@@ -185,7 +283,7 @@
           width: 50px;
           height: 50px;
         }
-        input[type="text"], input[type="password"] {
+        input[type="email"], input[type="password"], input[type="text"], input[type="username"] {
           width: auto;
         }
       }
@@ -195,6 +293,15 @@
       }
       .hidden {
         display: none;
+      }
+      .disabled {
+        cursor: not-allowed;
+        background-image: linear-gradient(to bottom right, #707070b0, #666666);
+      }
+      .disabled:hover {
+        cursor: not-allowed;
+        background-image: linear-gradient(to bottom right, #707070b0, #666666);
+        transform: translateY(0px);
       }
     </style>
   </body>
