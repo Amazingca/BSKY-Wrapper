@@ -10,11 +10,12 @@
   </head>
   <body>
     <header>
-      <flex style="justify-content: space-between;">
+      <div style="display: flex; justify-content: center;">
+      <flex style="width: 850px; justify-content: space-between;">
         <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
         <flex>
-          <div onclick="toggleNav()" id="navmenu">
-           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path></svg>
+          <div onclick="toggleNav()" id="searcher">
+           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
           </div>
           <div id="loginButton">
             <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
@@ -24,6 +25,7 @@
           </div>
         </flex>
       </flex>
+      </div>
     </header>
     <main-content>
       <div id="introMessage" class="hidden">
@@ -31,142 +33,170 @@
         <h4>Hello everyone. I decided to make a BlueSky Social API wrapper for those who wanted to see the posts on the platform before they had an account. Enjoy!</h4>
         <br>
       </div>
-      <grid>
-        <rolodex>
-          <menu>
-            <div class="hidden" style="margin-bottom: 1.25rem;" id="user-info-panel">
-              <h2 style="margin-top: 0px;">Profile</h2>
-              <spacer>
-                <button onclick="goToProfile();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem;" class="rolo-click">Go to profile</button>
-                <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem;" class="rolo-click" id="logoutMobile">Logout</button>
-              </spacer>
-            </div>
-            <h2 style="margin-top: 0px;">Rolodex</h2>
-            <spacer>
-              <div class="rolo-container">
-                <h3>Get User</h3>
-                <form name="GetUser">
-                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                  <input type="submit" class="rolo-click" value="Run Query">
-                </form>
-              </div>
-              <div class="rolo-container">
-                <h3>Get Post</h3>
-                <form name="GetPost">
-                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
-                  <input type="submit" class="rolo-click" value="Run Query">
-                </form>
-              </div>
-              <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
-            </spacer>
-            <h2 class="hidden" style="margin-top: 1rem;">Beta</h2>
-            <spacer>
-              <div class="rolo-container hidden">
-                <h3>Login</h3>
-                <form name="Login" onsubmit="login(event);">
-                  <input type="text" autocomplete="off" autocapitalize="none" placeholder="Username: *.bsky.social" name="username" required="true" class="rolo-text">
-                  <input type="password" autocomplete="off" autocapitalize="none" placeholder="Password" name="password" required="true" class="rolo-text">
-                  <input type="submit" autocomplete="off" autocapitalize="none" class="rolo-click" value="Login">
-                </form>
-              </div>
-              <div class="rolo-container hidden" id="user-info-panel-dep">
-                <h3>User</h3>
-                <br>
+      <div class="center">
+        <grid>
+          <rolodex>
+            <menu>
+              <div class="hidden" style="margin-bottom: 1.25rem;" id="user-info-panel">
+                <h2 style="margin-top: 0px;">Profile</h2>
                 <spacer>
-                  <button onclick="goToProfile();" class="rolo-click">Go to profile</button>
-                  <button onclick="logout();" class="rolo-click">Logout</button>
+                  <div class="deskbutton-group">
+                    <div id="userInfoDesktop"></div>
+                    <div class="user-options"></div>
+                    <a id="navButtonHomeDesktop" href="./" class="deskbutton" style="color: #222; text-decoration: none;">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z"></path></svg>
+                      <div>Home</div>
+                    </a>
+                    <a class="deskbutton" id="navButtonNotifsDesktop" style="justify-content: space-between; text-decoration: none;">
+                      <div id="navNotifsDesktop" style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; color: #222;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path></svg>
+                        <div>Notifications</div>
+                      </div>
+                      <div>
+                        <div class="hidden" id="notifCountDesktop"></div>
+                      </div>
+                    </a>
+                    <a id="navButtonProfileDesktop" class="deskbutton" style="border-bottom-left-radius: 0.6rem; border-bottom-right-radius: 0.6rem; color: #222; text-decoration: none;">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
+                      <div>Profile</div>
+                    </a>
+                  </div>
                 </spacer>
               </div>
-            </spacer>
-          </menu>
-        </rolodex>
-        <feed>
-          <div id="feed">
-            <h2>Feed</h2>
-            <div id="feedStruct">
-              <div class="feed-container">
-                <div class="spinner">
-                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+              <h2 style="margin-top: 0px;">Rolodex</h2>
+              <spacer>
+                <div class="rolo-container">
+                  <h3>Get User</h3>
+                  <form name="GetUser">
+                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
+                    <input type="submit" class="rolo-click" value="Run Query">
+                  </form>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div id="post" class="hidden">
-            <a onclick="goBack();" title="Go back to previous page" class="back-button">
-              <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
-              <h2 style="color: inherit;">Post</h2>
-            </a>
-            <div class="hidden" id="rootpost">
-              <div class="feed-container" id="rootpost-container">
-                <div class="spinner">
-                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                <div class="rolo-container">
+                  <h3>Get Post</h3>
+                  <form name="GetPost">
+                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
+                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
+                    <input type="submit" class="rolo-click" value="Run Query">
+                  </form>
                 </div>
+                <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
+              </spacer>
+            </menu>
+          </rolodex>
+          <feed>
+            <div id="feed">
+              <div id="feed-attach">
+                <h2>Feed</h2>
               </div>
-              <div class="dotted-spacer" id="separationrtp">
-              <brand onclick="loadParent();" style="font-size: 15px;" id="loadButton">Show more replies...</brand>
-              </div>
-            </div>
-            <div class="hidden" id="parentposts">
-              <div>
+              <div id="feedStruct">
                 <div class="feed-container">
                   <div class="spinner">
                     <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
                   </div>
                 </div>
-                <div class="lined-spacer"></div>
               </div>
             </div>
-            <div id="postContainer">
-              <div class="spinner">
-                <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+            <div id="post" class="hidden">
+              <a onclick="goBack();" title="Go back to previous page" class="back-button">
+                <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
+                <h2 style="color: inherit;">Post</h2>
+              </a>
+              <div class="hidden" id="rootpost">
+                <div id="rootpost-container">
+                  <div class="feed-container spinner">
+                    <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                  </div>
+                </div>
+                <div class="dotted-spacer" id="separationrtp">
+                <brand onclick="loadParent();" style="font-size: 15px;" id="loadButton">Show more replies...</brand>
+                </div>
+              </div>
+              <div class="hidden" id="parentposts">
+                <div>
+                  <div class="feed-container">
+                    <div class="spinner">
+                      <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                    </div>
+                  </div>
+                  <div class="lined-spacer"></div>
+                </div>
+              </div>
+              <div id="postContainer">
+                <div class="spinner">
+                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                </div>
               </div>
             </div>
-          </div>
-          <div id="user" class="hidden">
-            <a onclick="goBack();" title="Go back to previous page" class="back-button">
-              <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
-              <h2 style="color: inherit;">User</h2>
-            </a>
-            <div id="userStruct">
-              <div class="spinner">
-                <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+            <div id="user" class="hidden">
+              <a onclick="goBack();" title="Go back to previous page" class="back-button">
+                <svg style="margin-top: auto; margin-bottom: auto;" xmlns="http://www.w3.org/2000/svg" fill="inherit" viewbox="0 0 16 16" width="32" height="32"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>
+                <h2 style="color: inherit;">User</h2>
+              </a>
+              <div id="userStruct">
+                <div class="spinner">
+                  <svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg>
+                </div>
               </div>
             </div>
-          </div>
-          <footer>This client is not owned or managed by Bluesky.<br>View this project's <a href="https://github.com/Amazingca/BSKY-Wrapper" target="_blank">repo</a> and <a href="https://github.com/users/Amazingca/projects/2/views/5" target="_blank">roadmap</a> on GitHub.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub.</footer>
-        </feed>
-        <div class="invisiblepc" id="post-container">
-          <flex style="justify-content: space-between; margin: 1rem;">
-            <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
-            <h3 id="submit-post" onclick="sendPost();">Post</h3>
-          </flex>
-          <hr style="border-color: #888;">
-          <div id="post-content">
-            <flex style="margin: 1rem; align-items: flex-start;" id="flex-post-area">
+            <footer>This client is not owned or managed by Bluesky.<br>Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub.<br>View this project's <a href="https://github.com/Amazingca/BSKY-Wrapper" target="_blank">repo</a> and <a href="https://github.com/users/Amazingca/projects/2/views/5" target="_blank">roadmap</a> on there too.</footer>
+          </feed>
+          <div class="invisiblepc" id="post-container">
+            <flex style="justify-content: space-between; margin: 1rem;">
+              <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
+              <h3 id="submit-post" onclick="sendPost();">Post</h3>
             </flex>
+            <hr style="border-color: #888;">
+            <div id="post-content">
+              <flex style="margin: 1rem; align-items: flex-start;" id="flex-post-area">
+              </flex>
+            </div>
           </div>
-        </div>
-      </grid>
+        </grid>
+      </div>
     </main-content>
     <button class="hidden" onclick="newPostToggle();" id="new-post">
       <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path></svg>
     </button>
-    <div class="hidden" id="post-options">
-      <button class="cover" onclick="addLink();">
-        <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-      </button>
-      <button class="cover" onclick="chooseImage();">
-        <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M12.212 3.02a1.753 1.753 0 0 0-2.478.003l-5.83 5.83a3.007 3.007 0 0 0-.88 2.127c0 .795.315 1.551.88 2.116.567.567 1.333.89 2.126.89.79 0 1.548-.321 2.116-.89l5.48-5.48a.75.75 0 0 1 1.061 1.06l-5.48 5.48a4.492 4.492 0 0 1-3.177 1.33c-1.2 0-2.345-.487-3.187-1.33a4.483 4.483 0 0 1-1.32-3.177c0-1.195.475-2.341 1.32-3.186l5.83-5.83a3.25 3.25 0 0 1 5.553 2.297c0 .863-.343 1.691-.953 2.301L7.439 12.39c-.375.377-.884.59-1.416.593a1.998 1.998 0 0 1-1.412-.593 1.992 1.992 0 0 1 0-2.828l5.48-5.48a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-5.48 5.48a.492.492 0 0 0 0 .707.499.499 0 0 0 .352.154.51.51 0 0 0 .356-.154l5.833-5.827a1.755 1.755 0 0 0 0-2.481Z"></path></svg>
-      </button>
+    <div class="deskbutton" id="profileInfoModal"></div>
+    <div id="navbar">
+      <div style="position: fixed; bottom: 80px; background-color: #d9d9d9; left: 0px; right: 0px; z-index: 1; height: 2px;"></div>
+      <navbar>
+        <a id="navButtonHomeMobile" href="./">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z"></path></svg>
+        </a>
+        <a id="navButtonNotifsMobile">
+          <div class="hidden" id="notifCountMobile">0</div>
+          <div id="navNotifsMobile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path></svg>
+          </div>
+        </a>
+        <button onclick="newPostToggle();" id="new-post-mobile">
+          <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path></svg>
+        </button>
+        <a id="navButtonProfileMobile">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
+        </a>
+        <a style="cursor: pointer;" id="userInfoButton">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg>
+        </a>
+      </navbar>
     </div>
   </body>
   <style>
     @font-face {
       font-family: 'Mona Sans';
       src:
-        url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2 supports variations'),
-        url('https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/Mona-Sans.woff2') format('woff2-variations');
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2-variations');
+      font-weight: 200 900;
+      font-stretch: 75% 125%;
+    }
+    @font-face {
+      font-family: 'Hubot Sans';
+      src:
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2-variations');
       font-weight: 200 900;
       font-stretch: 75% 125%;
     }
@@ -177,27 +207,37 @@
       position: sticky;
       z-index: 3;
     }
-    #navmenu {
+    #searcher {
       display: none;
-      height: 24px;
+      position: fixed;
+      top: 21px;
+      right: 1rem;
     }
     main-content {
       display: block;
       padding-left: 1rem;
       padding-right: 1rem;
     }
+    .center {
+      display: flex;
+      justify-content: center;
+    }
     grid {
       display: grid;
       gap: 1rem;
+      max-width: 850px;
       grid-template-areas: "rolodex feed";
-      grid-template-columns: 25rem auto;
+      grid-template-columns: 15rem auto;
     }
     grid.visiblepc {
       grid-template-areas: "rolodex feed postbox";
       grid-template-columns: 25rem auto 25rem;
     }
-    h1, h2, h3, h4, h5, footer, .rolo-container, .rolo-text, .feed-container, .dotted-spacer, #post-text {
+    h1, h2, h3, h4, h5, footer, .deskbutton, #userInfoDesktop, .rolo-container, .rolo-text, .feed-container, .full-feed-container, .default-user-photo, .dotted-spacer, #post-text {
       font-family: "Mona Sans";
+    }
+    .reactor, #notifCountDesktop, #notifCountMobile, #text-amount-indicator {
+      font-family: "Hubot Sans";
     }
     h1, h2 {
       font-size: 1.5em;
@@ -217,6 +257,23 @@
       color: #555;
       margin: 0px;
     }
+    .deskbutton-group {
+      border-radius: 0.75rem;
+      border: 2px solid #d9d9d9;
+    }
+    .deskbutton {
+      font-size: 1.1rem;
+      font-weight: 600 !important;
+      padding: 0.5rem;
+      gap: 0.75rem;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .deskbutton:hover {
+      background-color: #d9d9d9;
+    }
     flex {
       display: flex;
       gap: 0.5rem;
@@ -232,6 +289,7 @@
       text-align: center;
       justify-content: center;
       align-items: center;
+      width: 594px;
     }
     .dotted-spacer {
       display: block;
@@ -261,14 +319,11 @@
     }
     rolodex {
       grid-area: rolodex;
-      width: 25rem;
+      width: 15rem;
       position: relative;
       background-color: white;
     }
     #loginMobile {
-      display: none;
-    }
-    #logoutMobile {
       display: none;
     }
     menu {
@@ -323,6 +378,9 @@
       cursor: pointer;
       fill: #888;
     }
+    flex {
+      display: flex;
+    }
     feed {
       grid-area: feed;
     }
@@ -345,6 +403,25 @@
       flex-direction: column;
       mix-blend-mode: multiply;
     }
+    .full-feed-container {
+      overflow-wrap: anywhere;
+      width: inherit;
+      background: #f5f5f5;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      mix-blend-mode: multiply;
+    }
+    reactors {
+      display: grid;
+      background-color: #d9d9d9;
+      padding: 0.5rem;
+      gap: 1.5rem;
+      grid-template-columns: auto auto auto auto;
+      border-bottom-left-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+      justify-content: start;
+    }
     footer {
       padding: 1rem;
       display: block;
@@ -364,25 +441,38 @@
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
       cursor: pointer;
     }
-    #post-options {
-      position: fixed;
-      z-index: 3;
-      bottom: 1rem;
-      right: 1rem;
+    #text-amount-indicator {
+      --deg: 0deg;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 64px;
+      border-radius: 50%;
+      background-image: radial-gradient(circle, white 40%, #00000000 40%), conic-gradient(#0099ff var(--deg), #00000000 var(--deg));
+    }
+    .post-options {
+      width: 64px;
+      height: 1px;
+      background-color: #222;
     }
     .default-user-photo {
-      height: 50px;
+      width: 50px;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
       -webkit-text-fill-color: white;
-      font-family: sans-serif;
-      font-size: 2.5rem;
+      font-size: 1.8rem;
+      font-weight: 700 !important;
       display: flex;
       justify-content: center;
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
+    }
+    .default-user-photo.post {
+      font-size: 2rem;
+      width: 64px;
     }
     .cover {
       height: 4rem;
@@ -408,13 +498,13 @@
     #post-container {
       grid-area: postbox;
       position: fixed;
-      width: 25rem;
+      width: calc(850px - 16rem);
       background-color: #f5f5f5;
       overflow-wrap: anywhere;
-      margin-right: 1rem;
       bottom: 0px;
-      right: 0px;
-      z-index: 2;
+      border: 1px solid white;
+      right: calc((100vw - 1rem - 849px)/2);
+      z-index: 4;
       margin-top: 0.5rem;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
@@ -423,7 +513,7 @@
       top: 100vh;
     }
     .visiblepc {
-      top: 92.16px;
+      top: calc(100vh - 27em);
     }
     #post-text {
       border-color: #00000000;
@@ -434,35 +524,112 @@
       padding: 0.5rem;
       resize: none;
     }
+    #navbar {
+      display: none;
+    }
+    navbar {
+      display: flex;
+      gap: 1rem;
+      position: fixed;
+      background: white;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      padding: 0.5rem;
+      justify-content: space-around;
+      align-items: center;
+    }
+    #notifCountDesktop {
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      -webkit-text-fill-color: white;
+      background-color: white;
+      border-radius: 9px;
+      text-align: center;
+      font-size: 14px;
+      padding: 0.25rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #notifCountMobile {
+      position: absolute;
+      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      -webkit-text-fill-color: white;
+      background-color: white;
+      border-radius: 9px;
+      margin-left: 15px;
+      bottom: 45px;
+      text-align: center;
+      font-size: 12px;
+      padding: 0.25rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #profileInfoModal {
+      display: none;
+      transition: 0.1s cubic-bezier(.4,1.53,.81,1.24) 0s;
+      position: fixed;
+      bottom: 5rem;
+      right: 0rem;
+      z-index: 3;
+      font-weight: 700 !important;
+      text-align: end;
+      font-size: 1.25rem;
+      padding: 0px;
+      border-radius: 0.75rem;
+      background-color: white; 
+      border: 2px solid #d9d9d9;
+    }
+    .user-options {
+      width: -webkit-fit-available;
+      height: 2px;
+      background-color: #d9d9d9;
+    }
+    .userInfoOptionsButton {
+      background-color: white;
+      border-width: 0px;
+      cursor: pointer;
+      color: #222;
+      padding: 0.5rem;
+      font-weight: 700 !important;
+      font-size: 1.1rem;
+      text-align: right;
+    }
+    .userInfoOptionsButton:hover {
+      background-color: #d9d9d9;
+    }
     @keyframes spin {
       0% { transform: rotateZ(0deg); }
       100% { transform: rotateZ(-360deg); }
     }
-    @media screen and (max-width: 1131px) {
-      grid {
-        grid-template-columns: 15rem auto;
-      }
-      grid.visiblepc {
-        grid-template-columns: 15rem auto 25rem;
-      }
-      rolodex {
-        width: 15rem;
-      }
+    grid.visiblepc {
+      grid-template-areas: 
+        "rolodex feed"
+        "empty postbox";
+      grid-template-columns: 15rem auto;
     }
-    @media screen and (max-width: 861px) {
+    @media screen and (max-width: 898px) {
       grid {
         grid-template-columns: 15rem auto;
       }
       #post-container {
-        width: calc(100vw - 18.75rem);
+        width: calc(100vw - 19rem);
+        right: 1rem;
+      }
+      .spinner {
+        width: auto;
       }
     }
     @media screen and (max-width: 589px) {
       header {
+        position: relative;
         padding-top: 0.25rem;
         padding-bottom: 0.25rem;
       }
-      #navmenu {
+      #searcher {
         display: block;
         cursor: pointer;
       }
@@ -471,6 +638,9 @@
       }
       #logoutButton {
         display: none;
+      }
+      .center {
+        display: block;
       }
       grid, grid.visiblepc {
         grid-template-areas:
@@ -488,6 +658,35 @@
         width: auto;
         display: none;
       }
+      #user-info-panel {
+        display: none;
+      }
+      reactors {
+        padding: 0.5rem;
+        gap: 0.5rem;
+        justify-content: space-between;
+      }
+      #feed-attach {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+        background-color: white;
+      }
+      #new-post {
+        display: none;
+      }
+      #new-post-mobile {
+        height: 4rem;
+        width: 4rem;
+        z-index: 1;
+        border-radius: 50%;
+        border-width: 0px;
+        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        cursor: pointer;
+      }
       #loginMobile.active {
         display: block;
       }
@@ -498,15 +697,24 @@
         position: relative;
         top: 0px;
       }
+      .post-size {
+        width: calc(100vw - 3rem);
+      }
       #post-container {
+        margin-top: 0px;
+        border: none;
+        border-radius: 0px;
         width: 100vw;
         left: 0px;
       }
       .back-button {
-        top: 68.16px;
+        top: 0px;
+      }
+      #navbar.active {
+        display: block;
       }
       .visiblepc {
-        top: 68.16px;
+        top: 0px;
       }
     }
     body {
@@ -577,58 +785,6 @@
       }
     }
       
-    async function login(event) {
-        
-      event.preventDefault();
-        
-      const handle = document.forms["Login"]["username"].value;
-      const password = document.forms["Login"]["password"].value;
-        
-      if ((!handle.includes(".bsky.social")) || (password.split("").length === 0)) {
-    
-        console.log("Login credential requirements not met!");
-      }
-
-      const reqObj = {
-        body: JSON.stringify({
-          "handle": handle,
-          "password": password
-        }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-      try {
-
-        let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
-
-        localStorage.setItem("accessJwt", authObj.accessJwt);
-        localStorage.setItem("refreshJwt", authObj.refreshJwt);
-        localStorage.setItem("userDid", authObj.did);
-          
-        document.getElementById("user-info-panel").classList.remove("hidden");
-          
-        const userInfo = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + authObj.did, { method: "GET", headers: { "Authorization": "Bearer " + authObj.accessJwt } }).then(r => r.text()));
-        
-        var userProfileImage;
-        if (userInfo.avatar != undefined) {
-            userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
-        } else {
-            userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;
-        }
-        
-        document.getElementById("flex-post-area").innerHTML =
-          `${userProfileImage}
-          <textarea type="text" placeholder="Your post goes here..." maxlength="256" id="post-text"></textarea>`;
-        document.getElementById("new-post").classList.remove("hidden");
-      } catch (e) {
-
-        console.log(e);
-      }
-    }
-      
     function newPostToggle() {
         
       document.getElementById("new-post").classList.toggle("hidden");
@@ -644,12 +800,8 @@
         document.getElementById("post-container").style.transitionDuration = "0s";
       }, 450);
         
-      if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         
-        document.getElementById("post-options").classList.toggle("hidden");
-      } else {
-          
-        document.getElementById("post-options").classList.toggle("hidden");
         document.getElementsByTagName("body")[0].classList.toggle("nooverflow");
       }
     }
@@ -881,6 +1033,21 @@
       document.getElementById("user-info-panel").classList.add("hidden");
       document.getElementById("flex-post-area").innerHTML = "";
       document.getElementById("new-post").classList.add("hidden");
+      document.getElementById("navbar").classList.remove("active");
+      
+      document.getElementById("profileInfoModal").style.right = "0rem";
+      document.getElementById("profileInfoModal").style.bottom = "5rem";
+        
+      setTimeout(function(){
+          
+        document.getElementById("profileInfoModal").style.display = "none";
+      }, 40);
+        
+      document.getElementById("userInfoButton").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg>`;
+        
+      userInfoVisible = false;
+      
+      location.reload();
     }
       
     function goToProfile() {
@@ -889,13 +1056,19 @@
         
       document.location.href = document.location.origin + document.location.pathname + "?username=" + userId;
     }
+    
+    function loadParent() {
+      
+      
+    }
   </script>
   <script type="module">
     import { userCache, modifyFlow } from "./feed.js";
     import { embeds, nameResolver } from "./mods.js";
-    import { loadParent, loadRoot } from "./replies.js";
-    import { getPost, getUserRepo, listRecords, getToken } from "./api.js";
-    import { post, user, userLight, postModalBuild } from "./struct.js";
+    import { loadFirstReplies } from "./replies.js";
+    import { getPost, getUserRepo, listRecords, getToken, getUserNotifCount } from "./api.js";
+    import { postDefault, user, userLight } from "./struct/default.js";
+    import { userInfoModalBuild, postModalBuild } from "./struct/full.js";
     
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
@@ -922,9 +1095,47 @@
       document.getElementById("loginMobile").classList.remove("active");
       document.getElementById("loginButton").classList.add("hidden");
       document.getElementById("logoutButton").classList.remove("hidden");
-      document.getElementById("user-info-panel").classList.remove("hidden");
+      
+      userInfoModalBuild();
       postModalBuild();
+      
       document.getElementById("new-post").classList.remove("hidden");
+      
+      if (document.location.hash === "#notifications") {
+        
+        document.getElementById("navNotifsDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg><div>Notifications</div>`;
+        document.getElementById("navNotifsMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg>`;
+      } else if (urlParams.get("username") === null) {
+        
+        document.getElementById("navButtonHomeDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg><div>Home</div>`
+        document.getElementById("navButtonHomeMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg>`;
+      }
+      
+      if ((urlParams.get("username") != null) && (urlParams.get("postid") === null) && (urlParams.get("username") === localStorage.getItem("userDid"))) {
+        
+        document.getElementById("navButtonProfileDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg><div>Profile</div>`
+        document.getElementById("navButtonProfileMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg>`;
+      }
+      
+      const notifCount = await getUserNotifCount();
+      
+      if (notifCount != 0) {
+        
+        document.getElementById("notifCountDesktop").innerHTML = notifCount;
+        document.getElementById("notifCountDesktop").classList.remove("hidden");
+        
+        document.getElementById("notifCountMobile").innerHTML = notifCount;
+        document.getElementById("notifCountMobile").classList.remove("hidden");
+      }
+      
+      document.getElementById("navButtonNotifsDesktop").href = document.location.origin + document.location.pathname + "#notifications";
+      document.getElementById("navButtonNotifsMobile").href = document.location.origin + document.location.pathname + "#notifications";
+      
+      document.getElementById("navButtonProfileDesktop").href = document.location.origin + document.location.pathname + "?username=" + localStorage.getItem("userDid");
+      document.getElementById("navButtonProfileMobile").href = document.location.origin + document.location.pathname + "?username=" + localStorage.getItem("userDid");
+      
+      document.getElementById("user-info-panel").classList.remove("hidden");
+      document.getElementById("navbar").classList.add("active");
     }
     
     if (document.location.search === "") {
@@ -981,21 +1192,11 @@
         
         const postObj = await getPost(userId, postId);
         
-        document.getElementById("postContainer").innerHTML = await post(userId, postId);
+        document.getElementById("postContainer").innerHTML = await postDefault(userId, postId);
         
         if (postObj.value.reply != undefined) {
           
-          if (postObj.value.reply.root.cid === postObj.value.reply.parent.cid) {
-            
-            document.getElementById("parentposts").classList.remove("hidden");
-            loadParent(postObj.value.reply);
-          } else {
-            
-            document.getElementById("rootpost").classList.remove("hidden");
-            document.getElementById("parentposts").classList.remove("hidden");
-            loadParent(postObj.value.reply);
-            loadRoot(postObj.value.reply);
-          }
+          loadFirstReplies(postObj);
         }
       } catch(e) {
         
@@ -1039,7 +1240,7 @@
           
           for (var postData of userPosts) {
             
-            tempPosts = tempPosts + await post(userId, postData);
+            tempPosts = tempPosts + await postDefault(userId, postData);
             document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempPosts + "</spacer>";
           }
         } else {
@@ -1093,6 +1294,55 @@
       } catch(e) {
         
         console.log(e);
+      }
+    }
+    
+    var userInfoVisible = false;
+    
+    document.getElementById("userInfoButton").addEventListener("click", async function() {
+      
+      if (userInfoVisible === false) {
+        
+        document.getElementById("profileInfoModal").style.display = "block";
+        
+        setTimeout(function(){
+          
+          document.getElementById("profileInfoModal").style.right = "0.5rem";
+          document.getElementById("profileInfoModal").style.bottom = "5.5rem";
+        }, 1);
+        
+        document.getElementById("userInfoButton").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"><defs/><g><path d="M5.16859 15.3916C4.94159 15.2435 4.81215 14.9844 4.83 14.714L4.993 11.384C4.995 11.299 4.943 11.168 4.786 11.068C3.05016 9.96776 1.99876 8.05515 2 6C1.99907 4.03876 2.95783 2.20117 4.567 1.08C5.06307 0.72296 5.72744 0.707075 6.24 1.04C6.702 1.336 7 1.867 7 2.463L7 5.283C7 5.365 7.041 5.443 7.11 5.489L7.86 5.999C7.94458 6.05617 8.05542 6.05617 8.14 5.999L8.89 5.489C8.95888 5.44265 9.00014 5.36502 9 5.282L9 2.463C9 1.867 9.298 1.336 9.76 1.04C10.2726 0.707075 10.9369 0.72296 11.433 1.08C13.0422 2.20117 14.0009 4.03876 14 6C14.0012 8.05515 12.9498 9.96776 11.214 11.068C11.057 11.168 11.005 11.298 11.007 11.383L11.17 14.713C11.1861 14.9826 11.0565 15.2401 10.8303 15.3877C10.6042 15.5353 5.39559 15.5396 5.16859 15.3916Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg>`;
+        
+        userInfoVisible = true;
+      } else {
+        
+        document.getElementById("profileInfoModal").style.right = "0rem";
+        document.getElementById("profileInfoModal").style.bottom = "5rem";
+        
+        setTimeout(function(){
+          
+          document.getElementById("profileInfoModal").style.display = "none";
+        }, 40);
+        
+        document.getElementById("userInfoButton").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg>`;
+        
+        userInfoVisible = false;
+      }
+    });
+    
+    var isTriggered = false;
+    window.onscroll = function () {
+      
+      if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
+        
+        if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 10) < (window.visualViewport.height + window.visualViewport.pageTop)) {
+          
+          if (isTriggered === false) {
+            
+            console.log("At bottom");
+            isTriggered = true;
+          }
+        }
       }
     }
   </script>
