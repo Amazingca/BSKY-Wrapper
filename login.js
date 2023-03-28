@@ -121,7 +121,7 @@ document.getElementById("signupInviteCode").addEventListener("keyup", (event) =>
  
   if (((document.getElementById("signupInviteCode").value.includes("bsky-social") || document.getElementById("signupInviteCode").value.includes("bsky.social")) && (document.getElementById("signupInviteCode").value.split("").length === 17)) || ((document.getElementById("signupInviteCode").value.split("").length === 5) && ((!document.getElementById("signupInviteCode").value.includes("bsky-")) && (!document.getElementById("signupInviteCode").value.includes("bsky."))))) {
     
-    if ((document.getElementById("signupInviteCode").value.split("").length === 5) && ((!document.getElementById("signupInviteCode").value.includes("bsky-")) && (!document.getElementById("signupInviteCode").value.includes("bsky.")))) {
+    if (((document.getElementById("signupInviteCode").value.split("").length === 5) || (document.getElementById("signupInviteCode").value.split("").length === 7)) && ((!document.getElementById("signupInviteCode").value.includes("bsky-")) && (!document.getElementById("signupInviteCode").value.includes("bsky.")))) {
         
       document.getElementById("signupInviteCode").value = "bsky-social-" + document.getElementById("signupInviteCode").value;
     }
