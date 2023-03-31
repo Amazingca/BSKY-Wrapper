@@ -900,6 +900,11 @@
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
     
+    if (window.location.host === "blue.amazingca.dev") {
+      console.log("REBRANDING...");
+      window.location.href = "https://chartreuse.amazingca.dev" + window.location.pathname + window.location.search;
+    }
+    
     if (localStorage.getItem("introViewed") === null) {
       
       //document.getElementById("introMessage").classList.remove("hidden");
