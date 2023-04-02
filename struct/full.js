@@ -102,23 +102,26 @@ export async function postFull(userId, post, type) {
     
     var postText;
     
-    if (postObj.record.entities != undefined) {
+    if (postObj.record.facets != undefined) {
       
       var selection = [];
-      
+
       for (var i = 0; i < postObj.record.entities.length; i++) {
-        
-        if (postObj.record.entities[i].type === "mention") {
+
+        if (postObj.record.facets[i].$type === "app.bsky.richtext.facet") {
           
-          const startPos = postObj.record.entities[i].index.start;
-          const endPos = postObj.record.entities[i].index.end;
-          const mentionLength = endPos - startPos;
-          
-          selection[i] = "";
-          
-          for (var o = 0; o < mentionLength; o++) {
-            
-            selection[i] = selection[i] + postObj.record.text.split("")[o + startPos];
+          if (postObj.record.facets[i].features[0].$type === "app.bsky.richtext.facet#mention") {
+
+            const startPos = postObj.record.facets[i].index.byteStart;
+            const endPos = postObj.record.facets[i].index.byteEnd;
+            const mentionLength = endPos - startPos;
+
+            selection[i] = "";
+
+            for (var o = 0; o < mentionLength; o++) {
+
+              selection[i] = selection[i] + postObj.record.text.split("")[o + startPos];
+            }
           }
         }
       }
