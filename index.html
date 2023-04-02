@@ -797,7 +797,7 @@
       if (postObj.record === undefined) {
           
         postObj = {
-          "did": userDid,
+          "repo": userDid,
           "collection": "app.bsky.feed.post",
           "record": {
             "text": postText,
@@ -806,7 +806,7 @@
         }
       } else {
           
-        postObj.did = userDid;
+        postObj.repo = userDid;
         postObj.collection = "app.bsky.feed.post";
         postObj.record.text = postText;
         postObj.record.createdAt = creationDate;
