@@ -71,7 +71,7 @@ export async function post(userId, post) {
     
     var postText;
     
-    if (postObj.record.facets != undefined) {
+    if (postObj.record.value.facets != undefined) {
       
       var selection = [];
 
