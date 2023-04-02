@@ -102,7 +102,7 @@ export async function postFull(userId, post, type) {
     
     var postText;
     
-    if (postObj.record.facets != undefined) {
+    if (postObj.record.value.facets != undefined) {
       
       var selection = [];
 
