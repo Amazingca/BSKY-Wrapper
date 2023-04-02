@@ -2,7 +2,7 @@ export async function getPost(userId, postId) {
   
   try {
     
-    const post = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${userId}&collection=app.bsky.feed.post&rkey=${postId}`).then(r => r.text()));
+    const post = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userId}&collection=app.bsky.feed.post&rkey=${postId}`).then(r => r.text()));
     
     return post;
   } catch (e) {
@@ -16,7 +16,7 @@ export async function getUserRepo(userId) {
   
   try {
     
-    const userRepo = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userId}`).then(r => r.text()));
+    const userRepo = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${userId}`).then(r => r.text()));
     
     return userRepo;
   } catch (e) {
@@ -46,7 +46,7 @@ export async function listRecords(userId, collection) {
   
   try {
     
-    const records = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userId}&collection=${collection}&limit=100`).then(r => r.text())).records;
+    const records = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userId}&collection=${collection}&limit=100`).then(r => r.text())).records;
     
     if (records.length === 0) {
       
@@ -98,7 +98,7 @@ export async function getToken() {
       }
     }
 
-    const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
+    const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.refreshSession", req).then(r => r.text()));
 
     localStorage.setItem("accessJwt", newTokens.accessJwt);
     localStorage.setItem("refreshJwt", newTokens.refreshJwt);
@@ -135,7 +135,7 @@ export async function loginReq(handle, password) {
   
   try {
     
-    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => {
+    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", reqObj).then(r => {
       if (!r.ok) {
         throw new Error('Login not successful');
       } else {
