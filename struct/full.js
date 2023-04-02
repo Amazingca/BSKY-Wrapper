@@ -153,7 +153,7 @@ export async function postFull(userId, post, type) {
     }
     
     var reactors = "";
-    if ((postObj.replyCount != undefined) && (postObj.repostCount != undefined) && (postObj.upvoteCount != undefined)) {
+    if ((postObj.replyCount != undefined) && (postObj.repostCount != undefined) && (postObj.likeCount != undefined)) {
       
       reactors = reactorContructor(postObj, null);
     }
