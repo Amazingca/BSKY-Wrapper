@@ -71,30 +71,33 @@ export async function post(userId, post) {
     
     var postText;
     
-    if (postObj.value.entities != undefined) {
+    if (postObj.record.facets != undefined) {
       
       var selection = [];
-      
-      for (var i = 0; i < postObj.value.entities.length; i++) {
-        
-        if (postObj.value.entities[i].type === "mention") {
+
+      for (var i = 0; i < postObj.record.entities.length; i++) {
+
+        if (postObj.record.facets[i].$type === "app.bsky.richtext.facet") {
           
-          const startPos = postObj.value.entities[i].index.start;
-          const endPos = postObj.value.entities[i].index.end;
-          const mentionLength = endPos - startPos;
-          
-          selection[i] = "";
-          
-          for (var o = 0; o < mentionLength; o++) {
-            
-            selection[i] = selection[i] + postObj.value.text.split("")[o + startPos];
+          if (postObj.record.facets[i].features[0].$type === "app.bsky.richtext.facet#mention") {
+
+            const startPos = postObj.record.facets[i].index.byteStart;
+            const endPos = postObj.record.facets[i].index.byteEnd;
+            const mentionLength = endPos - startPos;
+
+            selection[i] = "";
+
+            for (var o = 0; o < mentionLength; o++) {
+
+              selection[i] = selection[i] + postObj.record.text.split("")[o + startPos];
+            }
           }
         }
       }
       
       for (var i = 0; i < selection.length; i++) {
         
-        postObj.value.text = postObj.value.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.value.entities[i].value}" class="mention">${selection[i]}</a>`);
+        postObj.record.text = postObj.record.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.record.entities[i].value}" class="mention">${selection[i]}</a>`);
       }
     }
     
