@@ -106,7 +106,7 @@ export async function postFull(userId, post, type) {
       
       var selection = [];
 
-      for (var i = 0; i < postObj.record.entities.length; i++) {
+      for (var i = 0; i < postObj.record.facets.length; i++) {
 
         if (postObj.record.facets[i].$type === "app.bsky.richtext.facet") {
           
