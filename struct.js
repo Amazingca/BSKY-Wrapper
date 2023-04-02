@@ -71,7 +71,7 @@ export async function post(userId, post) {
     
     var postText;
     
-    if (postObj.record.value.facets != undefined) {
+    /*if (postObj.record.value.facets != undefined) {
       
       var selection = [];
 
@@ -112,7 +112,7 @@ export async function post(userId, post) {
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
         }
       }
-    }
+    }*/
     
     if (postObj.value.embed != undefined) {
       
