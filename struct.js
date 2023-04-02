@@ -236,5 +236,5 @@ export async function postModalBuild() {
   
   document.getElementById("flex-post-area").innerHTML =
     `${userProfileImage}
-    <textarea type="text" placeholder="Your post goes here..." maxlength="256" id="post-text"></textarea>`;
+    <textarea type="text" placeholder="Your post goes here..." maxlength="300" id="post-text"></textarea>`;
 }
