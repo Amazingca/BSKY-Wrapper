@@ -1,15 +1,15 @@
 {
     "lang": "en",
-    "short_name": "Blue",
-    "name": "Bluesky Social Wrapper",
+    "short_name": "Chartreuse",
+    "name": "Chartreuse",
     "description": "Unofficial web client for Bluesky Social.",
     "start_url": "/login",
     "display": "standalone",
-    "background_color": "#0099ff",
+    "background_color": "#98ce09aa",
     "theme_color": "#f5f5f5",
      "icons": [
       {
-       "src": "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-app-favicon?v=1679196074840",
+       "src": "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/rebrand-new.png?v=1680292752199",
        "type": "image/png",
        "sizes": "750x750"
       }
