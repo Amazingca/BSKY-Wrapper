@@ -602,7 +602,7 @@
 
       try {
 
-        let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.create", reqObj).then(r => r.text()));
+        let authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", reqObj).then(r => r.text()));
 
         localStorage.setItem("accessJwt", authObj.accessJwt);
         localStorage.setItem("refreshJwt", authObj.refreshJwt);
@@ -738,7 +738,7 @@
       try {
             
         // Make a fetch request with 'blobObj' properties, then take our response and convert it to JSON object.
-        const blobResTemp = await fetch("https://bsky.social/xrpc/com.atproto.blob.upload", blobObj).then(r => r.text());
+        const blobResTemp = await fetch("https://bsky.social/xrpc/com.atproto.repo.uploadBlob", blobObj).then(r => r.text());
         const blobRes = JSON.parse(blobResTemp);
           
           
@@ -753,7 +753,7 @@
         images.push({
           "alt": alt,
           "image": {
-            "cid": blobRes.cid,
+            "cid": blobRes.ref.$link,
             "mimeType": file.type
           }
         });
@@ -856,7 +856,7 @@
           }
         }
           
-        const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.session.refresh", req).then(r => r.text()));
+        const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.refreshSession", req).then(r => r.text()));
           
         localStorage.setItem("accessJwt", newTokens.accessJwt);
         localStorage.setItem("refreshJwt", newTokens.refreshJwt);
