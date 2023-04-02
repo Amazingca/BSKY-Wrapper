@@ -97,7 +97,7 @@ export async function post(userId, post) {
       
       for (var i = 0; i < selection.length; i++) {
         
-        postObj.record.text = postObj.record.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.record.entities[i].value}" class="mention">${selection[i]}</a>`);
+        postObj.record.text = postObj.record.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.record.facets[i].features[0].did}" class="mention">${selection[i]}</a>`);
       }
     }
     
