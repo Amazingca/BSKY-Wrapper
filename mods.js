@@ -29,7 +29,7 @@ export async function embeds(obj) {
 
         return newElement + `Attached: ${amount} images</h3>`;
       }
-    case "app.bsky.embed.images#presented":
+    case "app.bsky.embed.images#view":
       var imageEmbed =
         "<div style='display: grid; gap: 0.5rem; width: inherit;'>";
 
@@ -113,14 +113,14 @@ export async function embeds(obj) {
           quotePostUri.split("//")[1].split("/").length - 1
         ]
       );
-    case "app.bsky.embed.record#presented":
+    case "app.bsky.embed.record#view":
       return await postFull(obj.record.author.did, obj.record, "snippet");
     case "app.bsky.embed.external":
       return (
         newElement +
         `${obj.external.uri}">Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`
       );
-    case "app.bsky.embed.external#presented":
+    case "app.bsky.embed.external#view":
       return `<a href='${obj.external.uri}' target='_blank' title="${obj.external.title}\n\n${obj.external.description}"><div style="width: auto;" class="feed-container">${obj.external.title}</div></a>`;
   }
 }
