@@ -6,12 +6,13 @@ const urlParams = new URLSearchParams(url);
 var type = "default";
 
 if (urlParams.get("auth") != undefined) {
-    switch (urlParams.get("auth")) {
-        case "tooling":
-            type = "tooling";
-        default:
-            console.log("Improper auth type given in url!");
-            type = "default";
+    if (urlParams.get("auth").equals("tooling")) {
+        
+        type = "tooling";
+    } else {
+        
+        console.log("Improper auth type given in url!");
+        type = "default";
     }
 }
 
