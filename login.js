@@ -6,7 +6,7 @@ const urlParams = new URLSearchParams(url);
 var type = "default";
 
 if (urlParams.get("auth") != undefined) {
-    if (urlParams.get("auth").equals("tooling")) {
+    if (urlParams.get("auth") === "tooling") {
         
         type = "tooling";
     } else {
