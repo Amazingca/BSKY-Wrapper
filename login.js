@@ -40,7 +40,14 @@ document.getElementById("loginButton").addEventListener("click", async function(
     localStorage.setItem("refreshJwt", reqObj.refreshJwt);
     localStorage.setItem("userDid", reqObj.did);
     
-    window.location.href = "../";
+    if (type === "default") {
+        
+        window.location.href = "../";
+    } else if (type === "tooling") {
+        
+        window.opener.authenticated("yes");
+        window.close();
+    }
   } else {
     
     window.alert("The provided username/password do not have an associated account!");
