@@ -1,8 +1,30 @@
 import { loginReq } from "./api.js";
 
+const url = document.location.search;
+const urlParams = new URLSearchParams(url);
+
+var type = "default";
+
+if (urlParams.get("auth") != undefined) {
+    switch (urlParams.get("auth")) {
+        case "tooling":
+            type = "tooling";
+        default:
+            console.log("Improper auth type given in url!");
+            type = "default";
+    }
+}
+
 if ((((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) || localStorage.getItem("viewFeed")) {
-    
-  window.location.href = "../";
+  
+    if (type === "default") {
+        
+        window.location.href = "../";
+    } else if (type === "tooling") {
+        
+        window.opener.authenticated("yes");
+        window.close();
+    }
 }
 
 document.getElementById("loginButton").addEventListener("click", async function() {
