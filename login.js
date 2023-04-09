@@ -23,7 +23,7 @@ if ((((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refr
         window.location.href = "../";
     } else if (type === "tooling") {
         
-        window.opener.authenticated("yes");
+        window.opener.authenticated();
         window.close();
     }
 }
