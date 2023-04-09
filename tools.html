@@ -184,13 +184,15 @@
             }
 
             async function authenticated() {
-
-                const req = {
-                    method: "GET",
-                    headers: {
-                        "Authorization": "Bearer " + accessKey
-                    }
-                }
+              
+              const accessKey = localStorage.getItem("accessJwt");
+              
+              const req = {
+                  method: "GET",
+                  headers: {
+                      "Authorization": "Bearer " + accessKey
+                  }
+              }
 
                 try {
 
@@ -198,7 +200,6 @@
 
                     if (res.error === undefined) {
 
-                        localStorage.setItem("accessJwt", accessKey);
                         loggedIn = true;
 
                         document.getElementById("loginB").classList.add("hidden");
