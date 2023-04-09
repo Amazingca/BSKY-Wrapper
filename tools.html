@@ -185,9 +185,35 @@
 
             function authenticated() {
 
-                loggedIn = true;
-                document.getElementById("loginB").classList.add("hidden");
-                document.getElementById("logoutB").classList.remove("hidden");
+                const req = {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + accessKey
+                    }
+                }
+
+                try {
+
+                    const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.getSession", req).then(r => r.text()));
+
+                    if (res.error === undefined) {
+
+                        localStorage.setItem("accessJwt", accessKey);
+                        loggedIn = true;
+
+                        document.getElementById("loginB").classList.add("hidden");
+
+                        document.getElementById("logoutB").innerHTML = "Logout @" + res.handle;
+                        document.getElementById("logoutB").classList.remove("hidden");
+                    } else {
+
+                        localStorage.removeItem("accessJwt");
+                        window.alert("The sesssion token could not be verified! Try refreshing it!");
+                    }
+                } catch(e) {
+
+                    console.log(e);
+                }
             }
 
             var toConfirm = "";
