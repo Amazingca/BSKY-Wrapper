@@ -195,6 +195,36 @@ export async function getToken() {
   }
 }
 
+export async function getSession() {
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + await getToken()
+    }
+  }
+
+  try {
+
+    const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.getSession", req).then(r => r.text()));
+
+    if (res.error === undefined) {
+            
+      return true;
+    } else {
+        
+      console.log(res);
+                  
+      return false;
+    }
+  } catch (e) {
+                  
+    console.log(e);
+                  
+    return false;
+  }
+}
+
 export async function loginReq(handle, password) {
   
   if (password.split("").length === 0) {
