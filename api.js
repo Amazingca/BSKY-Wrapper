@@ -235,3 +235,40 @@ export async function loginReq(handle, password) {
     return undefined;
   }
 }
+
+export async function createAccountReq(inviteCode, userEmail, userHandle, userPassword) {
+  
+  let reqObj = {
+    body: JSON.stringify({
+      "email": userEmail,
+      "handle": userHandle,
+      "inviteCode": inviteCode,
+      "password": userPassword
+    }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
+  
+  try {
+    
+    let accObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createAccount", reqObj).then(r => r.text()));
+    
+    if (accObj.error === undefined) {
+      
+      localStorage.setItem("accessJwt", accObj.accessJwt);
+      localStorage.setItem("refreshJwt", accObj.refreshJwt);
+      localStorage.setItem("userDid", accObj.did);
+      
+      return "Success";
+    } else {
+      
+      return [accObj.error, accObj.message];
+    }
+  } catch (e) {
+    
+    console.log(e);
+    return "Error: The request could not be made! Try clicking the button again.";
+  }
+}
