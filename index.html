@@ -1066,7 +1066,7 @@
     import { userCache, modifyFlow } from "./feed.js";
     import { embeds, nameResolver } from "./mods.js";
     import { loadFirstReplies } from "./replies.js";
-    import { getPost, getUserRepo, listRecords, getToken, getUserNotifCount } from "./api.js";
+    import { getPost, getUserRepo, listRecords, getToken, getSession, getUserNotifCount } from "./api.js";
     import { postDefault, user, userLight } from "./struct/default.js";
     import { userInfoModalBuild, postModalBuild } from "./struct/full.js";
     
@@ -1091,7 +1091,22 @@
     
     if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
       
+      var tryForAuth = true;
       
+      while(tryForAuth) {
+        
+        var userAuthed = await getSession();
+        
+        if (userAuthed === true) {
+          
+          tryForAuth = false;
+          
+          buildPreReqs();
+        }
+      }
+    }
+    
+    async function buildPreReqs() {
       document.getElementById("loginMobile").classList.remove("active");
       document.getElementById("loginButton").classList.add("hidden");
       document.getElementById("logoutButton").classList.remove("hidden");
