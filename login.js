@@ -46,7 +46,7 @@ document.getElementById("loginButton").addEventListener("click", async function(
         window.location.href = "../";
     } else if (type === "tooling") {
         
-        window.opener.authenticated("yes");
+        window.opener.authenticated();
         window.close();
     }
   } else {
