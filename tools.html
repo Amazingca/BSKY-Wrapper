@@ -349,21 +349,45 @@
                     }
                 }
 
-                //console.log("Completed sorter: " + unfollowedDids.length + " users not followed. Attempting to follow these users...");
                 document.getElementById("progStatus").innerHTML = "Progress: Attempting to follow " + unfollowedDids.length + " users";
-
+              
+                var recordData = [];
+              
                 for (var i = 0; i < unfollowedDids.length; i++) {
+                  
+                  const creationDate = new Date().toISOString();
+                  
+                  recordData[recordData.length] = {
+                    "$type": "com.atproto.repo.applyWrites#create",
+                    "collection": "app.bsky.graph.follow",
+                    "value": {
+                      "subject": unfollowedDids[i],
+                      "createdAt": creationDate
+                    }
+                  }
+                }
 
-                    const creationDate = new Date().toISOString();
-                    const recordData = {
+                const rounds = Math.ceil(unfollowedDids.length / 200);
+                for (var i = 0; i < rounds; i++) {
+
+                    var startRange = i * 200;
+                    var endRange;
+
+                    if ((i + 1) === rounds) {
+                      
+                        endRange = (i * 200) + (unfollowedDids.length % 200);
+                    } else {
+
+                        endRange = (i * 200) + 200;
+                    }
+
+                    var tempMap = recordData.slice(startRange, endRange);
+
+                    var reqObj = {
                         method: "POST",
                         body: JSON.stringify({
                             "repo": userDid,
-                            "collection": "app.bsky.graph.follow",
-                            "record": {
-                                "subject": unfollowedDids[i],
-                                "createdAt": creationDate
-                            }
+                            "writes": tempMap
                         }),
                         headers: {
                             "Authorization": "Bearer " + localStorage.getItem("accessJwt"),
@@ -372,19 +396,28 @@
                     }
 
                     try {
+                        
+                        const req = await fetch("https://bsky.social/xrpc/com.atproto.repo.applyWrites", reqObj).then(r => r.status);
+                  
+                        if (req != 200) {
+                            
+                            window.alert("There was an error trying to follow these users! Try reauthenticating!");
+                            document.getElementById("progStatus").innerHTML = "Progress: ERROR";
+                            
+                            return;
+                        } else {
 
-                        const req = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", recordData).then(r => r.status);
-
-                        if (req === 200) {
-
-                            //console.log(`${Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/100}` + "% done.");
-                            document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/100 + "%";
-                            document.getElementById("progressB").value = Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/10000;
+                            document.getElementById("progStatus").innerHTML = "Progress: Batch " + i + "/" + rounds + " [" + unfollowedDids.length + "] done";
+                            document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/100 + "%";
+                            document.getElementById("progressB").value = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/10000;
                         }
                     } catch (e) {
+                        
+                        window.alert("There was an error trying to follow these users! Try reauthenticating!");
+                        document.getElementById("progStatus").innerHTML = "Progress: ERROR";
 
                         console.log(e);
-                        continue;
+                        return;
                     }
                 }
 
