@@ -376,7 +376,7 @@
 
                             //console.log(`${Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/100}` + "% done.");
                             document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/100 + "%";
-                            document.getElementById("progressB").value = Math.round(100*(`${i/dids.length}`.split("").slice(0, 6).join("")*100))/10000;
+                            document.getElementById("progressB").value = Math.round(100*(`${i/unfollowedDids.length}`.split("").slice(0, 6).join("")*100))/10000;
                         }
                     } catch (e) {
 
