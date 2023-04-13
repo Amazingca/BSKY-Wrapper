@@ -165,6 +165,7 @@
                         if (res.error === undefined) {
 
                             localStorage.setItem("accessJwt", accessKey);
+                            localStorage.setItem("userDid", res.did);
                             loggedIn = true;
 
                             document.getElementById("loginB").classList.add("hidden");
