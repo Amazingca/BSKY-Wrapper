@@ -239,7 +239,7 @@ export async function loginReq(handle, password) {
   
   const reqObj = {
     body: JSON.stringify({
-      "handle": handle,
+      "identifier": handle,
       "password": password
     }),
     method: "POST",
