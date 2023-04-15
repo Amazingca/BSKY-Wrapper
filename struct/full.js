@@ -102,7 +102,17 @@ export async function postFull(userId, post, type) {
     
     var postText;
     
-    if (postObj.record.facets != undefined) {
+    var hasFacets = false;
+    try {
+      if (postObj.record["facets"]) {
+        hasFacets = true;
+      }
+    } catch (e) {
+      
+      console.log("No facets in post.");
+    }
+    
+    if (hasFacets) {
       
       var selection = [];
 
@@ -145,19 +155,25 @@ export async function postFull(userId, post, type) {
       }
     }
     
+    if (type === "snippet") {
+      
+      postObj.record = postObj.value;
+    }
+    
     if (postObj.embed != undefined) {
       
       if (postObj.record.text != "") {
-        
+
         postText = postObj.record.text.replaceAll("\n", "<br>") + "<br><br>" + await embeds(postObj.embed);
       } else {
-        
+
         postText = await embeds(postObj.embed);
       }
     } else {
-      
+
       postText = postObj.record.text.replaceAll("\n", "<br>");
     }
+    
     
     var userProfileImage;
     if (postObj.author.avatar != undefined) {
