@@ -79,46 +79,30 @@ export async function postDefault(userId, post, type) {
     
     var postText;
     
-    if (postObj.record.facets != undefined) {
+    if (postObj.value.entities != undefined) {
       
       var selection = [];
-
-      for (var i = 0; i < postObj.record.facets.length; i++) {
-
-        if (postObj.record.facets[i].$type === "app.bsky.richtext.facet") {
+      
+      for (var i = 0; i < postObj.value.entities.length; i++) {
+        
+        if (postObj.value.entities[i].type === "mention") {
           
-          const startPos = postObj.record.facets[i].index.byteStart;
-          const endPos = postObj.record.facets[i].index.byteEnd;
+          const startPos = postObj.value.entities[i].index.start;
+          const endPos = postObj.value.entities[i].index.end;
           const mentionLength = endPos - startPos;
-
-          selection[i][0] = postObj.record.facets[i].features[0].$type;
-          selection[i][1] = "";
-          selection[i][2] = "";
           
-          if (postObj.record.facets[i].features[0].did != undefined) {
-            
-            selection[i][2] = postObj.record.facets[i].features[0].did;
-          } else if (postObj.record.facets[i].features[0].uri != undefined) {
-            
-            selection[i][2] = postObj.record.facets[i].features[0].uri;
-          }
-
+          selection[i] = "";
+          
           for (var o = 0; o < mentionLength; o++) {
-
-            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos];
+            
+            selection[i] = selection[i] + postObj.value.text.split("")[o + startPos];
           }
         }
       }
       
       for (var i = 0; i < selection.length; i++) {
         
-        if (selection[i][0] === "app.bsky.richtext.facet#mention") {
-          
-          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin + document.location.pathname}?username=${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
-        } else if (selection[i][0] === "app.bsky.richtext.facet#link") {
-          
-          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
-        }
+        postObj.value.text = postObj.value.text.replaceAll(selection[i], `<a href="${document.location.origin + document.location.pathname}?username=${postObj.value.entities[i].value}" class="mention">${selection[i]}</a>`);
       }
     }
     
