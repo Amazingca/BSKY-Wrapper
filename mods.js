@@ -19,11 +19,11 @@ export async function embeds(obj) {
           if (i + 1 != obj.images.length) {
             newElement =
               newElement +
-              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.ref.$link}, `;
+              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.cid}, `;
           } else {
             newElement =
               newElement +
-              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.ref.$link}">`;
+              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.cid}">`;
           }
         }
 
