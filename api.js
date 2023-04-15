@@ -12,6 +12,42 @@ export async function getPost(userId, postId) {
   }
 }
 
+export async function getPostFull(userId, postId) {
+  
+  if (userId.includes(".bsky.social")) {
+    
+    userId = await getUserRepo(userId);
+    userId = userId.did;
+  }
+  
+  const token = await getToken();
+  
+  const reqObj = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const req = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=at://" + userId + "/app.bsky.feed.post/" + postId, reqObj).then(r => r.text()));
+    
+    if (req.error === undefined) {
+      
+      return [userId, req];
+    } else {
+      
+      console.log(req);
+      return null;
+    }
+  } catch (e) {
+    
+    console.log(e);
+    return null;
+  }
+}
+
 export async function getUserRepo(userId) {
   
   try {
