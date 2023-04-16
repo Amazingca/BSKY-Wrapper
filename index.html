@@ -1082,8 +1082,8 @@
           
           for (var followedUser of userFollows) {
             
-            console.log(followedUser.value.subject.did);
-            tempUsers = tempUsers + await userLight(followedUser.value.subject.did);
+            console.log(followedUser.value.subject);
+            tempUsers = tempUsers + await userLight(followedUser.value.subject);
             document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempUsers + "</spacer>";
           }
         } else {
