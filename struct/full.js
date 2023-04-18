@@ -102,6 +102,11 @@ export async function postFull(userId, post, type) {
     
     var postText;
     
+    if ((type === "snippet") || (type === "light")) {
+      
+      postObj.record = postObj.value;
+    }
+    
     var hasFacets = false;
     try {
       if (postObj.record["facets"]) {
@@ -123,7 +128,8 @@ export async function postFull(userId, post, type) {
           const startPos = postObj.record.facets[i].index.byteStart;
           const endPos = postObj.record.facets[i].index.byteEnd;
           const mentionLength = endPos - startPos;
-
+          
+          selection[i] = [];
           selection[i][0] = postObj.record.facets[i].features[0].$type;
           selection[i][1] = "";
           selection[i][2] = "";
@@ -153,11 +159,6 @@ export async function postFull(userId, post, type) {
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
         }
       }
-    }
-    
-    if (type === "snippet") {
-      
-      postObj.record = postObj.value;
     }
     
     if (postObj.embed != undefined) {
