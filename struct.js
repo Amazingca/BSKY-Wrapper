@@ -1,7 +1,7 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "./api.js";
 import { embeds } from "./mods.js";
 
-export async function post(userId, post) {
+export async function post(userId, post, type) {
   
   const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
   const userObj = await getUserRepo(userId);
@@ -59,6 +59,14 @@ export async function post(userId, post) {
       }
     }
     
+    var textType = "";
+    var textSize = "";
+    if (type === "snippet") {
+      
+      textType = "display: flex; gap: 0.25rem;";
+      textSize = "font-size: 16px;";
+    }
+    
     var usernameElement;
     
     if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
@@ -66,12 +74,27 @@ export async function post(userId, post) {
       usernameElement = "";
     } else {
       
-      usernameElement = `<h3>${userProfileObj[0].value.displayName}</h3>`;
+      usernameElement = `<h3 style="${textSize}">${userProfileObj[0].value.displayName}</h3>`;
     }
     
     var postText;
     
-    /*if (postObj.record.value.facets != undefined) {
+    if ((type === "snippet") || (type === "light")) {
+      
+      postObj.record = postObj.value;
+    }
+    
+    var hasFacets = false;
+    try {
+      if (postObj.record["facets"]) {
+        hasFacets = true;
+      }
+    } catch (e) {
+      
+      console.log("No facets in post.");
+    }
+    
+    if (hasFacets) {
       
       var selection = [];
 
@@ -82,7 +105,8 @@ export async function post(userId, post) {
           const startPos = postObj.record.facets[i].index.byteStart;
           const endPos = postObj.record.facets[i].index.byteEnd;
           const mentionLength = endPos - startPos;
-
+          
+          selection[i] = [];
           selection[i][0] = postObj.record.facets[i].features[0].$type;
           selection[i][1] = "";
           selection[i][2] = "";
@@ -112,7 +136,7 @@ export async function post(userId, post) {
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
         }
       }
-    }*/
+    }
     
     if (postObj.value.embed != undefined) {
       
@@ -132,8 +156,10 @@ export async function post(userId, post) {
       `<div>
         ${replySumElement}
         <div class="feed-container">
-          ${usernameElement}
-          <h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+          <div style="${textType}">
+            ${usernameElement}
+            <h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+          </div>
           <br>
           <div>${postText}</div>
           <br>
@@ -236,17 +262,20 @@ export async function userLight(userId) {
   
 }
 
+}
+}
+
 export async function postModalBuild() {
-  
+
   const userInfo = await getUserInfo();
-  
+
   var userProfileImage;
   if (userInfo.avatar != undefined) {
     userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
   } else {
     userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;
   }
-  
+
   document.getElementById("flex-post-area").innerHTML =
     `${userProfileImage}
     <textarea type="text" placeholder="Your post goes here..." maxlength="300" id="post-text"></textarea>`;
