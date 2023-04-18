@@ -7,7 +7,7 @@ export async function loadParent(replies) {
   
   try {
         
-    const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
+    const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
     const userparsed = JSON.parse(rawuser);
         
     var username = "";
@@ -25,13 +25,13 @@ export async function loadParent(replies) {
         
     if (!userid.includes(".bsky.social")) {
           
-      const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
+      const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?repo=${userid}`).then(r => r.text());
       const user2parsed = JSON.parse(rawuser2);
           
       handle = user2parsed.handle;
     } 
         
-    const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
+    const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
     const parsedres = JSON.parse(rawres);
         
     var posttext;
@@ -82,7 +82,7 @@ export async function loadRoot(replies) {
     const parentUserId = replies.parent.uri.split("//")[1].split("/")[0];
     const parentPostId = replies.parent.uri.split("/")[replies.root.uri.split("/").length - 1];
         
-    const parentParent = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${parentUserId}&collection=app.bsky.feed.post&rkey=${parentPostId}`).then(r => r.text())).value.reply.parent.uri;
+    const parentParent = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${parentUserId}&collection=app.bsky.feed.post&rkey=${parentPostId}`).then(r => r.text())).value.reply.parent.uri;
     const parentParentId = parentParent.split("/")[parentParent.split("/").length - 1];
     
     if (parentParentId === postid) {
@@ -92,7 +92,7 @@ export async function loadRoot(replies) {
       document.getElementById("loadButton").classList.add("hidden");
     }
     
-    const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?user=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
+    const rawuser = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userid}&collection=app.bsky.actor.profile`).then(r => r.text());
     const userparsed = JSON.parse(rawuser);
         
     var username = "";
@@ -110,13 +110,13 @@ export async function loadRoot(replies) {
         
     if (!userid.includes(".bsky.social")) {
           
-      const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?user=${userid}`).then(r => r.text());
+      const rawuser2 = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?repo=${userid}`).then(r => r.text());
       const user2parsed = JSON.parse(rawuser2);
           
       handle = user2parsed.handle;
     } 
         
-    const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?user=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
+    const rawres = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userid}&collection=app.bsky.feed.post&rkey=${postid}`).then(r => r.text());
     const parsedres = JSON.parse(rawres);
         
     var posttext;
