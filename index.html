@@ -981,7 +981,7 @@
         
         const postObj = await getPost(userId, postId);
         
-        document.getElementById("postContainer").innerHTML = await post(userId, postId);
+        document.getElementById("postContainer").innerHTML = await post(userId, postId, "light");
         
         if (postObj.value.reply != undefined) {
           
