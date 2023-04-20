@@ -259,10 +259,6 @@ export async function userLight(userId) {
     
     return userElement;
   }
-  
-}
-
-}
 }
 
 export async function postModalBuild() {
