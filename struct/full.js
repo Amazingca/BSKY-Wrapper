@@ -144,7 +144,7 @@ export async function postFull(userId, post, type) {
 
           for (var o = 0; o < mentionLength; o++) {
 
-            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos];
+            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos - 2];
           }
           
           //console.log(selection[i][1], selection[i][1].split("").length, mentionLength);
