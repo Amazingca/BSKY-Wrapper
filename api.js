@@ -12,6 +12,42 @@ export async function getPost(userId, postId) {
   }
 }
 
+export async function getPostFull(userId, postId) {
+  
+  if (userId.includes(".bsky.social")) {
+    
+    userId = await getUserRepo(userId);
+    userId = userId.did;
+  }
+  
+  const token = await getToken();
+  
+  const reqObj = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const req = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=at://" + userId + "/app.bsky.feed.post/" + postId, reqObj).then(r => r.text()));
+    
+    if (req.error === undefined) {
+      
+      return [userId, req];
+    } else {
+      
+      console.log(req);
+      return null;
+    }
+  } catch (e) {
+    
+    console.log(e);
+    return null;
+  }
+}
+
 export async function getUserRepo(userId) {
   
   try {
@@ -62,10 +98,95 @@ export async function listRecords(userId, collection) {
   }
 }
 
+export async function getUserFeed() {
+  
+  const userIf = localStorage.getItem("userDid");
+  const token = await getToken();
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const feedReq = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline", req).then(r => r.text()));
+    
+    return feedReq;
+  } catch (e) {
+    
+    return null;
+    console.log(e);
+  }
+}
+
+export async function getUserNotifCount() {
+  
+  const userId = localStorage.getItem("userDid");
+  const token = localStorage.getItem("accessJwt");
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  }
+  
+  try {
+    
+    const notifCountObj = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.notification.getUnreadCount", req).then(r => r.text()));
+    
+    return notifCountObj.count;
+  } catch (e) {
+    
+    return "no"
+  }
+}
+
+export async function upvotePost(postUri, postCid) {
+  
+  const userId = localStorage.getItem("userDid");
+  const token = localStorage.getItem("accessJwt");
+  
+  const creationDate = new Date().toISOString();
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      "subject": {
+        "uri": postUri,
+        "cid": postCid
+      },
+      "createdAt": creationDate
+    })
+  }
+  
+  try {
+    
+    const res = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.like", req).then(r => r.text()));
+    
+    if (res.uri != undefined) {
+      
+      return res.uri;
+    } else {
+      
+      return null;
+    }
+  } catch (e) {
+    
+    return null
+  }
+}
+
 export async function getUserInfo() {
   
   const userId = localStorage.getItem("userDid");
-  const token = await getToken();
+  const token = localStorage.getItem("accessJwt");
   
   const req = {
     method: "GET",
@@ -110,6 +231,36 @@ export async function getToken() {
   }
 }
 
+export async function getSession() {
+  
+  const req = {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer " + await getToken()
+    }
+  }
+
+  try {
+
+    const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.getSession", req).then(r => r.text()));
+
+    if (res.error === undefined) {
+            
+      return true;
+    } else {
+        
+      console.log(res);
+                  
+      return false;
+    }
+  } catch (e) {
+                  
+    console.log(e);
+                  
+    return false;
+  }
+}
+
 export async function loginReq(handle, password) {
   
   if (password.split("").length === 0) {
@@ -145,7 +296,45 @@ export async function loginReq(handle, password) {
     return authObj;
   } catch (e) {
     
+    window.alert("User could not be authenticated! This could be due to expired tokens–please re-login to your account.");
     console.log(e);
     return undefined;
+  }
+}
+
+export async function createAccountReq(inviteCode, userEmail, userHandle, userPassword) {
+  
+  let reqObj = {
+    body: JSON.stringify({
+      "email": userEmail,
+      "handle": userHandle,
+      "inviteCode": inviteCode,
+      "password": userPassword
+    }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
+  
+  try {
+    
+    let accObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createAccount", reqObj).then(r => r.text()));
+    
+    if (accObj.error === undefined) {
+      
+      localStorage.setItem("accessJwt", accObj.accessJwt);
+      localStorage.setItem("refreshJwt", accObj.refreshJwt);
+      localStorage.setItem("userDid", accObj.did);
+      
+      return "Success";
+    } else {
+      
+      return [accObj.error, accObj.message];
+    }
+  } catch (e) {
+    
+    console.log(e);
+    return "Error: The request could not be made! Try clicking the button again.";
   }
 }

@@ -1,2 +1,4 @@
 /*
   Cache-Control: no-cache
+/embed
+  Access-Control-Allow-Origin: *

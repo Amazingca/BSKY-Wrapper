@@ -1,7 +1,7 @@
 {
     "lang": "en",
-    "short_name": "Blue",
-    "name": "Bluesky Social Wrapper",
+    "short_name": "Blue Staging",
+    "name": "Bluesky Social Wrapper [Staging]",
     "description": "Unofficial web client for Bluesky Social.",
     "start_url": "/login",
     "display": "standalone",

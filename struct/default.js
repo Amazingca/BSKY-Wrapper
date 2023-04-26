@@ -1,7 +1,7 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "./api.js";
-import { embeds } from "./mods.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
+import { embeds } from "../mods.js";
 
-export async function post(userId, post, type) {
+export async function postDefault(userId, post, type) {
   
   const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
   const userObj = await getUserRepo(userId);
@@ -121,7 +121,7 @@ export async function post(userId, post, type) {
 
           for (var o = 0; o < mentionLength; o++) {
 
-            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos - 2];
+            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos];
           }
           
           //console.log(selection[i][1], selection[i][1].split("").length, mentionLength);
@@ -261,20 +261,5 @@ export async function userLight(userId) {
     
     return userElement;
   }
-}
-
-export async function postModalBuild() {
-
-  const userInfo = await getUserInfo();
-
-  var userProfileImage;
-  if (userInfo.avatar != undefined) {
-    userProfileImage = `<img style="border-radius: 50%;" src="${userInfo.avatar}" width="64" height="64">`;
-  } else {
-    userProfileImage = `<div class="default-user-photo">${userInfo.handle.split("")[0].toUpperCase()}</div>`;
-  }
-
-  document.getElementById("flex-post-area").innerHTML =
-    `${userProfileImage}
-    <textarea type="text" placeholder="Your post goes here..." maxlength="300" id="post-text"></textarea>`;
+  
 }
