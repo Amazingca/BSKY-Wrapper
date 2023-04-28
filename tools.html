@@ -620,6 +620,12 @@
 
                     var temp = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${dids[i]}`).then(r => r.text()));
 
+                    console.log(dids[i], temp.handle);
+                    
+                    if (!temp.handle) {
+                        continue;
+                    }
+
                     if (temp.handle.includes(".bsky.social")) {
 
                         countDefaultH++;
