@@ -31,6 +31,9 @@
                 <tr>
                     <th class="button"><button onclick="getProfile();" id="getProfileB">Get all profiles</button></th>
                 </tr>
+                <tr>
+                    <th class="button"><button onclick="getUsersWithCH();" id="getCHB">Count users with custom handle</button></th>
+                </tr>
                 <tr class="hidden">
                     <th class="button"><button onclick="getUsers();" id="getUsersB">Get all user info</button></th>
                 </tr>
@@ -597,12 +600,44 @@
 
                 for (var i = 0; i < dids.length; i++) {
 
-                    var temp = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describe?repo=${dids[i]}`).then(r => r.text());
+                    var temp = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${dids[i]}`).then(r => r.text());
 
                     posts = posts + temp + "<br><br>";
                 }
 
                 document.getElementById("data").innerHTML = posts;
+            }
+
+            async function getUsersWithCH() {
+
+                document.getElementById("getCHB").style.backgroundColor = "#04aa6d";
+                document.getElementById("getCHB").style.color = "#fff";
+
+                var countHasCH = 0;
+                var countDefaultH = 0;
+
+                for (var i = 0; i < dids.length; i++) {
+
+                    var temp = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${dids[i]}`).then(r => r.text()));
+
+                    if (temp.handle.includes(".bsky.social")) {
+
+                        countDefaultH++;
+                    } else {
+
+                        countHasCH++;
+                    }
+
+                    document.getElementById("progStatus").innerHTML = "Progress: " + countHasCH + " users with custom handles!";
+                    document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/dids.length}`.split("").slice(0, 6).join("")*100))/100 + "%";
+                    document.getElementById("progressB").value = Math.round(100*(`${i/dids.length}`.split("").slice(0, 6).join("")*100))/10000;
+                }
+
+                document.getElementById("progStatus").innerHTML = "Progress: " + countHasCH + " CH users, " + countDefaultH + " DH users.";
+                document.getElementById("progPercent").innerHTML = "100%";
+                document.getElementById("progressB").value = "1";
+                document.getElementById("getCHB").style.backgroundColor = "";
+                document.getElementById("getCHB").style.color = "#000";
             }
 
             function confirmation() {
