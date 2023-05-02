@@ -112,7 +112,7 @@ export async function getUserFeed() {
   
   try {
     
-    const feedReq = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline", req).then(r => r.text()));
+    const feedReq = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline?limit=100", req).then(r => r.text()));
     
     return feedReq;
   } catch (e) {
