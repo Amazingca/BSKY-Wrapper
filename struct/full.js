@@ -1,4 +1,5 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
+import { labelHandle, labelUsername } from "../labels.js";
 import { embeds, reactorContructor } from "../mods.js";
 
 // Saved post dates and id
@@ -90,7 +91,7 @@ export async function postFull(userId, post, type) {
       textSize = "font-size: 16px;";
     }
     
-    var usernameElement;
+    /*var usernameElement;
     
     if (userObj.displayName === undefined) {
       
@@ -98,6 +99,19 @@ export async function postFull(userId, post, type) {
     } else {
       
       usernameElement = `<h3 style="${textSize}">${userObj.displayName}</h3>`;
+    }*/
+    
+    var usernameElement;
+    var handleElement;
+    
+    if (userObj.displayName === undefined) {
+      
+      usernameElement = "";
+      handleElement = labelHandle(userObj.did, "", userObj.handle);
+    } else {
+      
+      usernameElement = labelUsername(userObj.did, "", userObj.displayName);
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -202,7 +216,7 @@ export async function postFull(userId, post, type) {
               ${userProfileImage}
               <div style="${textType}">
                 ${usernameElement}
-                <h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+                ${handleElement}
               </div>
             </flex>
             <br>
