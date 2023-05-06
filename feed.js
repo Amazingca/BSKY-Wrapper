@@ -64,6 +64,11 @@ async function artificialFeed() {
 
         continue;
       }
+      
+      if (userDataObj.collections === undefined) {
+        
+        continue;
+      }
 
       var hasPostCollection = false;
 

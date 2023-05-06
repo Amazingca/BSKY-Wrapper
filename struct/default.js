@@ -1,4 +1,5 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
+import { labelHandle, labelUsername } from "../labels.js";
 import { embeds } from "../mods.js";
 
 export async function postDefault(userId, post, type) {
@@ -68,13 +69,16 @@ export async function postDefault(userId, post, type) {
     }
     
     var usernameElement;
+    var handleElement;
     
     if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
+      handleElement = labelHandle(userId, textSize, userObj.handle);
     } else {
       
-      usernameElement = `<h3 style="${textSize}">${userProfileObj[0].value.displayName}</h3>`;
+      usernameElement = labelUsername(userId, textSize, userProfileObj[0].value.displayName);
+      handleElement = `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -121,7 +125,7 @@ export async function postDefault(userId, post, type) {
 
           for (var o = 0; o < mentionLength; o++) {
 
-            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos];
+            selection[i][1] = selection[i][1] + postObj.record.text.split("")[o + startPos - 2];
           }
           
           //console.log(selection[i][1], selection[i][1].split("").length, mentionLength);
@@ -160,7 +164,7 @@ export async function postDefault(userId, post, type) {
         <div class="feed-container">
           <div style="${textType}">
             ${usernameElement}
-            <h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+            ${handleElement}
           </div>
           <br>
           <div>${postText}</div>
@@ -188,13 +192,16 @@ export async function user(userId) {
   } else {
     
     var usernameElement;
+    var handleElement;
     
     if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
+      handleElement = labelHandle(userId, "", userObj.handle);
     } else {
       
-      usernameElement = `<h3>${userProfileObj[0].value.displayName}</h3>`;
+      usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     var userFollowing;
@@ -221,7 +228,8 @@ export async function user(userId) {
     const userElement = 
       `<div class="feed-container">
         ${usernameElement}
-        <h3 style="color: #555;">@${userObj.handle} / ${userObj.did}</h3>
+        ${handleElement}
+        <h5>${userObj.did}</h5>
         <br>
         ${userDescription}
         <flex>
