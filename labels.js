@@ -1,10 +1,10 @@
 var OGDids;
 
-if (localStorage.getItem("userDid") != null) {
+/*if (localStorage.getItem("userDid") != null) {
   
   document.getElementById("labelCheckFlagged").disabled = false;
   document.getElementById("labelOfCheckFlagged").classList.remove("disabledFlag");
-}
+}*/
 
 async function buildPreReqs() {
   
