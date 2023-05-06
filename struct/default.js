@@ -252,22 +252,24 @@ export async function userLight(userId) {
   } else {
     
     var usernameElement;
+    var handleElement;
     
     if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
+      handleElement = labelHandle(userId, "", userObj.handle);
     } else {
       
-      usernameElement = `<h3>${userProfileObj[0].value.displayName}</h3>`;
+      usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     const userElement = 
       `<div class="feed-container">
         ${usernameElement}
-        <h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>
+        ${handleElement}
       </div>`;
     
     return userElement;
   }
-  
 }
