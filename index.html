@@ -7,6 +7,7 @@
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-favicon?v=1679367426997">
     <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-app-favicon?v=1679196074840">
     <link rel="manifest" href="manifest.json">
+    <script type="module" src="./labels.js"></script>
   </head>
   <body>
     <header>
@@ -80,6 +81,18 @@
                     <input type="submit" class="rolo-click" value="Run Query">
                   </form>
                 </div>
+                <div class="rolo-container">
+                  <h3 title="Label posts from an account">Labeling</h3>
+                  <h5>Label posts from an account</h5>
+                  <flex style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="labelCheckOGDids">
+                    <label>OG (first 329 accounts)</label>
+                  </flex>
+                  <flex title="Must be logged in" style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="labelCheckFlagged" disabled>
+                    <label class="disabledFlag" id="labelOfCheckFlagged">Flagged Accounts</label>
+                  </flex>
+                  </div>
                 <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
               </spacer>
             </menu>
@@ -327,11 +340,19 @@
       display: none;
     }
     menu {
-      position: sticky;
+      /*position: sticky;*/
+      position: fixed;
+      overflow-y: scroll;
       top: 92.16px;
+      width: 259px;
+      height: 85vh;
+      /*top: -23px;*/
       margin: 0px;
       padding: 0px;
       padding-top: 19.92px;
+    }
+    menu::-webkit-scrollbar {
+      width: 20px;
     }
     .mention {
       font-weight: 600 !important;
@@ -354,6 +375,9 @@
       border-radius: 0.5rem;
       border-width: 0px;
       width: 100%;
+    }
+    .disabledFlag {
+      color: #aaa;
     }
     #loadButton {
       cursor: pointer;
@@ -695,6 +719,9 @@
       }
       menu {
         position: relative;
+        width: auto;
+        height: auto;
+        overflow-y: auto;
         top: 0px;
       }
       .post-size {
