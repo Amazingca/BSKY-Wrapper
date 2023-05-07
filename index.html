@@ -88,11 +88,15 @@
                     <input type="checkbox" id="labelCheckOGDids">
                     <label>OG (first 329 accounts)</label>
                   </flex>
+                  <flex style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="labelCheckBSKYStaff">
+                    <label>Bluesky Staff</label>
+                  </flex>
                   <flex title="Must be logged in" style="margin-top: 0.5rem;">
                     <input type="checkbox" id="labelCheckFlagged" disabled>
                     <label class="disabledFlag" id="labelOfCheckFlagged">Flagged Accounts</label>
                   </flex>
-                  </div>
+                </div>
                 <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
               </spacer>
             </menu>
