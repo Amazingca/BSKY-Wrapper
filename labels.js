@@ -1,4 +1,5 @@
 var OGDids;
+var BSKYStaff;
 
 /*if (localStorage.getItem("userDid") != null) {
   
@@ -22,7 +23,18 @@ async function buildPreReqs() {
 
             try {
 
-              OGDids = await fetch("./OGDids.json").then(r => r.json());
+              OGDids = await fetch("./flags/OGDids.json").then(r => r.json());
+            } catch (e) {
+
+              console.log(e);
+            }
+            break;
+          case "BlueskyStaff":
+             document.getElementById("labelCheckBSKYStaff").checked = true;
+
+            try {
+
+              BSKYStaff = await fetch("./flags/BSKYStaff.json").then(r => r.json());
             } catch (e) {
 
               console.log(e);
@@ -44,17 +56,30 @@ buildPreReqs();
 var value = [];
 
 document.getElementById("labelCheckOGDids").addEventListener("change", function() {
-  checkOGDids("EarlyAccounts");
+  
+  value[0] = "EarlyAccounts";
+  value[1] = document.getElementById("labelCheckOGDids").checked;
+  
+  booleanToString(value);
+});
+
+document.getElementById("labelCheckBSKYStaff").addEventListener("change", function() {
+  
+  value[0] = "BlueskyStaff";
+  value[1] = document.getElementById("labelCheckBSKYStaff").checked;
+  
+  booleanToString(value);
 });
 
 document.getElementById("labelCheckFlagged").addEventListener("change", function() {
-  checkOGDids("LabeledAccounts");
+  
+  value[0] = "LabeledAccounts";
+  value[1] = document.getElementById("labelCheckFlagged").checked;
+  
+  booleanToString(value);
 });
 
-function checkOGDids(type) {
-  
-  value[0] = type;
-  value[1] = document.getElementById("labelCheckOGDids").checked;
+function booleanToString(value) {
   
   if (value[1]) {
     
@@ -132,6 +157,15 @@ function checkForLabels(did) {
           }
         }
         break;
+      case "BlueskyStaff":
+        
+        for (var o = 0; o < BSKYStaff.length; o++) {
+          
+          if (did === BSKYStaff[o]) {
+            
+            flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>Bluesky Staff</h5>";
+          }
+        }
       default:
         break;
     }
@@ -153,7 +187,7 @@ export function labelHandle(did, textSize, handle) {
   if (labels[0] === true) {
     
     console.log('labeled', labels[1], did)
-    return `<h3 style="color: #555; ${textSize}"><flex style="justify-content: space-between;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a>${labels[1]}</flex></h3>`;
+    return `<h3 style="color: #555; ${textSize}"><flex style="justify-content: space-between;"><div>@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></div><flex>${labels[1]}</flex></flex></h3>`;
   } else {
     
     return `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></h3>`;
@@ -166,7 +200,7 @@ export function labelUsername(did, textSize, displayName) {
   
   if (labels[0] === true) {
     
-    return `<h3 style="${textSize}"><flex style="justify-content: space-between;"><div>${displayName}</div>${labels[1]}</flex></h3>`;
+    return `<h3 style="${textSize}"><flex style="justify-content: space-between;"><div>${displayName}</div><flex>${labels[1]}</flex></flex></h3>`;
   } else {
     
     return `<h3 style="${textSize}">${displayName}</h3>`;
