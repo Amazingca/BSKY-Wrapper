@@ -1,5 +1,5 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
-import { labelHandle, labelUsername } from "../labels.js";
+import { labelHandle, labelUsername, labelStruct } from "../labels.js";
 import { embeds, reactorContructor } from "../mods.js";
 
 // Saved post dates and id
@@ -104,13 +104,33 @@ export async function postFull(userId, post, type) {
     var usernameElement;
     var handleElement;
     
+    var labels = null;
+    
+    if (postObj.labels.length != 0) {
+      
+      window.alert("Found flagged account!");
+      labels = postObj.labels;
+    } else if (userObj.labels.length != 0) {
+      
+      if (labels === null) {
+        
+        labels = userObj.labels;
+      } else {
+        
+        for (var i = 0; i < userObj.labels.length; i++) {
+          
+          labels.concat(userObj.labels);
+        }
+      }
+    }
+    
     if (userObj.displayName === undefined) {
       
       usernameElement = "";
-      handleElement = labelHandle(userObj.did, "", userObj.handle);
+      handleElement = labelHandle(userObj.did, "", userObj.handle, labels);
     } else {
       
-      usernameElement = labelUsername(userObj.did, "", userObj.displayName);
+      usernameElement = labelUsername(userObj.did, "", userObj.displayName, labels);
       handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
@@ -167,6 +187,11 @@ export async function postFull(userId, post, type) {
       
       for (var i = 0; i < selection.length; i++) {
         
+        if (selection[i] === undefined) {
+          
+          continue;
+        }
+        
         if (selection[i][0] === "app.bsky.richtext.facet#mention") {
           
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin + document.location.pathname}?username=${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
@@ -214,7 +239,7 @@ export async function postFull(userId, post, type) {
           <div style="margin: 0.5rem">
             <flex>
               ${userProfileImage}
-              <div style="${textType}">
+              <div style="width: -webkit-fill-available; ${textType}">
                 ${usernameElement}
                 ${handleElement}
               </div>
@@ -304,6 +329,24 @@ export async function userInfoModalBuild() {
     username = `<div>${userInfo.displayName}</div>`
   }
   
+  var labels;
+  
+  if (userInfo.labels != null) {
+    
+    labels = labelStruct(userInfo.did, userInfo.labels);
+  } else {
+    
+    labels = labelStruct(userInfo.did, null);
+  }
+  
+  var labelsMobile, labelsDesktop = "";
+  
+  if (labels != "") {
+    
+    labelsMobile = `<div style="font-size: 1rem; font-weight: 700 !important; color: #555;">Account Labels</div><div style="display: flex; justify-content: flex-end; gap: 0.25rem;">${labels}</div>`;
+    labelsDesktop = `<div style="margin: 0.5rem; font-weight: 700 !important; color: #555;">Account Labels:</div><div style="margin: 0.5rem; display: flex; gap: 0.25rem;">${labels}</div>`;
+  }
+  
   document.getElementById("profileInfoModal").innerHTML =
     `<div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin: 0.5rem;">
       <div>
@@ -315,6 +358,7 @@ export async function userInfoModalBuild() {
       ${userProfileImageMobile}
     </div>
     <div style="display: flex; gap: 0.5rem; justify-content: flex-end; flex-direction: column; margin: 0.5rem;">
+      ${labelsMobile}
       <div style="display: flex; justify-content: flex-end; gap: 0.5rem; font-size: 1rem;">
         <div style="font-weight: 700 !important;">
           ${userInfo.followersCount}
@@ -356,6 +400,7 @@ export async function userInfoModalBuild() {
           @${userInfo.handle}
         </h5>
       </div>
+      ${labelsDesktop}
       <div style="display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem;">
         <div style="display: flex; gap: 0.5rem;">
           <div style="font-weight: 700 !important; color: #555;">
