@@ -339,7 +339,8 @@ export async function userInfoModalBuild() {
     labels = labelStruct(userInfo.did, null);
   }
   
-  var labelsMobile, labelsDesktop = "";
+  var labelsMobile = "";
+  var labelsDesktop = "";
   
   if (labels != "") {
     
