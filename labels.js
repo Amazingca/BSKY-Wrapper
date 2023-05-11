@@ -1,11 +1,11 @@
 var OGDids;
 var BSKYStaff;
 
-/*if (localStorage.getItem("userDid") != null) {
+if (localStorage.getItem("userDid") != null) {
   
   document.getElementById("labelCheckFlagged").disabled = false;
   document.getElementById("labelOfCheckFlagged").classList.remove("disabledFlag");
-}*/
+}
 
 async function buildPreReqs() {
   
@@ -113,7 +113,7 @@ function saveLabels() {
   value = [];
 }
 
-function checkForLabels(did) {
+function checkForLabels(did, labels) {
   
   if (localStorage.getItem("labels") === null) {
     
@@ -144,6 +144,10 @@ function checkForLabels(did) {
   
   var flagHTML = "";
   
+  if (labels != null) {
+    console.log("has labels")
+  }
+  
   for (var i = 0; i < enabledFlags.length; i++) {
     
     switch (enabledFlags[i]) {
@@ -166,6 +170,17 @@ function checkForLabels(did) {
             flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>Bluesky Staff</h5>";
           }
         }
+        break;
+      case "LabeledAccounts":
+        
+        if (labels != null) {
+        console.log(labels)
+          for (var o = 0; o < labels.length; o++) {
+            
+            flagHTML += `<h5 title="Created by ${labels[o].src} on ${labels[o].cts}" style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #ff0000aa, #c21313ff); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>${labels[o].val}</h5>`;
+          }
+        }
+        break;
       default:
         break;
     }
@@ -180,9 +195,17 @@ function checkForLabels(did) {
   }
 }
 
-export function labelHandle(did, textSize, handle) {
+export function labelHandle(did, textSize, handle, sourceLabels) {
   
-  const labels = checkForLabels(did);
+  var labels;
+  
+  if (sourceLabels != null) {
+    
+    labels = checkForLabels(did, sourceLabels);
+  } else {
+    
+    labels = checkForLabels(did, null);
+  }
   
   if (labels[0] === true) {
     
@@ -194,9 +217,17 @@ export function labelHandle(did, textSize, handle) {
   }
 }
 
-export function labelUsername(did, textSize, displayName) {
+export function labelUsername(did, textSize, displayName, sourceLabels) {
   
-  const labels = checkForLabels(did);
+  var labels;
+  
+  if (sourceLabels != null) {
+    
+    labels = checkForLabels(did, sourceLabels);
+  } else {
+    
+    labels = checkForLabels(did, null);
+  }
   
   if (labels[0] === true) {
     
@@ -204,5 +235,26 @@ export function labelUsername(did, textSize, displayName) {
   } else {
     
     return `<h3 style="${textSize}">${displayName}</h3>`;
+  }
+}
+
+export function labelStruct(did, sourceLabels) {
+  
+  var labels;
+  
+  if (sourceLabels != null) {
+    
+    labels = checkForLabels(did, sourceLabels);
+  } else {
+    
+    labels = checkForLabels(did, null);
+  }
+  
+  if (labels[0] === true) {
+    
+    return labels[1];
+  } else {
+    
+    return "";
   }
 }
