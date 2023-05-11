@@ -14,7 +14,6 @@
                 <button onclick="auth()" id="loginB">Authenticate</button>
                 <button onclick="logout()" class="hidden" id="logoutB">Logout</button>
             </div>
-            
             <hr>
             <table style="width: -webkit-fill-available;">
                 <tr>
@@ -40,7 +39,7 @@
             </table>
             <div class="hidden" id="confirmM">
                 <br>
-                <button onclick="confirmation();" style="width: -webkit-fill-available; height: 35px;" id="confirmB"></button>
+                <button onclick="confirmation();" style="width: -webkit-fill-available; height: 75px;" id="confirmB"></button>
             </div>
             <div class="hidden" id="cancelM">
                 <br>
@@ -99,14 +98,14 @@
                 color: #222;
             }
             #confirmB {
-                background-color: #04aa6d;
+                background-color: #ff0000cc;
                 border-width: 0px;
                 font-size: 0.9em;
                 font-weight: 750 !important;
                 color: #fff;
             }
             #cancelB {
-                background-color: #d63939;
+                background-color: #ff0000cc;
                 border-width: 0px;
                 font-size: 0.9em;
                 font-weight: 750 !important;
@@ -251,7 +250,7 @@
 
                     toConfirm = "followAll";
 
-                    document.getElementById("confirmB").innerHTML = "Confirm: Follow All";
+                    document.getElementById("confirmB").innerHTML = "CAUTION: This feature is considered spamful on Bluesky Social and as such is recommended against.<br>If you understand these precautions and would like to proceed, click to confirm...";
                     document.getElementById("confirmM").classList.remove("hidden");
                 }
             }
