@@ -26,6 +26,7 @@
                 </tr>
                 <tr>
                     <th class="button"><button onclick="getPosts();" id="getPostsB">Get all recent posts</button></th>
+                    <th class="button"><button onclick="toConfirmUnfollowAll();" id="toConfirmUnfollowAllB">Unfollow all</button></th>
                 </tr>
                 <tr>
                     <th class="button"><button onclick="getProfile();" id="getProfileB">Get all profiles</button></th>
@@ -249,8 +250,28 @@
                 } else {
 
                     toConfirm = "followAll";
-
+                    
+                    document.getElementById("confirmB").style.backgroundColor = "#ff0000cc";
+                    document.getElementById("confirmB").style.height = "75px";
+                  
                     document.getElementById("confirmB").innerHTML = "CAUTION: This feature is considered spamful on Bluesky Social and as such is recommended against.<br>If you understand these precautions and would like to proceed, click to confirm...";
+                    document.getElementById("confirmM").classList.remove("hidden");
+                }
+            }
+          
+            function toConfirmUnfollowAll() {
+
+                if ((localStorage.getItem("accessJwt") === null) || (loggedIn === false)) {
+
+                    window.alert("Must be authenticated! Try importing your account details first then run this function again!");
+                } else {
+
+                    toConfirm = "unfollowAll";
+                  
+                    document.getElementById("confirmB").style.backgroundColor = "#04aa6d";
+                    document.getElementById("confirmB").style.height = "35px";
+                  
+                    document.getElementById("confirmB").innerHTML = "Confirm: Unfollow all";
                     document.getElementById("confirmM").classList.remove("hidden");
                 }
             }
@@ -262,7 +283,7 @@
             var posts = "";
             var followers = [];
 
-            async function followAll() {
+            async function followAll(type) {
                 
                 const userDid = localStorage.getItem("userDid");
 
@@ -276,7 +297,9 @@
                     
                 var going = true;
                 var lastitem;
-
+              
+                var followingCount = 0;
+              
                 while(going) {
                         
                     if (temptemp === "") {
@@ -287,6 +310,8 @@
                         } catch (e) {
                             console.log(e);
                         }
+                      
+                        followingCount += JSON.parse(t).records.length;
 
                         //console.log(JSON.parse(t).records.length);
                         if (JSON.parse(t).records.length < 100) {
@@ -307,6 +332,8 @@
                         } catch (e) {
                             console.log(e);
                         }
+                      
+                        followingCount += JSON.parse(t).records.length;
 
                         //console.log(JSON.parse(t).records.length);
                         if (t.includes("[]")) {
@@ -323,17 +350,23 @@
                             temptemp = temptemp + "," + JSON.stringify(JSON.parse(t).records).replaceAll("[", "").replaceAll("]", "");
                         }
                     }
+                  
+                    document.getElementById("progStatus").innerHTML = "Progress: Grabbed " + followingCount + " users.";
                 }
 
                 const following = JSON.parse(temp);
                 var isFollowing = [];
+                var rkeys = [];
                 for (var follow of following) {
 
                     isFollowing.push(follow.value.subject);
+                    rkeys.push(follow.uri.split("/")[follow.uri.split("/").length - 1]);
+                    document.getElementById("progStatus").innerHTML = "Progress: Constructing record object.";
                 }
 
                 //console.log("Is following " + isFollowing.length + " users.");
-                document.getElementById("progStatus").innerHTML = "Progress: Following " + isFollowing.length + " users";
+              
+                document.getElementById("progStatus").innerHTML = "Progress: Is following " + isFollowing.length + " users";
 
                 for (var u = 0; u < dids.length; u++) {
 
@@ -352,34 +385,70 @@
                         unfollowedDids.push(dids[u]);
                     }
                 }
-
-                document.getElementById("progStatus").innerHTML = "Progress: Attempting to follow " + unfollowedDids.length + " users";
+              
+                if (type === "follow") {
+                  
+                  document.getElementById("progStatus").innerHTML = "Progress: Attempting to follow " + unfollowedDids.length + " users";
+                } else if (type === "unfollow") {
+                  
+                  document.getElementById("progStatus").innerHTML = "Progress: Attempting to unfollow " + isFollowing.length + " users";
+                }
               
                 var recordData = [];
               
-                for (var i = 0; i < unfollowedDids.length; i++) {
+                if (type === "follow") {
                   
-                  const creationDate = new Date().toISOString();
+                  for (var i = 0; i < unfollowedDids.length; i++) {
+
+                    const creationDate = new Date().toISOString();
+
+                    recordData[recordData.length] = {
+                      "$type": "com.atproto.repo.applyWrites#create",
+                      "collection": "app.bsky.graph.follow",
+                      "value": {
+                        "subject": unfollowedDids[i],
+                        "createdAt": creationDate
+                      }
+                    }
+                  }
+                } else if (type === "unfollow") {
                   
-                  recordData[recordData.length] = {
-                    "$type": "com.atproto.repo.applyWrites#create",
-                    "collection": "app.bsky.graph.follow",
-                    "value": {
-                      "subject": unfollowedDids[i],
-                      "createdAt": creationDate
+                  for (var i = 0; i < isFollowing.length; i++) {
+
+                    const creationDate = new Date().toISOString();
+
+                    recordData[recordData.length] = {
+                      "$type": "com.atproto.repo.applyWrites#delete",
+                      "collection": "app.bsky.graph.follow",
+                      "rkey": rkeys[i]
                     }
                   }
                 }
-
-                const rounds = Math.ceil(unfollowedDids.length / 200);
+              
+                var rounds;
+              
+                if (type === "follow") {
+                  
+                  rounds = Math.ceil(unfollowedDids.length / 200);
+                } else if (type === "unfollow") {
+                  
+                  rounds = Math.ceil(isFollowing.length / 200);
+                }
+              
                 for (var i = 0; i < rounds; i++) {
 
                     var startRange = i * 200;
                     var endRange;
 
                     if ((i + 1) === rounds) {
-                      
+                        
+                      if (type === "follow") {
+                        
                         endRange = (i * 200) + (unfollowedDids.length % 200);
+                      } else if (type === "unfollow") {
+                        
+                        endRange = (i * 200) + (isFollowing.length % 200);
+                      }
                     } else {
 
                         endRange = (i * 200) + 200;
@@ -405,15 +474,23 @@
                   
                         if (req != 200) {
                             
-                            window.alert("There was an error trying to follow these users! Try reauthenticating!");
+                            window.alert("There was an error trying to add these records! Try reauthenticating!");
                             document.getElementById("progStatus").innerHTML = "Progress: ERROR";
                             
                             return;
                         } else {
 
-                            document.getElementById("progStatus").innerHTML = "Progress: Batch " + i + "/" + rounds + " [" + unfollowedDids.length + "] done";
-                            document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/100 + "%";
-                            document.getElementById("progressB").value = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/10000;
+                            if (type === "follow") {
+                              
+                              document.getElementById("progStatus").innerHTML = "Progress: Batch " + i + "/" + rounds + " [" + unfollowedDids.length + "] done";
+                              document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/100 + "%";
+                              document.getElementById("progressB").value = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/10000;
+                            } else if (type === "unfollow") {
+                              
+                              document.getElementById("progStatus").innerHTML = "Progress: Batch " + i + "/" + rounds + " [" + isFollowing.length + "] done";
+                              document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/100 + "%";
+                              document.getElementById("progressB").value = Math.round(100*(`${i/rounds}`.split("").slice(0, 6).join("")*100))/10000;
+                            }
                         }
                     } catch (e) {
                         
@@ -430,9 +507,15 @@
                 document.getElementById("progPercent").innerHTML = "100%";
                 document.getElementById("progressB").value = "1";
 
-                if (unfollowedDids.length === 0) {
-
-                    document.getElementById("progStatus").innerHTML = "Progress: NO USERS TO FOLLOW";
+                if (((unfollowedDids.length === 0) && (type === "follow")) || ((isFollowing.length === 0) && (type === "unfollow"))) {
+                  
+                    if (type === "follow") {
+                    
+                        document.getElementById("progStatus").innerHTML = "Progress: NO USERS TO FOLLOW";
+                    } else if (type === "unfollow") {
+                    
+                        document.getElementById("progStatus").innerHTML = "Progress: NO USERS TO UNFOLLOW";
+                    }
                 } else {
 
                     document.getElementById("progStatus").innerHTML = "Progress: COMPLETED";
@@ -669,8 +752,14 @@
 
                 if (toConfirm === "followAll") {
 
-                    followAll();
+                    followAll("follow");
 
+                    document.getElementById("confirmM").classList.add("hidden");
+                    document.getElementById("cancelM").classList.remove("hidden");
+                } else if (toConfirm === "unfollowAll") {
+                  
+                    followAll("unfollow");
+                  
                     document.getElementById("confirmM").classList.add("hidden");
                     document.getElementById("cancelM").classList.remove("hidden");
                 }
