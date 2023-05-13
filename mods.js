@@ -19,11 +19,11 @@ export async function embeds(obj) {
           if (i + 1 != obj.images.length) {
             newElement =
               newElement +
-              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.cid}, `;
+              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.ref.$link}, `;
           } else {
             newElement =
               newElement +
-              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.cid}">`;
+              `alt: “${obj.images[i].alt}” cid: ${obj.images[i].image.ref.$link}">`;
           }
         }
 
@@ -105,6 +105,7 @@ export async function embeds(obj) {
       }
 
       return imageEmbed + "</div>";
+      break;
     case "app.bsky.embed.record":
       const quotePostUri = obj.record.uri;
       return await postDefault(
@@ -113,15 +114,25 @@ export async function embeds(obj) {
           quotePostUri.split("//")[1].split("/").length - 1
         ]
       );
+      break;
     case "app.bsky.embed.record#view":
-      return await postFull(obj.record.author.did, obj.record, "snippet");
+      if (obj.record.author) {
+        
+        return await postFull(obj.record.author.did, obj.record, "snippet");
+      } else {
+        
+        return "";
+      }
+      break;
     case "app.bsky.embed.external":
       return (
         newElement +
         `${obj.external.uri}">Attached: <a href='${obj.external.uri}' target='_blank'>1 link</a></h3>`
       );
+      break;
     case "app.bsky.embed.external#view":
       return `<a href='${obj.external.uri}' target='_blank' title="${obj.external.title}\n\n${obj.external.description}"><div style="width: auto;" class="feed-container">${obj.external.title}</div></a>`;
+      break;
   }
 }
 
@@ -167,13 +178,13 @@ export function reactorContructor(postObj, amounts) {
   if (postObj.viewer.repost != undefined) {
     repostE = 
       `<flex class="reactors">
-        <svg class="repost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
+        <svg class="repostB depost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
         <div class="reactor">reposted ${postObj.repostCount}</div>
       </flex>`;
   } else {
     repostE = 
       `<flex class="reactors">
-        <svg class="repost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
+        <svg class="repostB repost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
         <div class="reactor">${postObj.repostCount}</div>
       </flex>`;
   }
@@ -181,13 +192,13 @@ export function reactorContructor(postObj, amounts) {
   if (postObj.viewer.like != undefined) {
     upvoteE = 
       `<flex class="reactors">
-        <svg class="upvote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M7.655 14.916v-.001h-.002l-.006-.003-.018-.01a22.066 22.066 0 0 1-3.744-2.584C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.044 5.231-3.886 6.818a22.094 22.094 0 0 1-3.433 2.414 7.152 7.152 0 0 1-.31.17l-.018.01-.008.004a.75.75 0 0 1-.69 0Z"></path></svg>
+        <svg class="upvoteB devote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M7.655 14.916v-.001h-.002l-.006-.003-.018-.01a22.066 22.066 0 0 1-3.744-2.584C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.044 5.231-3.886 6.818a22.094 22.094 0 0 1-3.433 2.414 7.152 7.152 0 0 1-.31.17l-.018.01-.008.004a.75.75 0 0 1-.69 0Z"></path></svg>
         <div class="reactor">${postObj.likeCount}</div>
       </flex>`;
   } else {
     upvoteE = 
       `<flex class="reactors">
-        <svg class="upvote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="m8 14.25.345.666a.75.75 0 0 1-.69 0l-.008-.004-.018-.01a7.152 7.152 0 0 1-.31-.17 22.055 22.055 0 0 1-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.066 22.066 0 0 1-3.744 2.584l-.018.01-.006.003h-.002ZM4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.58 20.58 0 0 0 8 13.393a20.58 20.58 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z"></path></svg>
+        <svg class="upvoteB upvote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="m8 14.25.345.666a.75.75 0 0 1-.69 0l-.008-.004-.018-.01a7.152 7.152 0 0 1-.31-.17 22.055 22.055 0 0 1-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.066 22.066 0 0 1-3.744 2.584l-.018.01-.006.003h-.002ZM4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.58 20.58 0 0 0 8 13.393a20.58 20.58 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z"></path></svg>
         <div class="reactor">${postObj.likeCount}</div>
       </flex>`;
   }
