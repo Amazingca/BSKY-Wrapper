@@ -108,7 +108,7 @@ export async function postFull(userId, post, type) {
     
     if (postObj.labels.length != 0) {
       
-      window.alert("Found flagged account!");
+      //window.alert("Found flagged account!");
       labels = postObj.labels;
     } else if (userObj.labels.length != 0) {
       
