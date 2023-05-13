@@ -40,9 +40,9 @@ async function userFeed() {
         feedStruct = feedStruct + postStruct;
         
         document.getElementById("feedStruct").innerHTML = "<spacer>" + feedStruct + "</spacer>";
-        
-        activateListeners(postObj.post.uri, postObj.post.cid);
       }
+      
+      activateListeners();
     }
   } catch (e) {
     
