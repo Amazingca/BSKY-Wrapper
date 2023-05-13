@@ -125,7 +125,7 @@ export async function getUserFeed() {
 export async function getUserNotifCount() {
   
   const userId = localStorage.getItem("userDid");
-  const token = localStorage.getItem("accessJwt");
+  const token = await getToken();
   
   const req = {
     method: "GET",
@@ -145,41 +145,82 @@ export async function getUserNotifCount() {
   }
 }
 
-export async function upvotePost(postUri, postCid) {
+export async function votePost(type, postUri, postCid) {
   
   const userId = localStorage.getItem("userDid");
-  const token = localStorage.getItem("accessJwt");
+  const token = await getToken();
   
   const creationDate = new Date().toISOString();
   
-  const req = {
-    method: "GET",
-    headers: {
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({
-      "subject": {
-        "uri": postUri,
-        "cid": postCid
+  if (type === "upvote") {
+    
+    const req = {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
       },
-      "createdAt": creationDate
-    })
-  }
-  
-  try {
-    
-    const res = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.like", req).then(r => r.text()));
-    
-    if (res.uri != undefined) {
-      
-      return res.uri;
-    } else {
-      
-      return null;
+      body: JSON.stringify({
+        "collection": "app.bsky.feed.like",
+        "repo": userId,
+        "record": {
+          "subject": {
+            "uri": postUri,
+            "cid": postCid
+          },
+          "createdAt": creationDate
+        }
+      })
     }
-  } catch (e) {
+
+    try {
+
+      const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", req).then(r => r.text()));
+
+      if (res.uri != undefined) {
+
+        return [true, "upvoted"];
+      } else {
+
+        return [false];
+      }
+    } catch (e) {
+
+      return [false];
+    }
+  } else if (type === "devote") {
     
-    return null
+    const postData = await getPostFull(postUri.split("//")[1].split("/")[0], postUri.split("//")[1].split("/")[2]);
+    const postRKey = postData[1].thread.post.viewer.like.split("//")[1].split("/")[2];
+    
+    const req = {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "collection": "app.bsky.feed.like",
+        "repo": userId,
+        "rkey": postRKey
+      })
+    }
+
+    try {
+
+      const res = await fetch("https://bsky.social/xrpc/com.atproto.repo.deleteRecord", req).then(r => r.status);
+
+      if (res === 200) {
+
+        return [true, "devoted"];
+      } else {
+
+        return [false];
+      }
+    } catch (e) {
+
+      return [false];
+    }
   }
 }
 
