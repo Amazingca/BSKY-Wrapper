@@ -821,17 +821,19 @@
                         return;
                     } else {
 
-                        document.getElementsByTagName("html")[0].focus();
-                        navigator.clipboard.writeText(JSON.stringify(dids));
+                        document.getElementById("data").innerHTML = JSON.stringify(dids);
+                        document.getElementById("dataP").classList.remove("hidden");
+                        
                         console.log("Some DIDs could not be removed from the cache because they were not found!", nonExistentDids);
-                        console.log("However, some DIDs were able to be removed, so the new cache has been copied to your clipboard!");
+                        console.log("However, some DIDs were able to be removed.");
                         return;
                     }
                 } else {
 
-                    document.getElementsByTagName("html")[0].focus();
-                    navigator.clipboard.writeText(JSON.stringify(dids));
-                    console.log("Updated DID cache copied to your clipboard!");
+                    document.getElementById("data").innerHTML = JSON.stringify(dids);
+                    document.getElementById("dataP").classList.remove("hidden");
+
+                    console.log("Updated DID cache!");
                     return;
                 }
             }
