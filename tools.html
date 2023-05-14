@@ -279,8 +279,6 @@
             var excludedDids;
             var dids;
 
-            var whileGoing = true;
-
             async function initializeCaches() {
 
                 try {
@@ -288,21 +286,18 @@
                     excludedDids = await fetch("./dids/excludedDids.json").then(r => r.json());
                     dids = await fetch("./dids/didCache.json").then(r => r.json());
 
-                    if ((typeof excludedDids === "object") && (typeof dids === "object")) {
+                    if ((typeof excludedDids != "object") || (typeof dids != "object")) {
 
-                        return false;
+                        window.alert("Couldn't pull the DID cache! Try to reload the page again!");
                     }
                 } catch (e) {
 
                     console.log(e);
-                    return true;
+                    window.alert("Couldn't pull the DID cache! Try to reload the page again!");
                 }
             }
         
-            while (whileGoing) {
-                
-                whileGoing = await initializeCaches();
-            }
+            initializeCaches();
             
             var posts = "";
             var followers = [];
