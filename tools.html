@@ -780,6 +780,60 @@
                 console.log(nonExistentUsers);
             }
 
+            function isolateDeletedUsers(deletedUsers) {
+
+                if (typeof deletedUser != "object") {
+
+                    console.log("You did not provide a valid array!");
+                    return;
+                } else if (deletedUser.length === 0) {
+
+                    console.log("This array is empty!");
+                    return;
+                }
+
+                var nonExistentDids = [];
+
+                for (var i = 0; i < deletedUsers.length; i++) {
+
+                    var existent = false;
+
+                    for (var o = 0; o < dids.length; o++) {
+
+                        if (deletedUsers[i] === dids[o]) {
+
+                            existent = true;
+                            dids.splice(o, 1);
+                        }
+                    }
+
+                    if (existent === false) {
+
+                        nonExistentDids.push(deletedUsers[i]);
+                    }
+                }
+
+                if (nonExistentDids.length > 0) {
+
+                    if (nonExistentDids.length === deletedUsers.length) {
+
+                        console.log("None of the DIDs provided were existent in the cache!");
+                        return;
+                    } else {
+
+                        navigator.clipboard.writeText(JSON.stringify(dids));
+                        console.log("Some DIDs could not be removed from the cache because they were not found!", nonExistentDids);
+                        console.log("However, some DIDs were able to be removed, so the new cache has been copied to your clipboard!");
+                        return;
+                    }
+                } else {
+
+                    navigator.clipboard.writeText(JSON.stringify(dids));
+                    console.log("Updated DID cache copied to your clipboard!");
+                    return;
+                }
+            }
+
             function confirmation() {
 
                 if (toConfirm === "followAll") {
