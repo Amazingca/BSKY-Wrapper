@@ -279,29 +279,29 @@
             var excludedDids;
             var dids;
 
+            var whileGoing = true;
+
             async function initializeCaches() {
-              
-                var going = true;
 
-                while (going) {
+                try {
 
-                    try {
+                    excludedDids = await fetch("./dids/excludedDids.json").then(r => r.json());
+                    dids = await fetch("./dids/didCache.json").then(r => r.json());
 
-                        excludedDids = await fetch("./dids/excludedDids.json").then(r => r.json());
-                        dids = await fetch("./dids/didCache.json").then(r => r.json());
+                    if ((typeof excludedDids === "object") && (typeof dids === "object")) {
 
-                        if ((typeof excludedDids === "object") && (typeof dids === "object")) {
-
-                            going = false;
-                        }
-                    } catch (e) {
-
-                        console.log(e);
+                        whileGoing = false;
                     }
-                }  
+                } catch (e) {
+
+                    console.log(e);
+                }
             }
-            
-            initializeCaches();
+        
+            while (whileGoing) {
+                
+                initializeCaches();
+            }
             
             var posts = "";
             var followers = [];

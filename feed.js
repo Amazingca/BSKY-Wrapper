@@ -4,28 +4,28 @@ import { getUserRepo, listRecords, getUserFeed } from "./api.js";
 import { activateListeners } from "./listeners.js";
 export var userCache;
 
+var whileGoing = true;
+
 async function initializeCaches() {
-              
-  var going = true;
 
-  while (going) {
+  try {
 
-    try {
+    userCache = await fetch("./dids/didCache.json").then(r => r.json());
+    
+    if (typeof userCache === "object") {
 
-      userCache = await fetch("./dids/didCache.json").then(r => r.json());
-      console.log(userCache);
-      if (typeof userCache === "object") {
-
-        going = false;
-      }
-    } catch (e) {
-
-      console.log(e);
+      whileGoing = false;
     }
-  }  
+  } catch (e) {
+
+    console.log(e);
+  } 
 }
-            
-initializeCaches();
+  
+while (whileGoing) {
+
+  initializeCaches();
+}
 
 var sortedObj = [];
 
