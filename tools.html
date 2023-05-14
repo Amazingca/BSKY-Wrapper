@@ -821,7 +821,7 @@
                         return;
                     } else {
 
-                        window.alert("To confirm the copy the new DID cache, please click OK.");
+                        document.getElementsByTagName("html")[0].focus();
                         navigator.clipboard.writeText(JSON.stringify(dids));
                         console.log("Some DIDs could not be removed from the cache because they were not found!", nonExistentDids);
                         console.log("However, some DIDs were able to be removed, so the new cache has been copied to your clipboard!");
@@ -829,7 +829,7 @@
                     }
                 } else {
 
-                    window.alert("To confirm the copy the new DID cache, please click OK.");
+                    document.getElementsByTagName("html")[0].focus();
                     navigator.clipboard.writeText(JSON.stringify(dids));
                     console.log("Updated DID cache copied to your clipboard!");
                     return;
