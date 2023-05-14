@@ -14,17 +14,18 @@ async function initializeCaches() {
     
     if (typeof userCache === "object") {
 
-      whileGoing = false;
+      return false;
     }
   } catch (e) {
 
     console.log(e);
+    return true;
   } 
 }
   
 while (whileGoing) {
 
-  initializeCaches();
+  whileGoing = await initializeCaches();
 }
 
 var sortedObj = [];

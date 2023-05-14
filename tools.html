@@ -290,17 +290,18 @@
 
                     if ((typeof excludedDids === "object") && (typeof dids === "object")) {
 
-                        whileGoing = false;
+                        return false;
                     }
                 } catch (e) {
 
                     console.log(e);
+                    return true;
                 }
             }
         
             while (whileGoing) {
                 
-                initializeCaches();
+                whileGoing = await initializeCaches();
             }
             
             var posts = "";
