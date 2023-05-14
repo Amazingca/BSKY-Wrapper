@@ -13,7 +13,7 @@ async function initializeCaches() {
     try {
 
       userCache = await fetch("./dids/didCache.json").then(r => r.json());
-
+      console.log(userCache);
       if (typeof userCache === "object") {
 
         going = false;
