@@ -737,16 +737,27 @@
                 var countHasCH = 0;
                 var countDefaultH = 0;
 
+                var nonExistentUsers = [];
+
                 for (var i = 0; i < dids.length; i++) {
 
                     var temp = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${dids[i]}`).then(r => r.text()));
-
-                    console.log(dids[i], temp.handle);
                     
-                    if (!temp.handle) {
-                        continue;
+                    if (!temp.handle) { 
+
+                        if (temp.message.includes("Could not find user: ")) {
+
+                            nonExistentUsers.push(dids[i]);
+                            continue;
+                        } else {
+
+                            continue;
+                        }
                     }
 
+                    console.log(dids[i], temp.handle);
+
+                    
                     if (temp.handle.includes(".bsky.social")) {
 
                         countDefaultH++;
@@ -765,6 +776,8 @@
                 document.getElementById("progressB").value = "1";
                 document.getElementById("getCHB").style.backgroundColor = "";
                 document.getElementById("getCHB").style.color = "#000";
+
+                console.log(nonExistentUsers);
             }
 
             function confirmation() {
