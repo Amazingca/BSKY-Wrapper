@@ -782,11 +782,11 @@
 
             function isolateDeletedUsers(deletedUsers) {
 
-                if (typeof deletedUser != "object") {
+                if (typeof deletedUsers != "object") {
 
                     console.log("You did not provide a valid array!");
                     return;
-                } else if (deletedUser.length === 0) {
+                } else if (deletedUsers.length === 0) {
 
                     console.log("This array is empty!");
                     return;
