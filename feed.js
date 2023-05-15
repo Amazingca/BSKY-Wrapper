@@ -10,7 +10,7 @@ async function initializeCaches() {
 
   try {
 
-    userCache = await fetch("./dids/didCache.json").then(r => r.json());
+    userCache = await fetch("../../../dids/didCache.json").then(r => r.json());
     
     if (typeof userCache === "object") {
 

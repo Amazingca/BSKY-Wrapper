@@ -1,4 +1,4 @@
-import { loginReq, createAccountReq } from "./api.js";
+import { loginReq, createAccountReq } from "../../../api.js";
 
 var type = "login";
 var signupActive = false;

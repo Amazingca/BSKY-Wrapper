@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-favicon?v=1679367426997">
     <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-app-favicon?v=1679196074840">
-    <link rel="manifest" href="manifest.json">
-    <script type="module" src="./labels.js"></script>
+    <link rel="manifest" href="../../../manifest.json">
+    <script type="module" src="../../../labels.js"></script>
   </head>
   <body>
     <header>
@@ -19,7 +19,7 @@
            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
           </div>
           <div id="loginButton">
-            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
+            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = '../../../login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
           </div>
           <div class="hidden" id="logoutButton">
             <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Logout</button>
@@ -68,18 +68,14 @@
               <spacer>
                 <div class="rolo-container">
                   <h3>Get User</h3>
-                  <form name="GetUser">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                    <input type="submit" class="rolo-click" value="Run Query">
-                  </form>
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" id="getUserId" required="true" class="rolo-text">
+                  <input type="button" id="goToUserButton" class="rolo-click" value="Run Query">
                 </div>
                 <div class="rolo-container">
                   <h3>Get Post</h3>
-                  <form name="GetPost">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
-                    <input type="submit" class="rolo-click" value="Run Query">
-                  </form>
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" id="getPostUser" required="true" class="rolo-text">
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" id="getPostId" required="true" class="rolo-text">
+                  <input type="button" id="goToPostButton" class="rolo-click" value="Run Query">
                 </div>
                 <div class="rolo-container">
                   <h3 title="Label posts from an account">Labeling</h3>
@@ -97,7 +93,7 @@
                     <label class="disabledFlag" id="labelOfCheckFlagged">Flagged Accounts</label>
                   </flex>
                 </div>
-                <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
+                <button onclick="localStorage.removeItem('viewFeed'); window.location.href = '../../../login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
               </spacer>
             </menu>
           </rolodex>
@@ -1095,12 +1091,12 @@
     }
   </script>
   <script type="module">
-    import { userCache, modifyFlow } from "./feed.js";
-    import { embeds, nameResolver } from "./mods.js";
-    import { loadFirstReplies } from "./replies.js";
-    import { getPost, getUserRepo, listRecords, getToken, getSession, getUserNotifCount } from "./api.js";
-    import { postDefault, user, userLight } from "./struct/default.js";
-    import { userInfoModalBuild, postModalBuild } from "./struct/full.js";
+    import { userCache, modifyFlow } from "../../../feed.js";
+    import { embeds, nameResolver } from "../../../mods.js";
+    import { loadFirstReplies } from "../../../replies.js";
+    import { getPost, getUserRepo, listRecords, getToken, getSession, getUserNotifCount } from "../../../api.js";
+    import { postDefault, user, userLight } from "../../../struct/default.js";
+    import { userInfoModalBuild, postModalBuild } from "../../../struct/full.js";
     
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
@@ -1236,28 +1232,29 @@
 
     console.log(parseURL(document.location.pathname));
     
-    checkUrl();
+    checkUrl(parseURL(document.location.pathname));
     
-    function checkUrl() {
-      
-      if (urlParams.get("username") != null) {
-      
-        if ((urlParams.get("username").split("").length > 0) || urlParams.get("username").includes("did:plc:")) {
+    function checkUrl(url) {
 
-          if (urlParams.get("postid") != null) {
+      document.getElementById("feedStruct").innerHTML = "";
+      document.getElementById("userStruct").innerHTML = "";
+      document.getElementById("post").innerHTML = "";
+      
+      if (url[0] != "home") {
+      
+        if ((url[1].userHandle.split("").length > 0) || url[1].userHandle.includes("did:plc:")) {
+
+          if (url[0] === "post") {
             
-            loadPost(urlParams.get("username"), urlParams.get("postid"));
+            loadPost(url[1].userHandle, url[1].postId);
           } else {
             
-            if (urlParams.get("type") != null) {
+            if (url[0] === "userFollowing") {
               
-              switch (urlParams.get("type")) {
-                case "follows":
-                  getUserFollows(urlParams.get("username"));
-              }
+              getUserFollows(url[1].userHandle);
             } else {
               
-              getUser(urlParams.get("username"));
+              getUser(url[1].userHandle);
             }
           }
         } else {
@@ -1438,5 +1435,32 @@
         }
       }
     }
+
+    document.getElementById("goToUserButton").addEventListener("click", function() {
+
+      const userId = document.getElementById("getUserId");
+
+      if (!userId.value) {
+
+        return;
+      }
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + userId.value);
+      checkUrl(parseURL(document.location.pathname));
+    });
+
+    document.getElementById("goToPostButton").addEventListener("click", function() {
+
+      const postUser = document.getElementById("getPostUser");
+      const postId = document.getElementById("getPostId");
+      
+      if ((!postUser.value) || (!postId.value)) {
+
+        return;
+      }
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + postUser.value + "/post/" + postId.value);
+      checkUrl(parseURL(document.location.pathname));
+    });
   </script>
 </html>

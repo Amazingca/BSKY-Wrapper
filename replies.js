@@ -1,5 +1,5 @@
-import { embeds } from "./mods.js";
-import { postDefault } from "./struct/default.js";
+import { embeds } from "../../../mods.js";
+import { postDefault } from "../../../struct/default.js";
 
 export async function loadFirstReplies(postObj) {
   

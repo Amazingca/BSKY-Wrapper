@@ -23,7 +23,7 @@ async function buildPreReqs() {
 
             try {
 
-              OGDids = await fetch("./flags/OGDids.json").then(r => r.json());
+              OGDids = await fetch("../../../flags/OGDids.json").then(r => r.json());
             } catch (e) {
 
               console.log(e);
@@ -34,7 +34,7 @@ async function buildPreReqs() {
 
             try {
 
-              BSKYStaff = await fetch("./flags/BSKYStaff.json").then(r => r.json());
+              BSKYStaff = await fetch("../../../flags/BSKYStaff.json").then(r => r.json());
             } catch (e) {
 
               console.log(e);

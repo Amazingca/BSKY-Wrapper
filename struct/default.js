@@ -1,6 +1,6 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
-import { labelHandle, labelUsername } from "../labels.js";
-import { embeds } from "../mods.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
+import { labelHandle, labelUsername } from "../../../../labels.js";
+import { embeds } from "../../../../mods.js";
 
 export async function postDefault(userId, post, type) {
   

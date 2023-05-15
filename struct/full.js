@@ -1,6 +1,6 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
-import { labelHandle, labelUsername, labelStruct } from "../labels.js";
-import { embeds, reactorContructor } from "../mods.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
+import { labelHandle, labelUsername, labelStruct } from "../../../../labels.js";
+import { embeds, reactorContructor } from "../../../../mods.js";
 
 // Saved post dates and id
 // <div style="color: #333; display: none;">${new Date(postObj.record.createdAt)}</div>

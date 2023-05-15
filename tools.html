@@ -151,7 +151,7 @@
                     return;
                 } else if (accessKey === "") {
 
-                    window.open("https://blue.amazingca.dev/login?auth=tooling");
+                    window.open("../../../login?auth=tooling");
                 } else {
 
                     const req = {
@@ -283,8 +283,8 @@
 
                 try {
 
-                    excludedDids = await fetch("./dids/excludedDids.json").then(r => r.json());
-                    dids = await fetch("./dids/didCache.json").then(r => r.json());
+                    excludedDids = await fetch("../../../dids/excludedDids.json").then(r => r.json());
+                    dids = await fetch("../../../dids/didCache.json").then(r => r.json());
 
                     if ((typeof excludedDids != "object") || (typeof dids != "object")) {
 

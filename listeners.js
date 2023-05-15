@@ -1,4 +1,4 @@
-import { votePost } from "./api.js";
+import { votePost } from "../../../api.js";
 
 export function activateListeners() {
   
