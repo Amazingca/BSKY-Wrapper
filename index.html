@@ -1098,6 +1098,9 @@
     import { postDefault, user, userLight } from "../../../struct/default.js";
     import { userInfoModalBuild, postModalBuild } from "../../../struct/full.js";
     
+    var stoppedBuilding = true;
+    var continueBuild = true;
+
     const url = document.location.search;
     const urlParams = new URLSearchParams(url);
     
@@ -1236,6 +1239,8 @@
     
     function checkUrl(url) {
 
+      continueBuild = false;
+
       document.getElementById("feedStruct").innerHTML = "";
       document.getElementById("userStruct").innerHTML = "";
       document.getElementById("post").innerHTML = "";
@@ -1246,14 +1251,17 @@
 
           if (url[0] === "post") {
             
+            continueBuild = true;
             loadPost(url[1].userHandle, url[1].postId);
           } else {
             
             if (url[0] === "userFollowing") {
               
+              continueBuild = true;
               getUserFollows(url[1].userHandle);
             } else {
               
+              continueBuild = true;
               getUser(url[1].userHandle);
             }
           }
@@ -1264,6 +1272,7 @@
         }
       } else {
         
+        continueBuild = true;
         modifyFlow();
       }
     }
@@ -1312,12 +1321,25 @@
         userId = userObj.did;
         
         var hasPosts = false;
+
+        while (!stoppedBuilding) {
+
+          continue;
+        }
         
         for (var i = 0; i < userObj.collections.length; i++) {
           
-          if (userObj.collections[i] === "app.bsky.feed.post") {
-            
-            hasPosts = true;
+          if (continueBuild) {
+
+            if (userObj.collections[i] === "app.bsky.feed.post") {
+              
+              hasPosts = true;
+            }
+
+            stoppedBuilding = false;
+          } else {
+
+            stoppedBuilding = true;
           }
         }
         
@@ -1356,11 +1378,24 @@
         
         var hasFollows = false;
         
+        while (!stoppedBuilding) {
+
+          continue;
+        }
+
         for (var i = 0; i < userObj.collections.length; i++) {
-          
-          if (userObj.collections[i] === "app.bsky.graph.follow") {
+
+          if (continueBuild) {
             
-            hasFollows = true;
+            if (userObj.collections[i] === "app.bsky.graph.follow") {
+              
+              hasFollows = true;
+            }
+
+            stoppedBuilding = false;
+          } else {
+
+            stoppedBuilding = true;
           }
         }
         
