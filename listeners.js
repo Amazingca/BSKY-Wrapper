@@ -1,3 +1,4 @@
+import { parseURL, checkUrl } from "../../../location.js";
 import { votePost } from "../../../api.js";
 
 export function activateListeners() {
@@ -60,6 +61,64 @@ export function activateListeners() {
         console.log(e);
         window.alert("This action could not be made!");
       }
+    });
+  }
+
+  var userRedirs = document.getElementsByClassName("userRedir");
+  var userMentionRedirs = document.getElementsByClassName("mention");
+  
+  userRedirs = [...userRedirs, ...userMentionRedirs];
+
+  for (var i = 0; i < userRedirs.length; i++) {
+
+    userRedirs[i].addEventListener("click", function() {
+
+      const userHandle = this.innerHTML.replaceAll("@", "");
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle);
+      checkUrl(parseURL(document.location.pathname));
+    });
+  }
+
+  const postRedirs = document.getElementsByClassName("postRedir");
+
+  for (var i = 0; i < postRedirs.length; i++) {
+
+    postRedirs[i].addEventListener("click", function() {
+
+      const location = this.title.split("- ")[1].split("#");
+
+      const userHandle = location[0];
+      const postId = location[1];
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/post/" + postId);
+      checkUrl(parseURL(document.location.pathname));
+    });
+  }
+
+  const profileRedirs = document.getElementsByClassName("profileRedir");
+
+  for (var i = 0; i < profileRedirs.length; i++) {
+
+    profileRedirs[i].addEventListener("click", function() {
+
+      const userDid = localStorage.getItem("userDid");
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + userDid);
+      checkUrl(parseURL(document.location.pathname));
+    });
+  }
+
+  const followingRedirs = document.getElementsByClassName("followingRedir");
+
+  for (var i = 0; i < followingRedirs.length; i++) {
+
+    followingRedirs[i].addEventListener("click", function() {
+
+      const userHandle = this.title;
+
+      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/following");
+      checkUrl(parseURL(document.location.pathname));
     });
   }
 }

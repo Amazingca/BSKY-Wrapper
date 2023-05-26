@@ -2,9 +2,26 @@ import { postDefault } from "./struct/default.js";
 import { postFull } from "./struct/full.js";
 import { getUserRepo, listRecords, getUserFeed } from "./api.js";
 import { activateListeners } from "./listeners.js";
+
+export var hasStoppedBuilding = true;
+export var stoppedBuilding = false;
 export var userCache;
 
 var whileGoing = true;
+
+export function editExternalVars(name, value) {
+
+  switch (name) {
+    case "hasStoppedBuilding":
+      hasStoppedBuilding = value;
+      break;
+    case "stoppedBuilding":
+      stoppedBuilding = value;
+      break;
+    default:
+      break;
+  }
+}
 
 async function initializeCaches() {
 
@@ -57,15 +74,21 @@ async function userFeed() {
       
       var feedStruct = "";
       
-      for (var postObj of userFeed.feed) {
+      for (var i = 0; i < userFeed.feed.length; i++) {
         
-        const postStruct = await postFull(userId, postObj);
+        if (stoppedBuilding) {
+
+          break;
+        }
+
+        const postStruct = await postFull(userId, userFeed.feed[i]);
         
         feedStruct = feedStruct + postStruct;
         
         document.getElementById("feedStruct").innerHTML = "<spacer>" + feedStruct + "</spacer>";
       }
       
+      hasStoppedBuilding = true;
       activateListeners();
     }
   } catch (e) {
@@ -81,6 +104,11 @@ async function artificialFeed() {
     document.getElementById("feedStruct").innerHTML = "";
 
     for (var i = 0; i < userCache.length; i++) {
+
+      if (stoppedBuilding) {
+
+        break;
+      }
       
       const userDataObj = await getUserRepo(userCache[i]);
 
@@ -115,6 +143,8 @@ async function artificialFeed() {
 
       sortPosts(Date.parse(userMostRecentPost[0].value.createdAt), await postDefault(userCache[i], userMostRecentPost[0]));
     }
+
+    hasStoppedBuilding = true;
   } catch(e) {
     
     console.log(e);
@@ -158,4 +188,5 @@ function sortPosts(timestamp, newItem) {
   }
   
   document.getElementById("feedStruct").innerHTML = "<spacer>" + recentCache + "</spacer>";
+  activateListeners();
 }
