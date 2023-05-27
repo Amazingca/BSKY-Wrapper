@@ -251,6 +251,14 @@ async function getUser(userId) {
         
         var hasPosts = false;
 
+        for (var i = 0; i < userObj.collections.length; i++) {
+          
+            if (userObj.collections[i] === "app.bsky.feed.post") {
+              
+                hasPosts = true;
+            }
+        }
+        
         if (hasPosts === true) {
         
             const userModal = await user(userId) + `<br><br><h3 style="padding-left: 0.5rem;">${await nameResolver(userId)}'s Posts:</h3><br>`;
