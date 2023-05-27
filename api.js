@@ -82,14 +82,14 @@ export async function listRecords(userId, collection) {
   
   try {
     
-    const records = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userId}&collection=${collection}&limit=100`).then(r => r.json()).records;
-    
-    if (records.length === 0) {
+    const records = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userId}&collection=${collection}&limit=100`).then(r => r.json());
+
+    if (records.records.length === 0) {
       
       return null;
     } else {
       
-      return records;
+      return records.records;
     }
   } catch (e) {
     
