@@ -648,7 +648,16 @@
                         }
                     }
                     
-                    var tempParsed = JSON.parse(temp);
+                    var tempParsed;
+
+                    try {
+
+                        tempParsed = JSON.parse(temp); 
+                    } catch (e) {
+
+                        console.log(passed[i], e);
+                        continue;
+                    }
 
                     count += tempParsed.length;
                     //console.log(`${Math.round(100*(`${i/passed.length}`.split("").slice(0, 6).join("")*100))/100}` + "% done: " + tempParsed.length + " following");
