@@ -158,7 +158,7 @@ export async function checkUrl(url) {
     try {
 
         var hasClearedAll = await clearLoaded();
-
+        
         if (!hasClearedAll) {
 
             throw "clearLoaded() returned false!";
@@ -397,10 +397,11 @@ async function clearLoaded() {
 
     editExternalVars("stoppedBuilding", true);
 
-    while (!hasStoppedBuilding) {
+    /*while (!hasStoppedBuilding) {
 
+        console.log("has not yet stopped building", stoppedBuilding)
         continue;
-    }
+    }*/
 
     return true;
 }
