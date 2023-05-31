@@ -405,52 +405,109 @@
                 }
               
                 if (type === "follow") {
-                  
-                  document.getElementById("progStatus").innerHTML = "Progress: Attempting to follow " + unfollowedDids.length + " users";
+                
+                    document.getElementById("progStatus").innerHTML = "Progress: Attempting to follow " + unfollowedDids.length + " users";
                 } else if (type === "unfollow") {
-                  
-                  document.getElementById("progStatus").innerHTML = "Progress: Attempting to unfollow " + isFollowing.length + " users";
+                
+                    document.getElementById("progStatus").innerHTML = "Progress: Attempting to unfollow " + isFollowing.length + " users";
                 }
-              
+            
                 var recordData = [];
-              
+            
                 if (type === "follow") {
-                  
-                  for (var i = 0; i < unfollowedDids.length; i++) {
+                
+                for (var i = 0; i < unfollowedDids.length; i++) {
 
                     const creationDate = new Date().toISOString();
 
                     recordData[recordData.length] = {
-                      "$type": "com.atproto.repo.applyWrites#create",
-                      "collection": "app.bsky.graph.follow",
-                      "value": {
-                        "subject": unfollowedDids[i],
-                        "createdAt": creationDate
-                      }
+                        "$type": "com.atproto.repo.applyWrites#create",
+                        "collection": "app.bsky.graph.follow",
+                        "value": {
+                            "subject": unfollowedDids[i],
+                            "createdAt": creationDate
+                        }
                     }
-                  }
-                } else if (type === "unfollow") {
-                  
-                  for (var i = 0; i < isFollowing.length; i++) {
-
-                    const creationDate = new Date().toISOString();
-
-                    recordData[recordData.length] = {
-                      "$type": "com.atproto.repo.applyWrites#delete",
-                      "collection": "app.bsky.graph.follow",
-                      "rkey": rkeys[i]
-                    }
-                  }
                 }
-              
-                var rounds;
-              
-                if (type === "follow") {
-                  
-                  rounds = Math.ceil(unfollowedDids.length / 200);
                 } else if (type === "unfollow") {
-                  
-                  rounds = Math.ceil(isFollowing.length / 200);
+
+                    /*var isFollowedBy = [];
+
+                    try {
+
+                        var continueGrab = true;
+                        var lastUser = "";
+
+                        var reqObj2 = {
+                            headers: {
+                                "Authorization": "Bearer " + localStorage.getItem("accessJwt")
+                            }
+                        }
+
+                        while (continueGrab) {
+
+                            var res = await fetch("https://bsky.social/xrpc/app.bsky.graph.getFollowers?actor=amazingca.dev&limit=100" + lastUser, reqObj2).then(r => r.json());
+
+                            if (res.followers.length < 100) {
+
+                                continueGrab = false;
+                            } else {
+
+                                var strRef = await fetch("https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=" + res.followers[res.followers.length - 1].did + "&collection=app.bsky.graph.follow&rkey=" + res.followers[res.followers.length - 1].viewer.followedBy.split("/")[4]).then(r => r.json());
+
+                                lastUser = "&cursor=" + Math.floor(new Date(strRef.value.createdAt)) + "::" + strRef.cid;
+                            }
+
+                            for (var z = 0; z < res.followers.length; z++) {
+
+                                if (res.followers[z].viewer.followedBy != undefined) {
+
+                                    isFollowedBy.push(res.followers[z].viewer.followedBy.split("/")[2]);
+                                }
+                            }
+                        }
+                    } catch (e) {
+
+                        console.log(e);
+                    }
+                
+                    var followersNotFollowed = [];*/
+                    
+                    for (var i = 0; i < isFollowing.length; i++) {
+
+                        /*var continueF = false;
+
+                        for (var z = 0; z < isFollowedBy.length; z++) {
+
+                            if (isFollowedBy[z] === isFollowing[i]) {
+
+                                continueF = true;
+                            }
+                        }
+
+                        if (continueF) {
+
+                            continue;
+                        }*/
+
+                        recordData[recordData.length] = {
+                            "$type": "com.atproto.repo.applyWrites#delete",
+                            "collection": "app.bsky.graph.follow",
+                            "rkey": rkeys[i]
+                        }
+                    }
+                }
+
+                //window.alert("Continue with the unfollowing of " + recordData.length + " users?");
+
+                var rounds;
+            
+                if (type === "follow") {
+                
+                rounds = Math.ceil(unfollowedDids.length / 200);
+                } else if (type === "unfollow") {
+                
+                rounds = Math.ceil(isFollowing.length / 200);
                 }
               
                 for (var i = 0; i < rounds; i++) {
@@ -460,13 +517,13 @@
 
                     if ((i + 1) === rounds) {
                         
-                      if (type === "follow") {
+                    if (type === "follow") {
                         
                         endRange = (i * 200) + (unfollowedDids.length % 200);
-                      } else if (type === "unfollow") {
+                    } else if (type === "unfollow") {
                         
                         endRange = (i * 200) + (isFollowing.length % 200);
-                      }
+                    }
                     } else {
 
                         endRange = (i * 200) + 200;
