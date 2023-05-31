@@ -22,11 +22,10 @@
                 </tr>
                 <tr>
                     <th class="button"><button onclick="getFollowers(dids);" id="getFollowersB">Get all users</button></th>
-                    <th class="button"><button onclick="toConfirmFollowAll();" id="toConfirmFollowAllB">Follow all</button></th>
+                    <th class="button"><button onclick="toConfirmUnfollowAll();" id="toConfirmUnfollowAllB">Unfollow all</button></th>
                 </tr>
                 <tr>
                     <th class="button"><button onclick="getPosts();" id="getPostsB">Get all recent posts</button></th>
-                    <th class="button"><button onclick="toConfirmUnfollowAll();" id="toConfirmUnfollowAllB">Unfollow all</button></th>
                 </tr>
                 <tr>
                     <th class="button"><button onclick="getProfile();" id="getProfileB">Get all profiles</button></th>
@@ -239,23 +238,6 @@
 
                     document.getElementById("confirmB").innerHTML = "";
                     document.getElementById("confirmM").classList.add("hidden");
-                }
-            }
-
-            function toConfirmFollowAll() {
-
-                if ((localStorage.getItem("accessJwt") === null) || (loggedIn === false)) {
-
-                    window.alert("Must be authenticated! Try importing your account details first then run this function again!");
-                } else {
-
-                    toConfirm = "followAll";
-                    
-                    document.getElementById("confirmB").style.backgroundColor = "#ff0000cc";
-                    document.getElementById("confirmB").style.height = "75px";
-                  
-                    document.getElementById("confirmB").innerHTML = "CAUTION: This feature is considered spamful on Bluesky Social and as such is recommended against.<br>If you understand these precautions and would like to proceed, click to confirm...";
-                    document.getElementById("confirmM").classList.remove("hidden");
                 }
             }
           
@@ -840,13 +822,7 @@
 
             function confirmation() {
 
-                if (toConfirm === "followAll") {
-
-                    followAll("follow");
-
-                    document.getElementById("confirmM").classList.add("hidden");
-                    document.getElementById("cancelM").classList.remove("hidden");
-                } else if (toConfirm === "unfollowAll") {
+                if (toConfirm === "unfollowAll") {
                   
                     followAll("unfollow");
                   
@@ -863,10 +839,6 @@
 
                 navigator.clipboard.writeText(document.getElementById("data").innerHTML);
             }
-            //getPosts();
-            //getFollowers(dids);
-            //getProfile();
-            //getUsers(); - NOT ADDED YET
         </script>
     </body>
 </html>
