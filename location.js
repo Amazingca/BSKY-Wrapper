@@ -6,6 +6,8 @@ import { postDefault, user, userLight } from "../../../struct/default.js";
 import { userInfoModalBuild, postModalBuild } from "../../../struct/full.js";
 import { activateListeners } from "./listeners.js";
 
+export var stoppedBuildingUser = true;
+
 const url = document.location.search;
 const urlParams = new URLSearchParams(url);
     
@@ -268,6 +270,11 @@ async function getUser(userId) {
             
             for (var i = 0; i < userPosts.length; i++) {
                 
+                if (i = 0) {
+
+                    stoppedBuildingUser = false;
+                }
+
                 if (stoppedBuilding) {
 
                     break;
@@ -277,6 +284,8 @@ async function getUser(userId) {
                 document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempPosts + "</spacer>";
                 activateListeners();
             }
+
+            stoppedBuildingUser = true;
 
             editExternalVars("hasStoppedBuilding", true);
         } else {
@@ -321,6 +330,11 @@ async function getUserFollows(userId) {
             
             for (var i = 0; i < userFollows.length; i++) {
                 
+                if (i = 0) {
+
+                    stoppedBuildingUser = false;
+                }
+                
                 if (stoppedBuilding) {
                     
                     break;
@@ -332,6 +346,8 @@ async function getUserFollows(userId) {
 
                 activateListeners();
             }
+
+            stoppedBuildingUser = true;
 
             editExternalVars("hasStoppedBuilding", true);
         } else {
@@ -431,8 +447,14 @@ document.getElementById("goToUserButton").addEventListener("click", function() {
         return;
     }
 
-    window.history.pushState(null, null, document.location.origin + "/user/" + userId.value);
-    checkUrl(parseURL(document.location.pathname));
+    if (hasStoppedBuilding && stoppedBuildingUser) {
+        
+        window.history.pushState(null, null, document.location.origin + "/user/" + userId.value);
+        checkUrl(parseURL(document.location.pathname));
+    } else {
+
+        window.location.href = document.location.origin + "/user/" + userId.value;
+    }
 });
 
 document.getElementById("goToPostButton").addEventListener("click", function() {
@@ -445,6 +467,12 @@ document.getElementById("goToPostButton").addEventListener("click", function() {
         return;
     }
 
-    window.history.pushState(null, null, document.location.origin + "/user/" + postUser.value + "/post/" + postId.value);
-    checkUrl(parseURL(document.location.pathname));
+    if (hasStoppedBuilding && stoppedBuildingUser) {
+        
+        window.history.pushState(null, null, document.location.origin + "/user/" + postUser.value + "/post/" + postId.value);
+        checkUrl(parseURL(document.location.pathname));
+    } else {
+
+        window.location.href = document.location.origin + "/user/" + postUser.value + "/post/" + postId.value;
+    }
 });

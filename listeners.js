@@ -1,4 +1,5 @@
-import { parseURL, checkUrl } from "../../../location.js";
+import { parseURL, checkUrl, stoppedBuildingUser } from "../../../location.js";
+import { hasStoppedBuilding } from "../../../feed.js";
 import { votePost } from "../../../api.js";
 
 export function activateListeners() {
@@ -75,8 +76,14 @@ export function activateListeners() {
 
       const userHandle = this.innerHTML.replaceAll("@", "");
 
-      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle);
-      checkUrl(parseURL(document.location.pathname));
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+        
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle
+      }
     });
   }
 
@@ -91,8 +98,14 @@ export function activateListeners() {
       const userHandle = location[0];
       const postId = location[1];
 
-      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/post/" + postId);
-      checkUrl(parseURL(document.location.pathname));
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/post/" + postId);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle + "/post/" + postId;
+      }
     });
   }
 
@@ -104,8 +117,14 @@ export function activateListeners() {
 
       const userDid = localStorage.getItem("userDid");
 
-      window.history.pushState(null, null, document.location.origin + "/user/" + userDid);
-      checkUrl(parseURL(document.location.pathname));
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userDid);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userDid;
+      }
     });
   }
 
@@ -117,8 +136,14 @@ export function activateListeners() {
 
       const userHandle = this.title;
 
-      window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/following");
-      checkUrl(parseURL(document.location.pathname));
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/following");
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle + "/following";
+      }
     });
   }
 }
