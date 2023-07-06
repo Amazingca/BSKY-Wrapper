@@ -270,22 +270,10 @@ async function getUser(userId) {
             
             for (var i = 0; i < userPosts.length; i++) {
                 
-                if (i = 0) {
-
-                    stoppedBuildingUser = false;
-                }
-
-                if (stoppedBuilding) {
-
-                    break;
-                }
-
                 tempPosts = tempPosts + await postDefault(userId, userPosts[i]);
                 document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempPosts + "</spacer>";
                 activateListeners();
             }
-
-            stoppedBuildingUser = true;
 
             editExternalVars("hasStoppedBuilding", true);
         } else {
@@ -329,25 +317,13 @@ async function getUserFollows(userId) {
             var tempUsers = "";
             
             for (var i = 0; i < userFollows.length; i++) {
-                
-                if (i = 0) {
 
-                    stoppedBuildingUser = false;
-                }
-                
-                if (stoppedBuilding) {
-                    
-                    break;
-                }
-
-                console.log(userFollows[i].value.subject);
+                console.log(i, userFollows[i].value.subject);
                 tempUsers = tempUsers + await userLight(userFollows[i].value.subject);
                 document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempUsers + "</spacer>";
 
                 activateListeners();
             }
-
-            stoppedBuildingUser = true;
 
             editExternalVars("hasStoppedBuilding", true);
         } else {
@@ -412,12 +388,6 @@ async function clearLoaded() {
     document.getElementById("postContainer").innerHTML = '<div class="spinner"><svg style="animation: spin 1s infinite;" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M5.029 2.217a6.5 6.5 0 0 1 9.437 5.11.75.75 0 1 0 1.492-.154 8 8 0 0 0-14.315-4.03L.427 1.927A.25.25 0 0 0 0 2.104V5.75A.25.25 0 0 0 .25 6h3.646a.25.25 0 0 0 .177-.427L2.715 4.215a6.491 6.491 0 0 1 2.314-1.998ZM1.262 8.169a.75.75 0 0 0-1.22.658 8.001 8.001 0 0 0 14.315 4.03l1.216 1.216a.25.25 0 0 0 .427-.177V10.25a.25.25 0 0 0-.25-.25h-3.646a.25.25 0 0 0-.177.427l1.358 1.358a6.501 6.501 0 0 1-11.751-3.11.75.75 0 0 0-.272-.506Z"></path><path d="M9.06 9.06a1.5 1.5 0 1 1-2.12-2.12 1.5 1.5 0 0 1 2.12 2.12Z"></path></svg></div>';
 
     editExternalVars("stoppedBuilding", true);
-
-    /*while (!hasStoppedBuilding) {
-
-        console.log("has not yet stopped building", stoppedBuilding)
-        continue;
-    }*/
 
     return true;
 }

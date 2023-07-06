@@ -170,7 +170,7 @@ export async function postDefault(userId, post, type) {
           <div>${postText}</div>
           <br>
           <flex style="justify-content: space-between;">
-            <div style="color: #333;">${new Date(postObj.value.createdAt)}</div>
+            <div style="color: #333;">${new Date(postObj.value.createdAt).toUTCString()}</div>
             <div style="color: #333;"><a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
           </flex>
         </div>
