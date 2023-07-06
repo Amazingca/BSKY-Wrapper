@@ -6,20 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
     <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-favicon?v=1679367426997">
     <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-app-favicon?v=1679196074840">
-    <link rel="manifest" href="manifest.json">
-    <script type="module" src="./labels.js"></script>
+    <link rel="manifest" href="../../../manifest.json">
+    <script type="module"src="../../../location.js"></script>
+    <script type="module" src="../../../labels.js"></script>
   </head>
   <body>
     <header>
       <div style="display: flex; justify-content: center;">
       <flex style="width: 850px; justify-content: space-between;">
-        <a href="./" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
+        <a href="../../../" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
         <flex>
           <div onclick="toggleNav()" id="searcher">
            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
           </div>
           <div id="loginButton">
-            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
+            <button onclick="localStorage.removeItem('viewFeed'); window.location.href = '../../../login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Login</button>
           </div>
           <div class="hidden" id="logoutButton">
             <button onclick="logout();" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem; border-radius: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem;" class="rolo-click">Logout</button>
@@ -44,11 +45,11 @@
                   <div class="deskbutton-group">
                     <div id="userInfoDesktop"></div>
                     <div class="user-options"></div>
-                    <a id="navButtonHomeDesktop" href="./" class="deskbutton" style="color: #222; text-decoration: none;">
+                    <a id="navButtonHomeDesktop" href="../../../" class="deskbutton" style="color: #222; text-decoration: none;">
                       <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z"></path></svg>
                       <div>Home</div>
                     </a>
-                    <a class="deskbutton" id="navButtonNotifsDesktop" style="justify-content: space-between; text-decoration: none;">
+                    <a onclick="addLocation(event);" class="deskbutton notifRedir" id="navButtonNotifsDesktop" style="justify-content: space-between; text-decoration: none;">
                       <div id="navNotifsDesktop" style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; color: #222;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path></svg>
                         <div>Notifications</div>
@@ -57,7 +58,7 @@
                         <div class="hidden" id="notifCountDesktop"></div>
                       </div>
                     </a>
-                    <a id="navButtonProfileDesktop" class="deskbutton" style="border-bottom-left-radius: 0.6rem; border-bottom-right-radius: 0.6rem; color: #222; text-decoration: none;">
+                    <a onclick="addLocation(event);" id="navButtonProfileDesktop" class="deskbutton profileRedir" style="border-bottom-left-radius: 0.6rem; border-bottom-right-radius: 0.6rem; color: #222; text-decoration: none;">
                       <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
                       <div>Profile</div>
                     </a>
@@ -68,18 +69,14 @@
               <spacer>
                 <div class="rolo-container">
                   <h3>Get User</h3>
-                  <form name="GetUser">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                    <input type="submit" class="rolo-click" value="Run Query">
-                  </form>
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" id="getUserId" required="true" class="rolo-text">
+                  <input type="button" id="goToUserButton" class="rolo-click" value="Run Query">
                 </div>
                 <div class="rolo-container">
                   <h3>Get Post</h3>
-                  <form name="GetPost">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" name="username" required="true" class="rolo-text">
-                    <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" name="postid" required="true" class="rolo-text">
-                    <input type="submit" class="rolo-click" value="Run Query">
-                  </form>
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Handle or DID" id="getPostUser" required="true" class="rolo-text">
+                  <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Post RKey, Ex: 3joxbu4fzfc2c" id="getPostId" required="true" class="rolo-text">
+                  <input type="button" id="goToPostButton" class="rolo-click" value="Run Query">
                 </div>
                 <div class="rolo-container">
                   <h3 title="Label posts from an account">Labeling</h3>
@@ -97,7 +94,7 @@
                     <label class="disabledFlag" id="labelOfCheckFlagged">Flagged Accounts</label>
                   </flex>
                 </div>
-                <button onclick="localStorage.removeItem('viewFeed'); window.location.href = './login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
+                <button onclick="localStorage.removeItem('viewFeed'); window.location.href = '../../../login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
               </spacer>
             </menu>
           </rolodex>
@@ -158,7 +155,7 @@
             </div>
             <footer>This client is not owned or managed by Bluesky. Some <a href="https://github.com/github/mona-sans" target="_blank">fonts</a> and <a href="https://github.com/primer/octicons" target="_blank">icons</a> are supplied by GitHub.<br>View this project's <a href="https://github.com/Amazingca/BSKY-Wrapper" target="_blank">repo</a> and <a href="https://github.com/users/Amazingca/projects/2/views/5" target="_blank">roadmap</a> on GitHub. View a list of other BlueSky clients <a href="https://atproto.com/community/projects" target="_blank">here</a>.</footer>
           </feed>
-          <div class="invisiblepc" id="post-container">
+          <div class="invisiblepc" id="userpost-container">
             <flex style="justify-content: space-between; margin: 1rem;">
               <h3 id="cancel-post" onclick="newPostToggle();">Cancel</h3>
               <h3 id="submit-post" onclick="sendPost();">Post</h3>
@@ -179,10 +176,10 @@
     <div id="navbar">
       <div style="position: fixed; bottom: 80px; background-color: #d9d9d9; left: 0px; right: 0px; z-index: 1; height: 2px;"></div>
       <navbar>
-        <a id="navButtonHomeMobile" href="./">
+        <a id="navButtonHomeMobile" href="../../../">
           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z"></path></svg>
         </a>
-        <a id="navButtonNotifsMobile">
+        <a onclick="addLocation(event);" id="navButtonNotifsMobile" class="notifRedir">
           <div class="hidden" id="notifCountMobile">0</div>
           <div id="navNotifsMobile">
             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path></svg>
@@ -191,7 +188,7 @@
         <button onclick="newPostToggle();" id="new-post-mobile">
           <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path></svg>
         </button>
-        <a id="navButtonProfileMobile">
+        <a onclick="addLocation(event);" id="navButtonProfileMobile" class="profileRedir">
           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
         </a>
         <a style="cursor: pointer;" id="userInfoButton">
@@ -522,7 +519,7 @@
     #submit-post {
       cursor: pointer;
     }
-    #post-container {
+    #post-container, #userpost-container {
       grid-area: postbox;
       position: fixed;
       width: calc(850px - 16rem);
@@ -643,7 +640,7 @@
       grid {
         grid-template-columns: 15rem auto;
       }
-      #post-container {
+      #post-container, #userpost-container {
         width: calc(100vw - 19rem);
         right: 1rem;
       }
@@ -732,7 +729,7 @@
       .post-size {
         width: calc(100vw - 3rem);
       }
-      #post-container {
+      #post-container, #userpost-container {
         margin-top: 0px;
         border: none;
         border-radius: 0px;
@@ -788,7 +785,8 @@
       }
     }
       
-    function addLocation() {
+    function addLocation(event) {
+      event.preventDefault();
       
       if ((localStorage.getItem("recent") === null) && (window.location.search != "")) {
           
@@ -823,13 +821,13 @@
         
       document.getElementsByTagName("grid")[0].classList.toggle("visiblepc");
       
-      document.getElementById("post-container").style.transitionDuration = "0.45s"
-      document.getElementById("post-container").classList.toggle("invisiblepc");
-      document.getElementById("post-container").classList.toggle("visiblepc");
+      document.getElementById("userpost-container").style.transitionDuration = "0.45s"
+      document.getElementById("userpost-container").classList.toggle("invisiblepc");
+      document.getElementById("userpost-container").classList.toggle("visiblepc");
       
       setTimeout(function(){
         
-        document.getElementById("post-container").style.transitionDuration = "0s";
+        document.getElementById("userpost-container").style.transitionDuration = "0s";
       }, 450);
         
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -1092,351 +1090,6 @@
     function loadParent() {
       
       
-    }
-  </script>
-  <script type="module">
-    import { userCache, modifyFlow } from "./feed.js";
-    import { embeds, nameResolver } from "./mods.js";
-    import { loadFirstReplies } from "./replies.js";
-    import { getPost, getUserRepo, listRecords, getToken, getSession, getUserNotifCount } from "./api.js";
-    import { postDefault, user, userLight } from "./struct/default.js";
-    import { userInfoModalBuild, postModalBuild } from "./struct/full.js";
-    
-    const url = document.location.search;
-    const urlParams = new URLSearchParams(url);
-    
-    if (localStorage.getItem("introViewed") === null) {
-      
-      //document.getElementById("introMessage").classList.remove("hidden");
-      localStorage.setItem("recent", "[]");
-      localStorage.setItem("introViewed", true);
-    }
-    
-    if (localStorage.getItem("rolodexVisible") != null) {
-      
-      if (localStorage.getItem("rolodexVisible") === "true") {
-        
-        document.getElementsByTagName('rolodex')[0].classList.add('visible');
-        document.getElementsByTagName('grid')[0].classList.add('nav');
-      }
-    }
-    
-    if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
-      
-      var tryForAuth = true;
-      
-      while(tryForAuth) {
-        
-        var userAuthed = await getSession();
-        
-        if (userAuthed === true) {
-          
-          tryForAuth = false;
-          
-          buildPreReqs();
-        }
-      }
-    }
-    
-    async function buildPreReqs() {
-      document.getElementById("loginMobile").classList.remove("active");
-      document.getElementById("loginButton").classList.add("hidden");
-      document.getElementById("logoutButton").classList.remove("hidden");
-      
-      userInfoModalBuild();
-      postModalBuild();
-      
-      document.getElementById("new-post").classList.remove("hidden");
-      
-      if (document.location.hash === "#notifications") {
-        
-        document.getElementById("navNotifsDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg><div>Notifications</div>`;
-        document.getElementById("navNotifsMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg>`;
-      } else if (urlParams.get("username") === null) {
-        
-        document.getElementById("navButtonHomeDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg><div>Home</div>`
-        document.getElementById("navButtonHomeMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg>`;
-      }
-      
-      if ((urlParams.get("username") != null) && (urlParams.get("postid") === null) && (urlParams.get("username") === localStorage.getItem("userDid"))) {
-        
-        document.getElementById("navButtonProfileDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg><div>Profile</div>`
-        document.getElementById("navButtonProfileMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg>`;
-      }
-
-      const notifCount = await getUserNotifCount();
-      
-      if (notifCount != 0) {
-        
-        document.getElementById("notifCountDesktop").innerHTML = notifCount;
-        document.getElementById("notifCountDesktop").classList.remove("hidden");
-        
-        document.getElementById("notifCountMobile").innerHTML = notifCount;
-        document.getElementById("notifCountMobile").classList.remove("hidden");
-      }
-      
-      document.getElementById("navButtonNotifsDesktop").href = document.location.origin + document.location.pathname + "#notifications";
-      document.getElementById("navButtonNotifsMobile").href = document.location.origin + document.location.pathname + "#notifications";
-      
-      document.getElementById("navButtonProfileDesktop").href = document.location.origin + document.location.pathname + "?username=" + localStorage.getItem("userDid");
-      document.getElementById("navButtonProfileMobile").href = document.location.origin + document.location.pathname + "?username=" + localStorage.getItem("userDid");
-      
-      document.getElementById("user-info-panel").classList.remove("hidden");
-      document.getElementById("navbar").classList.add("active");
-    }
-    
-    if (document.location.search === "") {
-      
-      localStorage.setItem("recent", "[]");
-    }
-
-    function parseURL(path) {
-      
-      if ((path === "") || (path === "/")) {
-
-        return ["home"];
-      }
-
-      path = path.split("");
-      path[path.length] === "/" ? path.pop() : path;
-      path.shift();
-      path = path.join("");
-
-      var arrayFactor = path.split("/");
-
-      switch (arrayFactor[0]) {
-        case "notifications":
-          return ["notifications"];
-          break;
-        case "user":
-          if (arrayFactor.length > 2) {
-            switch (arrayFactor[2]) {
-              case "post":
-                if (arrayFactor.length > 3) {
-                  return ["post", { "userHandle": arrayFactor[1], "postId": arrayFactor[3] }];
-                } else {
-                  return ["home"];
-                }
-                break;
-              case "following":
-                return ["userFollowing", { "userHandle": arrayFactor[1] }];
-                break;
-              default:
-                break;
-            }
-          } else {
-            return ["user", { "userHandle": arrayFactor[1] }];
-          }
-          break;
-        default:
-          return ["home"];
-          break;
-      }
-    }
-
-    console.log(parseURL(document.location.pathname));
-    
-    checkUrl();
-    
-    function checkUrl() {
-      
-      if (urlParams.get("username") != null) {
-      
-        if ((urlParams.get("username").split("").length > 0) || urlParams.get("username").includes("did:plc:")) {
-
-          if (urlParams.get("postid") != null) {
-            
-            loadPost(urlParams.get("username"), urlParams.get("postid"));
-          } else {
-            
-            if (urlParams.get("type") != null) {
-              
-              switch (urlParams.get("type")) {
-                case "follows":
-                  getUserFollows(urlParams.get("username"));
-              }
-            } else {
-              
-              getUser(urlParams.get("username"));
-            }
-          }
-        } else {
-          
-          console.log("URL doesn't have any proper user id!")
-          return;
-        }
-      } else {
-        
-        modifyFlow();
-      }
-    }
-    
-    async function loadPost(userId, postId) {
-      
-      document.getElementById("feed").classList.toggle("hidden");
-      document.getElementById("post").classList.toggle("hidden");
-      
-      if ((!userId.includes(".bsky.social")) && (!userId.includes(".")) && (!userId.includes("did:plc:"))) {
-        
-        userId = userId + ".bsky.social";
-      }
-      
-      try {
-        
-        const postObj = await getPost(userId, postId);
-        
-        document.getElementById("postContainer").innerHTML = await postDefault(userId, postId, "light");
-        
-        if (postObj.value.reply != undefined) {
-          
-          loadFirstReplies(postObj);
-        }
-      } catch(e) {
-        
-        console.log(e);
-        return;
-      }
-    }
-    
-    async function getUser(userId) {
-      
-      document.getElementById("feed").classList.toggle("hidden");
-      document.getElementById("user").classList.toggle("hidden");
-
-      if ((!userId.includes(".bsky.social")) && (!userId.includes(".")) && (!userId.includes("did:plc:"))) {
-        
-        userId = userId + ".bsky.social";
-      }
-      
-      try {
-        
-        const userObj = await getUserRepo(userId);
-        
-        userId = userObj.did;
-        
-        var hasPosts = false;
-        
-        for (var i = 0; i < userObj.collections.length; i++) {
-          
-          if (userObj.collections[i] === "app.bsky.feed.post") {
-            
-            hasPosts = true;
-          }
-        }
-        
-        if (hasPosts === true) {
-          
-          const userModal = await user(userId) + `<br><br><h3 style="padding-left: 0.5rem;">${await nameResolver(userId)}'s Posts:</h3><br>`;
-          
-          const userPosts = await listRecords(userId, "app.bsky.feed.post");
-          var tempPosts = "";
-          
-          for (var postData of userPosts) {
-            
-            tempPosts = tempPosts + await postDefault(userId, postData);
-            document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempPosts + "</spacer>";
-          }
-        } else {
-          
-          document.getElementById("userStruct").innerHTML = await user(userId);
-        }
-      } catch(e) {
-        
-        console.log(e);
-      }
-    }
-    
-    async function getUserFollows(userId) {
-      
-      document.getElementById("feed").classList.toggle("hidden");
-      document.getElementById("user").classList.toggle("hidden");
-
-      try {
-        
-        const userObj = await getUserRepo(userId);
-        
-        userId = userObj.did;
-        
-        var hasFollows = false;
-        
-        for (var i = 0; i < userObj.collections.length; i++) {
-          
-          if (userObj.collections[i] === "app.bsky.graph.follow") {
-            
-            hasFollows = true;
-          }
-        }
-        
-        if (hasFollows === true) {
-          
-          const userModal = await user(userId) + `<br><br><h3 style="padding-left: 0.5rem;">${await nameResolver(userId)}'s Following:</h3><br>`;
-          
-          const userFollows = await listRecords(userId, "app.bsky.graph.follow");
-          var tempUsers = "";
-          
-          for (var followedUser of userFollows) {
-            
-            console.log(followedUser.value.subject);
-            tempUsers = tempUsers + await userLight(followedUser.value.subject);
-            document.getElementById("userStruct").innerHTML = userModal + "<spacer>" + tempUsers + "</spacer>";
-          }
-        } else {
-          
-          document.getElementById("userStruct").innerHTML = "<h3>This user is not following any other users!</h3>";
-        }
-      } catch(e) {
-        
-        console.log(e);
-      }
-    }
-    
-    var userInfoVisible = false;
-    
-    document.getElementById("userInfoButton").addEventListener("click", async function() {
-      
-      if (userInfoVisible === false) {
-        
-        document.getElementById("profileInfoModal").style.display = "block";
-        
-        setTimeout(function(){
-          
-          document.getElementById("profileInfoModal").style.right = "0.5rem";
-          document.getElementById("profileInfoModal").style.bottom = "5.5rem";
-        }, 1);
-        
-        document.getElementById("userInfoButton").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"><defs/><g><path d="M5.16859 15.3916C4.94159 15.2435 4.81215 14.9844 4.83 14.714L4.993 11.384C4.995 11.299 4.943 11.168 4.786 11.068C3.05016 9.96776 1.99876 8.05515 2 6C1.99907 4.03876 2.95783 2.20117 4.567 1.08C5.06307 0.72296 5.72744 0.707075 6.24 1.04C6.702 1.336 7 1.867 7 2.463L7 5.283C7 5.365 7.041 5.443 7.11 5.489L7.86 5.999C7.94458 6.05617 8.05542 6.05617 8.14 5.999L8.89 5.489C8.95888 5.44265 9.00014 5.36502 9 5.282L9 2.463C9 1.867 9.298 1.336 9.76 1.04C10.2726 0.707075 10.9369 0.72296 11.433 1.08C13.0422 2.20117 14.0009 4.03876 14 6C14.0012 8.05515 12.9498 9.96776 11.214 11.068C11.057 11.168 11.005 11.298 11.007 11.383L11.17 14.713C11.1861 14.9826 11.0565 15.2401 10.8303 15.3877C10.6042 15.5353 5.39559 15.5396 5.16859 15.3916Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg>`;
-        
-        userInfoVisible = true;
-      } else {
-        
-        document.getElementById("profileInfoModal").style.right = "0rem";
-        document.getElementById("profileInfoModal").style.bottom = "5rem";
-        
-        setTimeout(function(){
-          
-          document.getElementById("profileInfoModal").style.display = "none";
-        }, 40);
-        
-        document.getElementById("userInfoButton").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg>`;
-        
-        userInfoVisible = false;
-      }
-    });
-    
-    var isTriggered = false;
-    window.onscroll = function () {
-      
-      if (((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refreshJwt") != null)) && ((!localStorage.getItem("accessJwt").includes("undefined")) && (!localStorage.getItem("refreshJwt").includes("undefined")))) {
-        
-        if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 10) < (window.visualViewport.height + window.visualViewport.pageTop)) {
-          
-          if (isTriggered === false) {
-            
-            console.log("At bottom");
-            isTriggered = true;
-          }
-        }
-      }
     }
   </script>
 </html>

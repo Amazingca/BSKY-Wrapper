@@ -1,6 +1,6 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
-import { labelHandle, labelUsername, labelStruct } from "../labels.js";
-import { embeds, reactorContructor } from "../mods.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
+import { labelHandle, labelUsername, labelStruct } from "../../../../labels.js";
+import { embeds, reactorContructor } from "../../../../mods.js";
 
 // Saved post dates and id
 // <div style="color: #333; display: none;">${new Date(postObj.record.createdAt)}</div>
@@ -48,7 +48,7 @@ export async function postFull(userId, post, type) {
       }
           
       replostSumElement = 
-        `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread">
+        `<a style="text-decoration: none;" onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">
           <flex class="reply-sum">
             <svg fill="#555" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M6.78 1.97a.75.75 0 0 1 0 1.06L3.81 6h6.44A4.75 4.75 0 0 1 15 10.75v2.5a.75.75 0 0 1-1.5 0v-2.5a3.25 3.25 0 0 0-3.25-3.25H3.81l2.97 2.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L1.47 7.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"></path></svg>
             <h5>Replied to ${replyAuthorName}</h5>
@@ -73,7 +73,7 @@ export async function postFull(userId, post, type) {
       }
       
       replostSumElement = 
-        `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${repostAuthorDid}" title="Go to Thread">
+        `<a style="text-decoration: none;" onclick="addLocation(event);" href="${document.location.origin}/user/${repostAuthorDid}" title="Go to User" class="userRedir">
           <flex class="reply-sum">
             <svg fill="#555" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
             <h5>Reposted by ${repostAuthorName}</h5>
@@ -131,7 +131,7 @@ export async function postFull(userId, post, type) {
     } else {
       
       usernameElement = labelUsername(userObj.did, "", userObj.displayName, labels);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -194,7 +194,7 @@ export async function postFull(userId, post, type) {
         
         if (selection[i][0] === "app.bsky.richtext.facet#mention") {
           
-          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin + document.location.pathname}?username=${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
+          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin}/user/${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
         } else if (selection[i][0] === "app.bsky.richtext.facet#link") {
           
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
@@ -245,7 +245,7 @@ export async function postFull(userId, post, type) {
               </div>
             </flex>
             <br>
-            <div title="${new Date(postObj.record.createdAt)}" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">${postText}</div>
+            <div title="${new Date(postObj.record.createdAt)}" onclick="addLocation();" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">${postText}</div>
           </div>
           ${reactors}
         </div>

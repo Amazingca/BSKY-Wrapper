@@ -1,6 +1,6 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "../api.js";
-import { labelHandle, labelUsername } from "../labels.js";
-import { embeds } from "../mods.js";
+import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
+import { labelHandle, labelUsername } from "../../../../labels.js";
+import { embeds } from "../../../../mods.js";
 
 export async function postDefault(userId, post, type) {
   
@@ -47,7 +47,7 @@ export async function postDefault(userId, post, type) {
           }
           
           replySumElement = 
-            `<a style="text-decoration: none;" onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread">
+            `<a style="text-decoration: none;" onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">
               <flex class="reply-sum">
                 <svg fill="#555" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M6.78 1.97a.75.75 0 0 1 0 1.06L3.81 6h6.44A4.75 4.75 0 0 1 15 10.75v2.5a.75.75 0 0 1-1.5 0v-2.5a3.25 3.25 0 0 0-3.25-3.25H3.81l2.97 2.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L1.47 7.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"></path></svg>
                 <h5>Replied to ${replyAuthorName}</h5>
@@ -78,7 +78,7 @@ export async function postDefault(userId, post, type) {
     } else {
       
       usernameElement = labelUsername(userId, textSize, userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
+      handleElement = `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -136,7 +136,7 @@ export async function postDefault(userId, post, type) {
         
         if (selection[i][0] === "app.bsky.richtext.facet#mention") {
           
-          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin + document.location.pathname}?username=${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
+          postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${document.location.origin}/user/${selection[i][2]}" class="mention">${selection[i][1]}</a>`);
         } else if (selection[i][0] === "app.bsky.richtext.facet#link") {
           
           postObj.record.text = postObj.record.text.replaceAll(selection[i][1], `<a href="${selection[i][2]}" target="_blank" class="mention">${selection[i][1]}</a>`);
@@ -170,8 +170,8 @@ export async function postDefault(userId, post, type) {
           <div>${postText}</div>
           <br>
           <flex style="justify-content: space-between;">
-            <div style="color: #333;">${new Date(postObj.value.createdAt)}</div>
-            <div style="color: #333;"><a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&postid=${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
+            <div style="color: #333;">${new Date(postObj.value.createdAt).toUTCString()}</div>
+            <div style="color: #333;"><a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
           </flex>
         </div>
       </div>`;
@@ -201,7 +201,7 @@ export async function user(userId) {
     } else {
       
       usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" class="userRedir" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     var userFollowing;
@@ -211,10 +211,10 @@ export async function user(userId) {
       userFollowing = "Following: None";
     } else if (userFollows.length > 1) {
       
-      userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} users</a>`;
+      userFollowing = `Following: <a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/following" class="followingRedir" title="${userObj.handle}">${userFollows.length} users</a>`;
     } else {
       
-      userFollowing = `Following: <a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}&type=follows">${userFollows.length} user</a>`;
+      userFollowing = `Following: <a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/following" class="followingRedir" title="${userObj.handle}">${userFollows.length} user</a>`;
     }
     
     var userDescription;
@@ -261,7 +261,7 @@ export async function userLight(userId) {
     } else {
       
       usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${userObj.handle}" title="Go to User Profile">${userObj.handle}</a></h3>`;
+      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     const userElement = 

@@ -23,7 +23,7 @@ async function buildPreReqs() {
 
             try {
 
-              OGDids = await fetch("./flags/OGDids.json").then(r => r.json());
+              OGDids = await fetch("../../../flags/OGDids.json").then(r => r.json());
             } catch (e) {
 
               console.log(e);
@@ -34,7 +34,7 @@ async function buildPreReqs() {
 
             try {
 
-              BSKYStaff = await fetch("./flags/BSKYStaff.json").then(r => r.json());
+              BSKYStaff = await fetch("../../../flags/BSKYStaff.json").then(r => r.json());
             } catch (e) {
 
               console.log(e);
@@ -210,10 +210,10 @@ export function labelHandle(did, textSize, handle, sourceLabels) {
   if (labels[0] === true) {
     
     console.log('labeled', labels[1], did)
-    return `<h3 style="color: #555; ${textSize}"><flex style="justify-content: space-between;"><div>@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></div><flex>${labels[1]}</flex></flex></h3>`;
+    return `<h3 style="color: #555; ${textSize}"><flex style="justify-content: space-between;"><div>@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></div><flex>${labels[1]}</flex></flex></h3>`;
   } else {
     
-    return `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation();" href="${document.location.origin + document.location.pathname}?username=${handle}" title="Go to User Profile">${handle}</a></h3>`;
+    return `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></h3>`;
   }
 }
 

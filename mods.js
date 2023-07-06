@@ -1,6 +1,6 @@
-import { getUserRepo, listRecords } from "./api.js";
-import { postDefault } from "./struct/default.js";
-import { postFull } from "./struct/full.js";
+import { getUserRepo, listRecords } from "../../../api.js";
+import { postDefault } from "../../../struct/default.js";
+import { postFull } from "../../../struct/full.js";
 
 export async function embeds(obj) {
   var newElement = `<h3 title="`;

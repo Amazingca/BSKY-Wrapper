@@ -1,4 +1,6 @@
-import { votePost } from "./api.js";
+import { parseURL, checkUrl, stoppedBuildingUser } from "../../../location.js";
+import { hasStoppedBuilding } from "../../../feed.js";
+import { votePost } from "../../../api.js";
 
 export function activateListeners() {
   
@@ -59,6 +61,88 @@ export function activateListeners() {
         
         console.log(e);
         window.alert("This action could not be made!");
+      }
+    });
+  }
+
+  var userRedirs = document.getElementsByClassName("userRedir");
+  var userMentionRedirs = document.getElementsByClassName("mention");
+  
+  userRedirs = [...userRedirs, ...userMentionRedirs];
+
+  for (var i = 0; i < userRedirs.length; i++) {
+
+    userRedirs[i].addEventListener("click", function() {
+
+      const userHandle = this.innerHTML.replaceAll("@", "");
+
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+        
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle
+      }
+    });
+  }
+
+  const postRedirs = document.getElementsByClassName("postRedir");
+
+  for (var i = 0; i < postRedirs.length; i++) {
+
+    postRedirs[i].addEventListener("click", function() {
+
+      const location = this.title.split("- ")[1].split("#");
+
+      const userHandle = location[0];
+      const postId = location[1];
+
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/post/" + postId);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle + "/post/" + postId;
+      }
+    });
+  }
+
+  const profileRedirs = document.getElementsByClassName("profileRedir");
+
+  for (var i = 0; i < profileRedirs.length; i++) {
+
+    profileRedirs[i].addEventListener("click", function() {
+
+      const userDid = localStorage.getItem("userDid");
+
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userDid);
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userDid;
+      }
+    });
+  }
+
+  const followingRedirs = document.getElementsByClassName("followingRedir");
+
+  for (var i = 0; i < followingRedirs.length; i++) {
+
+    followingRedirs[i].addEventListener("click", function() {
+
+      const userHandle = this.title;
+
+      if (hasStoppedBuilding && stoppedBuildingUser) {
+
+        window.history.pushState(null, null, document.location.origin + "/user/" + userHandle + "/following");
+        checkUrl(parseURL(document.location.pathname));
+      } else {
+
+        window.location.href = document.location.origin + "/user/" + userHandle + "/following";
       }
     });
   }

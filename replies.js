@@ -1,5 +1,6 @@
-import { embeds } from "./mods.js";
-import { postDefault } from "./struct/default.js";
+import { embeds } from "../../../mods.js";
+import { postDefault } from "../../../struct/default.js";
+import { activateListeners } from "./listeners.js";
 
 export async function loadFirstReplies(postObj) {
   
@@ -24,6 +25,7 @@ async function loadParent(replies) {
   try {
     
     document.getElementById("parentposts").innerHTML = "<div>" + await postDefault(userid, postid) + "<div class='lined-spacer'></div></div>";
+    activateListeners();
   } catch(e) {
     
     console.log(e);
@@ -38,6 +40,7 @@ async function loadRoot(replies) {
   try {
     
     document.getElementById("rootpost-container").innerHTML = await postDefault(userid, postid);
+    activateListeners();
   } catch(e) {
     
     console.log(e);

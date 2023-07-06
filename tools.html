@@ -150,7 +150,7 @@
                     return;
                 } else if (accessKey === "") {
 
-                    window.open("https://blue.amazingca.dev/login?auth=tooling");
+                    window.open("../../../login?auth=tooling");
                 } else {
 
                     const req = {
@@ -240,23 +240,6 @@
                     document.getElementById("confirmM").classList.add("hidden");
                 }
             }
-
-            function toConfirmFollowAll() {
-
-                if ((localStorage.getItem("accessJwt") === null) || (loggedIn === false)) {
-
-                    window.alert("Must be authenticated! Try importing your account details first then run this function again!");
-                } else {
-
-                    toConfirm = "followAll";
-                    
-                    document.getElementById("confirmB").style.backgroundColor = "#ff0000cc";
-                    document.getElementById("confirmB").style.height = "75px";
-                  
-                    document.getElementById("confirmB").innerHTML = "CAUTION: This feature is considered spamful on Bluesky Social and as such is recommended against.<br>If you understand these precautions and would like to proceed, click to confirm...";
-                    document.getElementById("confirmM").classList.remove("hidden");
-                }
-            }
           
             function toConfirmUnfollowAll() {
 
@@ -282,8 +265,8 @@
 
                 try {
 
-                    excludedDids = await fetch("./dids/excludedDids.json").then(r => r.json());
-                    dids = await fetch("./dids/didCache.json").then(r => r.json());
+                    excludedDids = await fetch("../../../dids/excludedDids.json").then(r => r.json());
+                    dids = await fetch("../../../dids/didCache.json").then(r => r.json());
 
                     if ((typeof excludedDids != "object") || (typeof dids != "object")) {
 
@@ -499,15 +482,15 @@
                 }
 
                 //window.alert("Continue with the unfollowing of " + recordData.length + " users?");
-
+              
                 var rounds;
-            
+              
                 if (type === "follow") {
-                
-                rounds = Math.ceil(unfollowedDids.length / 200);
+                  
+                  rounds = Math.ceil(unfollowedDids.length / 200);
                 } else if (type === "unfollow") {
-                
-                rounds = Math.ceil(isFollowing.length / 200);
+                  
+                  rounds = Math.ceil(isFollowing.length / 200);
                 }
               
                 for (var i = 0; i < rounds; i++) {
@@ -517,13 +500,13 @@
 
                     if ((i + 1) === rounds) {
                         
-                    if (type === "follow") {
+                      if (type === "follow") {
                         
                         endRange = (i * 200) + (unfollowedDids.length % 200);
-                    } else if (type === "unfollow") {
+                      } else if (type === "unfollow") {
                         
                         endRange = (i * 200) + (isFollowing.length % 200);
-                    }
+                      }
                     } else {
 
                         endRange = (i * 200) + 200;
@@ -704,16 +687,7 @@
                         }
                     }
                     
-                    var tempParsed;
-
-                    try {
-
-                        tempParsed = JSON.parse(temp); 
-                    } catch (e) {
-
-                        console.log(passed[i], e);
-                        continue;
-                    }
+                    var tempParsed = JSON.parse(temp);
 
                     count += tempParsed.length;
                     //console.log(`${Math.round(100*(`${i/passed.length}`.split("").slice(0, 6).join("")*100))/100}` + "% done: " + tempParsed.length + " following");
@@ -922,10 +896,6 @@
 
                 navigator.clipboard.writeText(document.getElementById("data").innerHTML);
             }
-            //getPosts();
-            //getFollowers(dids);
-            //getProfile();
-            //getUsers(); - NOT ADDED YET
         </script>
     </body>
 </html>

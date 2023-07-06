@@ -2,7 +2,7 @@ export async function getPost(userId, postId) {
   
   try {
     
-    const post = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userId}&collection=app.bsky.feed.post&rkey=${postId}`).then(r => r.text()));
+    const post = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userId}&collection=app.bsky.feed.post&rkey=${postId}`).then(r => r.json());
     
     return post;
   } catch (e) {
@@ -31,7 +31,7 @@ export async function getPostFull(userId, postId) {
   
   try {
     
-    const req = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=at://" + userId + "/app.bsky.feed.post/" + postId, reqObj).then(r => r.text()));
+    const req = await fetch("https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=at://" + userId + "/app.bsky.feed.post/" + postId, reqObj).then(r => r.json());
     
     if (req.error === undefined) {
       
@@ -52,7 +52,7 @@ export async function getUserRepo(userId) {
   
   try {
     
-    const userRepo = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${userId}`).then(r => r.text()));
+    const userRepo = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${userId}`).then(r => r.json());
     
     return userRepo;
   } catch (e) {
@@ -82,14 +82,14 @@ export async function listRecords(userId, collection) {
   
   try {
     
-    const records = JSON.parse(await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userId}&collection=${collection}&limit=100`).then(r => r.text())).records;
-    
-    if (records.length === 0) {
+    const records = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${userId}&collection=${collection}&limit=100`).then(r => r.json());
+
+    if (records.records.length === 0) {
       
       return null;
     } else {
       
-      return records;
+      return records.records;
     }
   } catch (e) {
     
@@ -112,7 +112,7 @@ export async function getUserFeed() {
   
   try {
     
-    const feedReq = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline?limit=100", req).then(r => r.text()));
+    const feedReq = await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline?limit=100", req).then(r => r.json());
     
     return feedReq;
   } catch (e) {
@@ -136,7 +136,7 @@ export async function getUserNotifCount() {
   
   try {
     
-    const notifCountObj = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.notification.getUnreadCount", req).then(r => r.text()));
+    const notifCountObj = await fetch("https://bsky.social/xrpc/app.bsky.notification.getUnreadCount", req).then(r => r.json());
     
     return notifCountObj.count;
   } catch (e) {
@@ -175,7 +175,7 @@ export async function votePost(type, postUri, postCid) {
 
     try {
 
-      const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", req).then(r => r.text()));
+      const res = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", req).then(r => r.json());
 
       if (res.uri != undefined) {
 
@@ -238,7 +238,7 @@ export async function getUserInfo() {
   
   try {
     
-    const reqObj = JSON.parse(await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + userId, req).then(r => r.text()));
+    const reqObj = await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + userId, req).then(r => r.json());
     
     return reqObj;
   } catch (e) {
@@ -260,7 +260,7 @@ export async function getToken() {
       }
     }
 
-    const newTokens = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.refreshSession", req).then(r => r.text()));
+    const newTokens = await fetch("https://bsky.social/xrpc/com.atproto.server.refreshSession", req).then(r => r.json());
 
     localStorage.setItem("accessJwt", newTokens.accessJwt);
     localStorage.setItem("refreshJwt", newTokens.refreshJwt);
@@ -283,7 +283,7 @@ export async function getSession() {
 
   try {
 
-    const res = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.getSession", req).then(r => r.text()));
+    const res = await fetch("https://bsky.social/xrpc/com.atproto.server.getSession", req).then(r => r.json());
 
     if (res.error === undefined) {
             
@@ -327,12 +327,12 @@ export async function loginReq(handle, password) {
   
   try {
     
-    const authObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", reqObj).then(r => {
+    const authObj = await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", reqObj).then(r => {
       if (!r.ok) {
         throw new Error('Login not successful');
       } else {
-        return r.text();
-      }}));
+        return r.json();
+      }});
     
     return authObj;
   } catch (e) {
@@ -360,7 +360,7 @@ export async function createAccountReq(inviteCode, userEmail, userHandle, userPa
   
   try {
     
-    let accObj = JSON.parse(await fetch("https://bsky.social/xrpc/com.atproto.server.createAccount", reqObj).then(r => r.text()));
+    let accObj = await fetch("https://bsky.social/xrpc/com.atproto.server.createAccount", reqObj).then(r => r.json());
     
     if (accObj.error === undefined) {
       
