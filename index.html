@@ -65,6 +65,10 @@
                   </div>
                 </spacer>
               </div>
+              <button class="hidden" onclick="newPostToggle();" style="margin-bottom: 1.25rem;" id="new-post">
+                <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="27" height="27"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"></path></svg>
+                <div>New Post</div>
+              </button>
               <h2 style="margin-top: 0px;">Rolodex</h2>
               <spacer>
                 <div class="rolo-container">
@@ -169,9 +173,6 @@
         </grid>
       </div>
     </main-content>
-    <button class="hidden" onclick="newPostToggle();" id="new-post">
-      <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="32" height="32"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"></path></svg>
-    </button>
     <div class="deskbutton" id="profileInfoModal"></div>
     <div id="navbar">
       <div style="position: fixed; bottom: 80px; background-color: #d9d9d9; left: 0px; right: 0px; z-index: 1; height: 2px;"></div>
@@ -362,7 +363,7 @@
     .rolo-text {
       border-radius: 0.5rem;
       border-width: 0.1px;
-      border-color: black;
+      border-color: #ffffff;
       margin-top: 0.25rem;
       margin-bottom: 0.25rem;
       padding: 0.25rem;
@@ -454,16 +455,20 @@
       background-color: white;
     }
     #new-post {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      height: 4rem;
-      width: 4rem;
+      display: flex;
+      gap: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 600 !important;
+      -webkit-text-fill-color: white;
+      height: 2.5rem;
+      width: -webkit-fill-available;
       z-index: 1;
-      border-radius: 50%;
+      padding: calc(0.5rem + 2px);
+      border-radius: 0.75rem;
       border-width: 0px;
       background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
       cursor: pointer;
+      align-items: center;
     }
     #text-amount-indicator {
       --deg: 0deg;
