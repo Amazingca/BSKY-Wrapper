@@ -53,7 +53,7 @@ async function buildPreReqs() {
     userInfoModalBuild();
     postModalBuild();
     
-    document.getElementById("new-post").classList.remove("hidden");
+    document.getElementById("new-post").style.display = "";
 
     const docURL = parseURL(document.location.pathname);
     
