@@ -884,7 +884,7 @@
                 
                 try {
 
-                    for (var i = 0; i < 2; i++) {
+                    for (var i = 0; i < 1; i++) {
 
                         var cache;
                         var cacheS;
@@ -914,16 +914,27 @@
 
                         if (cache.length < 1000) {
 
-                            console.log(recordCache);
+                            window.alert("Your computer will now attempt to save a JSON file of the latest cache.");
+
+                            function download(content, fileName, contentType) {
+
+                                var a = document.createElement("a");
+                                var file = new Blob([content], {type: contentType});
+                                a.href = URL.createObjectURL(file);
+                                a.download = fileName;
+                                a.click();
+                            }
+
+                            download(recordCache, 'didCache.json', 'application/json');
                         } else {
 
-                           prevTime = cache.pop().createdAt; 
-                           i--;
+                            prevTime = cache.pop().createdAt; 
+                            i--;
                         }
                     }
                 } catch (e) {
 
-                    console.log(e, cacheS);
+                    console.log(e);
                 }
             }
 
