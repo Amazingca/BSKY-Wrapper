@@ -76,10 +76,18 @@ async function userFeed() {
 
 function artificialFeed() {
   
+  var feedStruct = "";
+
   const socket = new WebSocket('wss://bsky.social/xrpc/com.atproto.sync.subscribeRepos');
+
+  var counter = 0;
 
   socket.addEventListener('message', async (event) => {
     
+    counter++;
+
+    if (counter % 5 != 0) return;
+
     try {
       
       const messageBuf = await event.data.arrayBuffer();
@@ -94,7 +102,12 @@ function artificialFeed() {
 
         if (record.$type === "app.bsky.feed.post") {
 
-          console.log(record)
+          record.uri = "at://" + body.repo + "/" + body.ops[0].path;
+          const postStruct = await postDefault(body.repo, record, "feed");
+
+          feedStruct = postStruct + feedStruct;
+        
+          document.getElementById("feedStruct").innerHTML = "<spacer>" + feedStruct + "</spacer>";
         }
       }
     } catch(e) {

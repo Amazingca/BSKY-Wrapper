@@ -877,6 +877,56 @@
                 }
             }
 
+            async function userCollector() {
+
+                var recordCache;
+                var prevTime = "";
+                
+                try {
+
+                    for (var i = 0; i < 2; i++) {
+
+                        var cache;
+                        var cacheS;
+
+                        if (prevTime === "") {
+
+                            cacheS = await fetch("https://plc.directory/export?count=1000").then(r => r.text());
+                        } else {
+
+
+                            cacheS = await fetch("https://plc.directory/export?count=1000&after=" + prevTime).then(r => r.text());
+                        }
+
+                        cacheS = cacheS.replaceAll(/([Z]["][}])(\r\n|\n|\r)/gm, "Z\"},");
+                        cacheS = cacheS.split("");
+                        cacheS = cacheS.join("");
+                        
+                        cache = JSON.parse("[" + cacheS + "]");
+
+                        if (prevTime === "") {
+
+                            recordCache = cache;
+                        } else {
+
+                            recordCache = [ ...recordCache, ...cache];  
+                        }
+
+                        if (cache.length < 1000) {
+
+                            console.log(recordCache);
+                        } else {
+
+                           prevTime = cache.pop().createdAt; 
+                           i--;
+                        }
+                    }
+                } catch (e) {
+
+                    console.log(e, cacheS);
+                }
+            }
+
             function confirmation() {
 
                 if (toConfirm === "unfollowAll") {

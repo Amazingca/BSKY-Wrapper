@@ -12,7 +12,7 @@ export async function postFull(userId, post, type) {
   var userObj;
   var postObj;
   
-  if(type === "snippet") {
+  if (type === "snippet") {
     
     userObj = post.author;
     postObj = post;
