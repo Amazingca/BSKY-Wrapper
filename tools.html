@@ -21,7 +21,7 @@
                     <th>Mass Actions</th>
                 </tr>
                 <tr>
-                    <th class="button"><button onclick="getFollowers(dids);" id="getFollowersB">Get all users</button></th>
+                    <th class="button"><button onclick="userCollector();" id="getFollowersB">Get all users</button></th>
                     <th class="button"><button onclick="toConfirmUnfollowAll();" id="toConfirmUnfollowAllB">Unfollow all</button></th>
                 </tr>
                 <tr>
@@ -606,133 +606,6 @@
                 document.getElementById("getPostsB").style.color = "#000";
             }
 
-            async function getFollowers(passed) {
-
-                document.getElementById("getFollowersB").style.backgroundColor = "#04aa6d";
-                document.getElementById("getFollowersB").style.color = "#fff";
-
-                var count = 0;
-
-                for (var i = 0; i < passed.length; i++) {
-
-                    if (localStorage.getItem("excludeDids") != "false") {
-                        
-                        var excluded = false;
-
-                        for (var o = 0; o < excludedDids.length; o++) {
-
-                            if (passed[i] === excludedDids[o]) {
-
-                                excluded = true;
-                            }
-                        }
-
-                        if (excluded === true) {
-
-                            continue;
-                        }
-                    }
-
-                    var temp = "";
-                    var temptemp = "";
-                    
-                    var going = true;
-                    var lastitem;
-
-                    while(going) {
-                        
-                        if (temptemp === "") {
-                            
-                            var t;
-                            try {
-                                t = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${passed[i]}&collection=app.bsky.graph.follow&limit=100`).then(r => r.text());
-                            } catch (e) {
-                                console.log(e);
-                            }
-
-                            //console.log(JSON.parse(t).records.length);
-                            if (JSON.parse(t).records.length < 100) {
-                                //console.log("first is last");
-                                temp = JSON.stringify(JSON.parse(t).records);
-                                going = false;
-                            } else {
-                                //console.log("first not last");
-                                var tid = JSON.parse(t).records[JSON.parse(t).records.length - 1].uri.split("/")[4]
-                                lastitem = tid;
-                                temptemp = JSON.stringify(JSON.parse(t).records).replaceAll("]", "");
-                            }
-                        } else {
-
-                            var t;
-                            try {
-                                t = await fetch(`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${passed[i]}&collection=app.bsky.graph.follow&limit=100&rkeyEnd=${lastitem}`).then(r => r.text());
-                            } catch (e) {
-                                console.log(e);
-                            }
-
-                            //console.log(JSON.parse(t).records.length);
-                            if (t.includes("[]")) {
-                                temp = temptemp + "]";
-                                going = false;
-                            } else if (JSON.parse(t).records.length < 100) {
-                                //console.log("not first is last");
-                                temp = temptemp + "," + JSON.stringify(JSON.parse(t).records).replaceAll("[", "");
-                                going = false;
-                            } else {
-                                //console.log("not first is not last");
-                                var tid = JSON.parse(t).records[JSON.parse(t).records.length - 1].uri.split("/")[4]
-                                lastitem = tid;
-                                temptemp = temptemp + "," + JSON.stringify(JSON.parse(t).records).replaceAll("[", "").replaceAll("]", "");
-                            }
-                        }
-                    }
-                    
-                    var tempParsed = JSON.parse(temp);
-
-                    count += tempParsed.length;
-                    //console.log(`${Math.round(100*(`${i/passed.length}`.split("").slice(0, 6).join("")*100))/100}` + "% done: " + tempParsed.length + " following");
-                    document.getElementById("progStatus").innerHTML = "Progress: Batch - " + tempParsed.length + "; Follows - " + count + ";";
-                    document.getElementById("progPercent").innerHTML = Math.round(100*(`${i/passed.length}`.split("").slice(0, 6).join("")*100))/100 + "%";
-                    document.getElementById("progressB").value = Math.round(100*(`${i/passed.length}`.split("").slice(0, 6).join("")*100))/10000;
-
-                    for (var o = 0; o < tempParsed.length; o++) {
-
-                        var inside = false;
-                            
-                        for (var y = 0; y < followers.length; y++) {
-
-                            if ((followers[y] === tempParsed[o].value.subject)) {
-
-                                inside = true;
-                            }
-                        }
-
-                        if ((inside === false) && (tempParsed[o].value.subject != "") && (tempParsed[o].value.subject.includes("did:plc"))) {
-                            
-                            followers[followers.length] = tempParsed[o].value.subject;
-                            
-                            //console.log(followers[followers.length-1]);
-                        }
-                    }
-                }
-
-                //console.log(followers);
-                //console.log("*All* users on the platform are following others a total of " + count + " times!");
-                //document.getElementById("data").innerHTML = document.getElementById("data").innerHTML + JSON.stringify(followers) + `<br><button onclick='getFollowers(${JSON.stringify(followers)})'>Another Round</button><br><br>`;
-
-                dids = followers;
-
-                document.getElementById("progStatus").innerHTML = "Progress: " + followers.length + " users, " + count + " follows";
-                document.getElementById("progPercent").innerHTML = "100%";
-                document.getElementById("progressB").value = "1";
-
-                document.getElementById("data").innerHTML = JSON.stringify(followers);
-                document.getElementById("dataP").classList.remove("hidden");
-
-                document.getElementById("getFollowersB").style.backgroundColor = "";
-                document.getElementById("getFollowersB").style.color = "#000";
-            }
-
             async function getProfile() {
 
                 document.getElementById("getProfileB").style.backgroundColor = "#04aa6d";
@@ -879,9 +752,20 @@
 
             async function userCollector() {
 
+                const choice = window.prompt("Your device will now attempt to create a DID cache object of all PLCs in the network. If you would like just an array of these DIDs, please say `1`. If you would like an entire data scrape, please say `2`. Otherwise, to cancel, leave this blank.\n\nDISCLAIMER: This process is request-intensive and might temporarily block your IP on Bluesky's servers. It typically lasts for around 15 minutes. If you understand these risks, you may proceed...");
+
+                if (!choice || choice === "") {
+
+                    return;
+                }
+
+                document.getElementById("getFollowersB").style.backgroundColor = "#04aa6d";
+                document.getElementById("getFollowersB").style.color = "#fff";
+
                 var recordCache;
                 var prevTime = "";
-                
+                var counter = 0;
+
                 try {
 
                     for (var i = 0; i < 1; i++) {
@@ -912,6 +796,12 @@
                             recordCache = [ ...recordCache, ...cache];  
                         }
 
+                        counter++;
+
+                        document.getElementById("progStatus").innerHTML = "Progress: Grabbed " + counter + " data slices.";
+                        document.getElementById("progPercent").innerHTML = Math.round(100*(`${counter/(dids.length/1000)}`.split("").slice(0, 6).join("")*100))/100 + "%";
+                        document.getElementById("progressB").value = Math.round(100*(`${counter/(dids.length/1000)}`.split("").slice(0, 6).join("")*100))/10000;
+
                         if (cache.length < 1000) {
 
                             window.alert("Your computer will now attempt to save a JSON file of the latest cache.");
@@ -924,17 +814,31 @@
                                 a.download = fileName;
                                 a.click();
                             }
-
-                            //download(JSON.stringify(recordCache), 'didCache.json', 'application/json');
-
+                            
                             var justDids = [];
+                            var userCount;
 
                             for (var did of recordCache) {
 
                                 justDids.push(did.did);
                             }
 
-                            download(JSON.stringify(justDids), 'didCache.json', 'application/json');
+                            userCount = justDids.length;
+
+                            if (choice === "2") {
+                            
+                                download(JSON.stringify(recordCache), 'didBulk.json', 'application/json');  
+                            } else if (choice === "1") {
+
+                                download(JSON.stringify(justDids), 'didCache.json', 'application/json'); 
+                            }
+
+                            document.getElementById("progStatus").innerHTML = "Progress: COMPLETED - " + userCount + " DIDs total.";
+                            document.getElementById("progPercent").innerHTML = "100%";
+                            document.getElementById("progressB").value = "1";
+
+                            document.getElementById("getFollowersB").style.backgroundColor = "";
+                            document.getElementById("getFollowersB").style.color = "#000";
                         } else {
 
                             prevTime = cache.pop().createdAt; 
