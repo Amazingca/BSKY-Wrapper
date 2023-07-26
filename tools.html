@@ -925,16 +925,16 @@
                                 a.click();
                             }
 
-                            download(JSON.stringify(recordCache), 'didCache.json', 'application/json');
+                            //download(JSON.stringify(recordCache), 'didCache.json', 'application/json');
 
-                            //var justDids = [];
+                            var justDids = [];
 
-                            //for (var did of recordCache) {
+                            for (var did of recordCache) {
 
-                            //    justDids.push(did.did);
-                            //}
+                                justDids.push(did.did);
+                            }
 
-                            //download(justDids, 'didCache.json', 'application/json');
+                            download(JSON.stringify(justDids), 'didCache.json', 'application/json');
                         } else {
 
                             prevTime = cache.pop().createdAt; 
