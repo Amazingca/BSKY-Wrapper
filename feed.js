@@ -3,11 +3,12 @@ import { postFull } from "./struct/full.js";
 import { getUserRepo, listRecords, getUserFeed } from "./api.js";
 import { activateListeners } from "./listeners.js";
 
+import { CarReader } from 'https://cdn.jsdelivr.net/npm/@ipld/car@5.1.1/+esm';
+import { decode, decodeMultiple } from 'https://cdn.jsdelivr.net/npm/cbor-x@1.5.1/+esm';
+
 export var hasStoppedBuilding = true;
 export var stoppedBuilding = false;
 export var userCache;
-
-var whileGoing = true;
 
 export function editExternalVars(name, value) {
 
@@ -22,30 +23,6 @@ export function editExternalVars(name, value) {
       break;
   }
 }
-
-async function initializeCaches() {
-
-  try {
-
-    userCache = await fetch("../../../dids/didCache.json").then(r => r.json());
-    
-    if (typeof userCache === "object") {
-
-      return false;
-    }
-  } catch (e) {
-
-    console.log(e);
-    return true;
-  } 
-}
-  
-while (whileGoing) {
-
-  whileGoing = await initializeCaches();
-}
-
-var sortedObj = [];
 
 export async function modifyFlow() {
   
@@ -97,96 +74,45 @@ async function userFeed() {
   }
 }
 
-async function artificialFeed() {
+function artificialFeed() {
   
-  try {
+  var feedStruct = "";
+
+  const socket = new WebSocket('wss://bsky.social/xrpc/com.atproto.sync.subscribeRepos');
+
+  var counter = 0;
+
+  socket.addEventListener('message', async (event) => {
     
-    document.getElementById("feedStruct").innerHTML = "";
+    counter++;
 
-    for (var i = 0; i < userCache.length; i++) {
+    if (counter % 5 != 0) return;
 
-      if (stoppedBuilding) {
-
-        break;
-      }
+    try {
       
-      const userDataObj = await getUserRepo(userCache[i]);
+      const messageBuf = await event.data.arrayBuffer();
 
-      if (userDataObj === null) {
+      const [header, body] = decodeMultiple(new Uint8Array(messageBuf))
+      if (header.op !== 1) return
+      const car = await CarReader.fromBytes(body.blocks);
 
-        continue;
-      }
-      
-      if (userDataObj.collections === undefined) {
+      for (var block of car._blocks) {
         
-        continue;
-      }
+        const record = decode(block.bytes)
 
-      var hasPostCollection = false;
+        if (record.$type === "app.bsky.feed.post") {
 
-      //check whether user has "collection": app.bsky.feed.post
-      //^ this will determine whether user has any posts and whether we should continue
-      for (var o = 0; o < userDataObj.collections.length; o++) {
+          record.uri = "at://" + body.repo + "/" + body.ops[0].path;
+          const postStruct = await postDefault(body.repo, record, "feed");
 
-        if (userDataObj.collections[o] === "app.bsky.feed.post") {
-
-          hasPostCollection = true;
+          feedStruct = postStruct + feedStruct;
+        
+          document.getElementById("feedStruct").innerHTML = "<spacer>" + feedStruct + "</spacer>";
         }
       }
-
-      if (hasPostCollection === false) {
-
-        continue;
-      }
-        
-      const userMostRecentPost = await listRecords(userCache[i], "app.bsky.feed.post");
-
-      sortPosts(Date.parse(userMostRecentPost[0].value.createdAt), await postDefault(userCache[i], userMostRecentPost[0]));
-    }
-
-    hasStoppedBuilding = true;
-  } catch(e) {
-    
-    console.log(e);
-  }
-}
-
-function sortPosts(timestamp, newItem) {
-  
-  var recentCache = "";
-  
-  if (sortedObj.length === 0) {
-    
-    sortedObj[0] = [timestamp, newItem];
-    
-  } else if (sortedObj.length === 1) {
-    
-    if (timestamp < sortedObj[0][0]) {
+    } catch(e) {
       
-      sortedObj.unshift([timestamp, newItem]);
-    } else {
-      
-      sortedObj.push([timestamp, newItem]);
+      console.log(e);
     }
-  } else {
-    
-    for (var z = 0; z < sortedObj.length; z++) {
-      
-      if ((timestamp > sortedObj[z][0]) && ((z + 1) === sortedObj.length)) {
-        
-        sortedObj.splice(z + 1, 0, [timestamp, newItem]);
-      } else if ((timestamp > sortedObj[z][0]) && (timestamp < sortedObj[z + 1][0])) {
-        
-        sortedObj.splice(z + 1, 0, [timestamp, newItem]);
-      }
-    }
-  }
-  
-  for (var x = 0; x < sortedObj.length; x++) {
-    
-    recentCache = recentCache + sortedObj[sortedObj.length - x - 1][1];
-  }
-  
-  document.getElementById("feedStruct").innerHTML = "<spacer>" + recentCache + "</spacer>";
-  activateListeners();
+  });
 }

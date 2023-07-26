@@ -27,6 +27,11 @@ export async function postDefault(userId, post, type) {
     var replySumElement = "";
     
     if (isObj === true) {
+
+      if (type === "feed") {
+
+        post.value = post;
+      }
       
       if (post.value.reply != null) {
         
@@ -86,6 +91,11 @@ export async function postDefault(userId, post, type) {
     if ((type === "snippet") || (type === "light")) {
       
       postObj.record = postObj.value;
+    }
+
+    if (type === "feed") {
+
+      postObj.record = post;
     }
     
     var hasFacets = false;

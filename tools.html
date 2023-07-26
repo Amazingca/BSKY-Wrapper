@@ -877,6 +877,76 @@
                 }
             }
 
+            async function userCollector() {
+
+                var recordCache;
+                var prevTime = "";
+                
+                try {
+
+                    for (var i = 0; i < 1; i++) {
+
+                        var cache;
+                        var cacheS;
+
+                        if (prevTime === "") {
+
+                            cacheS = await fetch("https://plc.directory/export?count=1000").then(r => r.text());
+                        } else {
+
+
+                            cacheS = await fetch("https://plc.directory/export?count=1000&after=" + prevTime).then(r => r.text());
+                        }
+
+                        cacheS = cacheS.replaceAll(/([Z]["][}])(\r\n|\n|\r)/gm, "Z\"},");
+                        cacheS = cacheS.split("");
+                        cacheS = cacheS.join("");
+                        
+                        cache = JSON.parse("[" + cacheS + "]");
+
+                        if (prevTime === "") {
+
+                            recordCache = cache;
+                        } else {
+
+                            recordCache = [ ...recordCache, ...cache];  
+                        }
+
+                        if (cache.length < 1000) {
+
+                            window.alert("Your computer will now attempt to save a JSON file of the latest cache.");
+
+                            function download(content, fileName, contentType) {
+
+                                var a = document.createElement("a");
+                                var file = new Blob([content], {type: contentType});
+                                a.href = URL.createObjectURL(file);
+                                a.download = fileName;
+                                a.click();
+                            }
+
+                            //download(JSON.stringify(recordCache), 'didCache.json', 'application/json');
+
+                            var justDids = [];
+
+                            for (var did of recordCache) {
+
+                                justDids.push(did.did);
+                            }
+
+                            download(JSON.stringify(justDids), 'didCache.json', 'application/json');
+                        } else {
+
+                            prevTime = cache.pop().createdAt; 
+                            i--;
+                        }
+                    }
+                } catch (e) {
+
+                    console.log(e);
+                }
+            }
+
             function confirmation() {
 
                 if (toConfirm === "unfollowAll") {
