@@ -99,12 +99,28 @@ export async function embeds(obj) {
           return "<div>More than 4 images</div>";
         }
 
+        var blurs = "";
+        var clickFunc = `window.open('${obj.images[i].fullsize}')`;
+
+        if (obj.explicit === true) {
+
+          blurs = "filter: blur(8px);";
+          clickFunc = `this.style.filter = 'none'; this.onclick = function() { window.open('${obj.images[i].fullsize}'); }`;
+        }
+
         imageEmbed =
           imageEmbed +
-          `<img onclick="window.open('${obj.images[i].fullsize}')" src="${obj.images[i].thumb}" title="${obj.images[i].alt}" style="cursor: pointer; border-radius: 7px; ${index} max-width:100%; display: flex; height: auto;">`;
+          `<div style="overflow: hidden; border-radius: 7px; ${index}"><img onclick="${clickFunc}" src="${obj.images[i].thumb}" title="${obj.images[i].alt}" style="cursor: pointer; max-width:100%; display: flex; height: auto; transition: 0.1s cubic-bezier(.3,.09,.46,1.01) 0s; ${blurs}"></div>`;
       }
 
       return imageEmbed + "</div>";
+      break;
+    case "app.bsky.embed.recordWithMedia#view":
+      const mediaObj = await embeds(obj.media);
+      const recordObj = await embeds(obj.record.record);
+      //postFull(obj.record.record.author.did, obj.record.record, "snippet");
+
+      return mediaObj + "<br>" + recordObj;
       break;
     case "app.bsky.embed.record":
       const quotePostUri = obj.record.uri;
@@ -114,6 +130,15 @@ export async function embeds(obj) {
           quotePostUri.split("//")[1].split("/").length - 1
         ]
       );
+      break;
+    case "app.bsky.embed.record#viewRecord":
+      if (obj.author) {
+        
+        return await postFull(obj.author.did, obj, "snippet");
+      } else {
+        
+        return "";
+      }
       break;
     case "app.bsky.embed.record#view":
       if (obj.record.author) {
@@ -178,8 +203,8 @@ export function reactorContructor(postObj, amounts) {
   if (postObj.viewer.repost != undefined) {
     repostE = 
       `<flex class="reactors">
-        <svg class="repostB depost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
-        <div class="reactor">reposted ${postObj.repostCount}</div>
+        <svg class="repostB depost_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path fill="green" d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
+        <div style="color: green;" class="reactor">${postObj.repostCount}</div>
       </flex>`;
   } else {
     repostE = 
@@ -192,8 +217,8 @@ export function reactorContructor(postObj, amounts) {
   if (postObj.viewer.like != undefined) {
     upvoteE = 
       `<flex class="reactors">
-        <svg class="upvoteB devote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path d="M7.655 14.916v-.001h-.002l-.006-.003-.018-.01a22.066 22.066 0 0 1-3.744-2.584C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.044 5.231-3.886 6.818a22.094 22.094 0 0 1-3.433 2.414 7.152 7.152 0 0 1-.31.17l-.018.01-.008.004a.75.75 0 0 1-.69 0Z"></path></svg>
-        <div class="reactor">${postObj.likeCount}</div>
+        <svg class="upvoteB devote_${postObj.uri}-${postObj.cid}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="20" height="20"><path fill="red" d="M7.655 14.916v-.001h-.002l-.006-.003-.018-.01a22.066 22.066 0 0 1-3.744-2.584C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.044 5.231-3.886 6.818a22.094 22.094 0 0 1-3.433 2.414 7.152 7.152 0 0 1-.31.17l-.018.01-.008.004a.75.75 0 0 1-.69 0Z"></path></svg>
+        <div style="color: red;" class="reactor">${postObj.likeCount}</div>
       </flex>`;
   } else {
     upvoteE = 

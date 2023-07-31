@@ -157,7 +157,7 @@ function checkForLabels(did, labels) {
           
           if (did === OGDids[o]) {
             
-            flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>OG Account</h5>";
+            flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; text-align: center; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>OG Account</h5>";
           }
         }
         break;
@@ -167,7 +167,7 @@ function checkForLabels(did, labels) {
           
           if (did === BSKYStaff[o]) {
             
-            flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>Bluesky Staff</h5>";
+            flagHTML += "<h5 style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; text-align: center; background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>Bluesky Staff</h5>";
           }
         }
         break;
@@ -177,7 +177,7 @@ function checkForLabels(did, labels) {
         console.log(labels)
           for (var o = 0; o < labels.length; o++) {
             
-            flagHTML += `<h5 title="Created by ${labels[o].src} on ${labels[o].cts}" style='padding: 0.25rem; padding-right: 0.5rem; padding-bottom: 0px; background-image: linear-gradient(to bottom right, #ff0000aa, #c21313ff); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>${labels[o].val}</h5>`;
+            flagHTML += `<h5 title="Created by ${labels[o].src} on ${labels[o].cts}" style='padding: 0.25rem; padding-bottom: 0px; text-align: center; background-image: linear-gradient(to bottom right, #ff0000aa, #c21313ff); -webkit-text-fill-color: white; width: fit-content; border-radius: 10px;'>${labels[o].val}</h5>`;
           }
         }
         break;
@@ -257,4 +257,57 @@ export function labelStruct(did, sourceLabels) {
     
     return "";
   }
+}
+
+export function isExplicit(labels) {
+
+  if (localStorage.getItem("labels") === null) {
+    
+    return "";
+  }
+  
+  const flagSaveData = JSON.parse(localStorage.getItem("labels"));
+  
+  if (Object.keys(flagSaveData).length === 0) {
+    
+    return "";
+  }
+  
+  var enabledFlags = [];
+  
+  for (var i = 0; i < Object.keys(flagSaveData).length; i++) {
+    
+    if (flagSaveData[Object.keys(flagSaveData)[i]] === "true") {
+      
+      enabledFlags.push(Object.keys(flagSaveData)[i]);
+    }
+  }
+  
+  if (enabledFlags.length === 0) {
+    
+    return "";
+  }
+
+  var isExplicit = false;
+  
+  if (labels === null) {
+    
+    return isExplicit;
+  }
+  
+  for (var i = 0; i < enabledFlags.length; i++) {
+
+    if (enabledFlags[i] === "LabeledAccounts") {
+
+      for (var flag of labels) {
+        console.log(labels)
+        if ((flag.val === "sexual") || (flag.val === "porn")) {
+  
+          isExplicit = true;
+        }
+      }
+    }
+  }
+
+  return isExplicit;
 }

@@ -1,5 +1,5 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
-import { labelHandle, labelUsername, labelStruct } from "../../../../labels.js";
+import { labelHandle, labelUsername, labelStruct, isExplicit } from "../../../../labels.js";
 import { embeds, reactorContructor } from "../../../../mods.js";
 
 // Saved post dates and id
@@ -123,6 +123,8 @@ export async function postFull(userId, post, type) {
         }
       }
     }
+
+    const explicit = isExplicit(labels);
     
     if (userObj.displayName === undefined) {
       
@@ -201,14 +203,22 @@ export async function postFull(userId, post, type) {
         }
       }
     }
+
+    if (postObj.embeds != undefined) {
+
+      postObj.embed = postObj.embeds[0];
+    }
     
     if (postObj.embed != undefined) {
+
+      postObj.embed.explicit = explicit;
       
       if (postObj.record.text != "") {
 
         postText = postObj.record.text.replaceAll("\n", "<br>") + "<br><br>" + await embeds(postObj.embed);
       } else {
 
+        console.log(postObj.embed)
         postText = await embeds(postObj.embed);
       }
     } else {
