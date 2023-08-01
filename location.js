@@ -59,11 +59,11 @@ async function buildPreReqs() {
     
     if (document.location.hash === "#notifications") {
         
-        document.getElementById("navNotifsDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg><div>Notifications</div>`;
+        document.getElementById("navNotifsDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg><div style="font-weight: 800 !important;">Notifications</div>`;
         document.getElementById("navNotifsMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M8 16c.9 0 1.7-.6 1.9-1.5.1-.3-.1-.5-.4-.5h-3c-.3 0-.5.2-.4.5.2.9 1 1.5 1.9 1.5ZM3 5c0-2.8 2.2-5 5-5s5 2.2 5 5v3l1.7 2.6c.2.2.3.5.3.8 0 .8-.7 1.5-1.5 1.5h-11c-.8.1-1.5-.6-1.5-1.4 0-.3.1-.6.3-.8L3 8.1V5Z"></path></svg>`;
     } else if (urlParams.get("username") === null) {
         
-        document.getElementById("navButtonHomeDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg><div>Home</div>`
+        document.getElementById("navButtonHomeDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg><div style="font-weight: 800 !important;">Home</div>`
         document.getElementById("navButtonHomeMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><defs/><g><path d="M6.906 0.664C7.54511 0.152016 8.45389 0.152016 9.093 0.664L14.343 4.864C14.758 5.196 15 5.699 15 6.231L15 13.25C15 14.2165 14.2165 15 13.25 15L9.75 15C9.33579 15 9 14.6642 9 14.25L9 9L7 9L7 14.25C7 14.6642 6.66421 15 6.25 15L2.75 15C1.7835 15 1 14.2165 1 13.25L1 6.23C1 5.699 1.242 5.196 1.657 4.864L6.907 0.664L6.906 0.664Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/></g></svg>`;
     }
     
@@ -73,7 +73,7 @@ async function buildPreReqs() {
 
         if ((docURL[1].userHandle === localStorage.getItem("userDid")) || (userObj.did === localStorage.getItem("userDid"))) {
 
-            document.getElementById("navButtonProfileDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg><div>Profile</div>`
+            document.getElementById("navButtonProfileDesktop").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="27" height="27"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg><div style="font-weight: 800 !important;">Profile</div>`
             document.getElementById("navButtonProfileMobile").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M4.243 4.757a3.757 3.757 0 1 1 5.851 3.119 6.006 6.006 0 0 1 3.9 5.339.75.75 0 0 1-.715.784H2.721a.75.75 0 0 1-.714-.784 6.006 6.006 0 0 1 3.9-5.34 3.753 3.753 0 0 1-1.664-3.118Z"></path></svg>`;
         }
     }
