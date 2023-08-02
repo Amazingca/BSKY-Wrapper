@@ -336,7 +336,7 @@ export async function userInfoModalBuild() {
   var username = "";
   if (userInfo.displayName != undefined) {
     
-    username = `<div>${userInfo.displayName}</div>`
+    username = `<div style="overflow-x: hidden;">${userInfo.displayName}</div>`
   }
   
   var labels;
@@ -361,7 +361,7 @@ export async function userInfoModalBuild() {
   document.getElementById("profileInfoModal").innerHTML =
     `<div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin: 0.5rem;">
       <div>
-        <h5 style="font-size: 1rem;">
+        <h5 style="font-size: 1rem; overflow-x: scroll;">
           @${userInfo.handle}
         </h5>
         ${username}
