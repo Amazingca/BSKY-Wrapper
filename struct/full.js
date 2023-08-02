@@ -361,7 +361,7 @@ export async function userInfoModalBuild() {
   document.getElementById("profileInfoModal").innerHTML =
     `<div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin: 0.5rem;">
       <div>
-        <h5 style="font-size: 1rem; overflow-x: scroll;">
+        <h5 style="font-size: 1rem; overflow-x: hidden;">
           @${userInfo.handle}
         </h5>
         ${username}
