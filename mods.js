@@ -87,18 +87,18 @@ export async function embeds(obj) {
         }
 
         var index;
-        var crops = "width: 100%;";
+        var crops = "object-fit: cover; width: 100%; height: 100%;";
         if (obj.images.length === 1) {
           index = "object-fit: contain; grid-column-start: 1; grid-column-end: 2; grid-row-start: 1; grid-row-end: 2;";
         } else if (obj.images.length === 2) {
           index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${column}; grid-row-start: 1; grid-row-end: 2;`;
-          crops = "";
+          crops = "object-fit: cover; width: 100%; height: 100%;";
         } else if (obj.images.length === 3) {
           index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${columnend}; grid-row-start: ${row}; grid-row-end: ${rowend};`;
-          crops = "";
+          crops = "object-fit: cover; width: 100%; height: 100%;";
         } else if (obj.images.length === 4) {
           index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${column}; grid-row-start: ${row}; grid-row-end: ${row};`;
-          crops = "";
+          crops = "object-fit: cover; width: 100%; height: 100%;";
         } else {
           return "<div>More than 4 images</div>";
         }
@@ -114,7 +114,7 @@ export async function embeds(obj) {
 
         imageEmbed =
           imageEmbed +
-          `<div style="overflow: hidden; display: flex; justify-content: center; border-radius: 7px; ${index}"><img onclick="${clickFunc}" src="${obj.images[i].thumb}" title="${obj.images[i].alt}" style="cursor: pointer; height: 100%; transition: 0.1s cubic-bezier(.3,.09,.46,1.01) 0s; ${crops} ${blurs}"></div>`;
+          `<div style="overflow: hidden; justify-content: center; border-radius: 7px; ${index}"><img onclick="${clickFunc}" src="${obj.images[i].thumb}" title="${obj.images[i].alt}" style="cursor: pointer; transition: 0.1s cubic-bezier(.3,.09,.46,1.01) 0s; ${crops} ${blurs}"></div>`;
       }
 
       return imageEmbed + "</div>";

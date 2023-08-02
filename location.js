@@ -95,6 +95,7 @@ async function buildPreReqs() {
     document.getElementById("navButtonProfileDesktop").href = document.location.origin + "/user/" + localStorage.getItem("userDid");
     document.getElementById("navButtonProfileMobile").href = document.location.origin + "/user/" + localStorage.getItem("userDid");
     
+    document.getElementById("directories").classList.remove("hidden");
     document.getElementById("user-info-panel").classList.remove("hidden");
     document.getElementById("navbar").classList.add("active");
 
