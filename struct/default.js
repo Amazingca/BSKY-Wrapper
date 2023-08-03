@@ -83,7 +83,7 @@ export async function postDefault(userId, post, type) {
     } else {
       
       usernameElement = labelUsername(userId, textSize, userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
+      handleElement = `<h3 style="${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -180,8 +180,8 @@ export async function postDefault(userId, post, type) {
           <div>${postText}</div>
           <br>
           <flex style="justify-content: space-between;">
-            <div style="color: #333;">${new Date(postObj.value.createdAt).toUTCString()}</div>
-            <div style="color: #333;"><a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
+            <div style="color: var(--info-primary);">${new Date(postObj.value.createdAt).toUTCString()}</div>
+            <div style="color: var(--info-primary);"><a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}/post/${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" title="Go to Thread - ${userObj.handle}#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}" class="postRedir">id#${postObj.uri.split("/")[postObj.uri.split("/").length - 1]}</a></div>
           </flex>
         </div>
       </div>`;
@@ -211,7 +211,7 @@ export async function user(userId) {
     } else {
       
       usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" class="userRedir" title="Go to User Profile">${userObj.handle}</a></h3>`;
+      handleElement = `<h3>@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" class="userRedir" title="Go to User Profile">${userObj.handle}</a></h3>`;
     }
     
     var userFollowing;
@@ -271,7 +271,7 @@ export async function userLight(userId) {
     } else {
       
       usernameElement = labelUsername(userId, "", userProfileObj[0].value.displayName);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
+      handleElement = `<h3>@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     const userElement = 

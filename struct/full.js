@@ -133,7 +133,7 @@ export async function postFull(userId, post, type) {
     } else {
       
       usernameElement = labelUsername(userObj.did, "", userObj.displayName, labels);
-      handleElement = `<h3 style="color: #555;">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
+      handleElement = `<h3>@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
     var postText;
@@ -354,8 +354,8 @@ export async function userInfoModalBuild() {
   
   if (labels != "") {
     
-    labelsMobile = `<div style="font-size: 1rem; font-weight: 700 !important; color: #555;">Account Labels</div><div style="display: flex; justify-content: flex-end; gap: 0.25rem;">${labels}</div>`;
-    labelsDesktop = `<div style="margin: 0.5rem; font-weight: 700 !important; color: #555;">Account Labels:</div><div style="margin: 0.5rem; display: flex; gap: 0.25rem;">${labels}</div>`;
+    labelsMobile = `<div style="font-size: 1rem; font-weight: 700 !important; color: var(--redir-primary);">Account Labels</div><div style="display: flex; justify-content: flex-end; gap: 0.25rem;">${labels}</div>`;
+    labelsDesktop = `<div style="margin: 0.5rem; font-weight: 700 !important; color: var(--redir-primary);">Account Labels:</div><div style="margin: 0.5rem; display: flex; gap: 0.25rem;">${labels}</div>`;
   }
   
   document.getElementById("profileInfoModal").innerHTML =
@@ -374,7 +374,7 @@ export async function userInfoModalBuild() {
         <div style="font-weight: 700 !important;">
           ${userInfo.followersCount}
         </div>
-        <div style="font-weight: 700 !important; color: #555;">
+        <div style="font-weight: 700 !important; color: var(--redir-primary);">
           Followers
         </div>
       </div>
@@ -382,7 +382,7 @@ export async function userInfoModalBuild() {
         <div style="font-weight: 700 !important;">
           ${userInfo.followsCount}
         </div>
-        <div style="font-weight: 700 !important; color: #555;">
+        <div style="font-weight: 700 !important; color: var(--redir-primary);">
           Following
         </div>
       </div>
@@ -390,7 +390,7 @@ export async function userInfoModalBuild() {
         <div style="font-weight: 700 !important;">
           ${userInfo.postsCount}
         </div>
-        <div style="font-weight: 700 !important; color: #555;">
+        <div style="font-weight: 700 !important; color: var(--redir-primary);">
           Posts
         </div>
       </div>
@@ -414,7 +414,7 @@ export async function userInfoModalBuild() {
       ${labelsDesktop}
       <div style="display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem;">
         <div style="display: flex; gap: 0.5rem;">
-          <div style="font-weight: 700 !important; color: #555;">
+          <div style="font-weight: 700 !important; color: var(--redir-primary);">
             Followers:
           </div>
           <div style="font-weight: 700 !important;">
@@ -422,7 +422,7 @@ export async function userInfoModalBuild() {
           </div>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-          <div style="font-weight: 700 !important; color: #555;">
+          <div style="font-weight: 700 !important; color: var(--redir-primary);">
             Following:
           </div>
           <div style="font-weight: 700 !important;">
@@ -430,7 +430,7 @@ export async function userInfoModalBuild() {
           </div>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-          <div style="font-weight: 700 !important; color: #555;">
+          <div style="font-weight: 700 !important; color: var(--redir-primary);">
             Posts made:
           </div>
           <div style="font-weight: 700 !important;">

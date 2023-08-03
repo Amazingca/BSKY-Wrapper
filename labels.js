@@ -210,10 +210,10 @@ export function labelHandle(did, textSize, handle, sourceLabels) {
   if (labels[0] === true) {
     
     console.log('labeled', labels[1], did)
-    return `<h3 style="color: #555; ${textSize}"><flex style="justify-content: space-between;"><div>@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></div><flex>${labels[1]}</flex></flex></h3>`;
+    return `<h3 style="color: var(--redir-primary); ${textSize}"><flex style="justify-content: space-between;"><div>@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></div><flex>${labels[1]}</flex></flex></h3>`;
   } else {
     
-    return `<h3 style="color: #555; ${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></h3>`;
+    return `<h3 style="color: var(--redir-primary); ${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin + document.location.pathname}/user/${handle}" title="Go to User Profile" class="userRedir">${handle}</a></h3>`;
   }
 }
 

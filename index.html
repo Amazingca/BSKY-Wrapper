@@ -14,8 +14,14 @@
     <header>
       <div style="display: flex; justify-content: center;">
       <flex style="width: 850px; justify-content: space-between;">
-        <a href="../../../" style="text-decoration: none;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
+        <a href="../../../" style="text-decoration: none; padding-right: 4rem;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
         <flex>
+          <div onclick="toggleColorMode('dark')" class="colorModeToggle" id="darkModeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="#222"><path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path></svg>
+          </div>
+          <div onclick="toggleColorMode('light')" class="colorModeToggle hidden" id="lightModeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="#ddd"><path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"></path></svg>
+          </div>
           <div onclick="toggleNav()" id="searcher">
            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
           </div>
@@ -59,7 +65,7 @@
                 </a>
               </div>
               <button onclick="newPostToggle();" style="margin-bottom: 1.25rem; display: none;" id="new-post">
-                <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="27" height="27"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"></path></svg>
+                <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="27" height="27"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z" fill="var(--background-primary)"></path></svg>
                 <div>New Post</div>
               </button>
               <h2 style="margin-top: 0px;">Rolodex</h2>
@@ -93,6 +99,7 @@
                 </div>
                 <button onclick="localStorage.removeItem('viewFeed'); window.location.href = '../../../login';" style="font-weight: 700 !important; font-size: 1rem; padding: 0.5rem;" class="rolo-click active" id="loginMobile">Login</button>
               </spacer>
+              <br><br><br><br><br><br><br>
               <div id="userInfoDesktop"></div>
             </menu>
           </rolodex>
@@ -181,7 +188,7 @@
           </div>
         </a>
         <button onclick="newPostToggle();" id="new-post-mobile">
-          <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z" fill="#ffffff"></path></svg>
         </button>
         <a onclick="addLocation(event);" id="navButtonProfileMobile" class="profileRedir">
           <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" width="24" height="24"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
@@ -209,12 +216,84 @@
       font-weight: 200 900;
       font-stretch: 75% 125%;
     }
+    body {
+      margin: 0px;
+      padding: 0px;
+
+      --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      --primary-accent-hover: linear-gradient(to bottom right, #22bbffAA, #5d94f8FF);
+      --primary-accent-active: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+
+      --font-primary: #222;
+      --font-secondary: #555;
+
+      --redir-primary: #555;
+      --redir-hover: #888;
+
+      --svg-primary: #222;
+
+      --header-primary: #f5f5f5;
+
+      --background-primary: #fff;
+      --background-invert: #000;
+
+      --info-primary: #333;
+
+      --secondary-button-active: #d9d9d9;
+      --disabled-button: #aaa;
+
+      --link-hover: #888;
+
+      --tertiary-button: #888;
+      --tertiary-button-hover: #999;
+      --tertiary-button-active: #aaa;
+
+      --blend-mode: multiply;
+
+      background-color: var(--background-primary);
+    }
+    body.darkMode {
+      --font-primary: #ddd;
+      --font-secondary: #fff;
+
+      --redir-primary: #ddd;
+      --redir-hover: #aaa;
+
+      --svg-primary: #ddd;
+
+      --header-primary: #1a1a1a;
+
+      --background-primary: #000;
+      --background-invert: #fff;
+
+      --info-primary: #c3c3c3;
+
+      --secondary-button-active: #2e2e2e;
+      --disabled-button: #555;
+
+      --link-hover: #888;
+
+      --tertiary-button: #888;
+      --tertiary-button-hover: #696969;
+      --tertiary-button-active: #484848;
+
+      --blend-mode: exclusion;
+    }
+    div {
+      color: var(--background-invert);
+    }
+    svg {
+      fill: var(--svg-primary);
+    }
     header {
-      background: #f5f5f5;
+      background: var(--header-primary);
       padding: 1rem;
       top: 0px;
       position: sticky;
       z-index: 3;
+
+      user-select: none;
+      -webkit-user-select: none;
     }
     #searcher {
       display: none;
@@ -251,11 +330,11 @@
     h1, h2 {
       font-size: 1.5em;
       font-weight: 900 !important;
-      color: #222;
+      color: var(--font-primary);
     }
     h3, #user-follows, .dotted-spacer {
       font-weight: 800 !important;
-      color: #222;
+      color: var(--font-primary);
       margin: 0px;
     }
     h4 {
@@ -263,14 +342,29 @@
     }
     h5 {
       font-weight: 700 !important;
-      color: #555;
+      color: var(--font-secondary);
       margin: 0px;
+    }
+    h3:has(a) {
+      color: var(--redir-primary);
+    }
+    .colorModeToggle {
+      display: flex;
+      align-items: center;
+      padding-right: 0.5rem;
+      transition: 0.1s cubic-bezier(.3,.09,.46,1.01) 0s;
+    }
+    .colorModeToggle:hover {
+      transform: scale(1.1);
+    }
+    .colorModeToggle:active {
+      transform: scale(0.95);
     }
     #userInfoDesktop {
       position: fixed;
       bottom: 0px;
       width: inherit;
-      background-color: white;
+      background-color: var(--background-primary);
 
       overflow-y: hidden;
       height: 8rem;
@@ -278,22 +372,22 @@
     #userInfoDesktop:hover {
       height: auto;
     }
-    .deskbutton-group {
+    /*.deskbutton-group {
       border-radius: 0.75rem;
       border: 2px solid #d9d9d9;
-    }
+    }*/
     .deskbutton {
       font-size: 1.1rem;
       font-weight: 600 !important;
       padding: 0.5rem;
       gap: 0.75rem;
-      background-color: white;
+      background-color: var(--background-primary);
       display: flex;
       align-items: center;
       cursor: pointer;
     }
     .deskbutton:hover {
-      background-color: #d9d9d9;
+      background-color: var(--secondary-button-active);
     }
     flex {
       display: flex;
@@ -301,7 +395,7 @@
       align-items: center;
     }
     brand, #submit-post {
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      background-image: var(--primary-accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -315,7 +409,7 @@
     .dotted-spacer {
       display: block;
       border-width: 0.3rem;
-      border-left-color: #222;
+      border-left-color: var(--font-primary);
       border-left-style: dashed;
       margin: 0.5rem;
       padding-top: 1rem;
@@ -324,7 +418,7 @@
     .lined-spacer {
       display: block;
       border-width: 0.3rem;
-      border-left-color: #222;
+      border-left-color: var(--font-primary);
       border-left-style: solid;
       margin: 0.5rem;
       padding: 1rem;
@@ -342,7 +436,7 @@
       grid-area: rolodex;
       width: 15rem;
       position: relative;
-      background-color: white;
+      background-color: var(--background-primary);
     }
     #loginMobile {
       display: none;
@@ -364,19 +458,21 @@
     .mention {
       font-weight: 600 !important;
       text-decoration: none;
-      color: #555;
+      color: var(--font-secondary);
     }
     .rolo-text {
       border-radius: 0.5rem;
       border-width: 0.1px;
-      border-color: #ffffff;
+      border-color: var(--background-primary);
+      background-color: var(--background-primary);
+      color: var(--font-primary);
       margin-top: 0.25rem;
       margin-bottom: 0.25rem;
       padding: 0.25rem;
     }
     .rolo-click {
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
-      -webkit-text-fill-color: white;
+      background-image: var(--primary-accent);
+      -webkit-text-fill-color: var(--background-primary);
       padding: 0.25rem;
       cursor: pointer;
       border-radius: 0.5rem;
@@ -384,16 +480,16 @@
       width: 100%;
     }
     .disabledFlag {
-      color: #aaa;
+      color: var(--disabled-button);
     }
     #loadButton {
       cursor: pointer;
     }
     .rolo-click:hover, #loadButton:hover, #new-post:hover, #submit-post:hover, .cover:hover {
-      background-image: linear-gradient(to bottom right, #22bbffAA, #5d94f8FF);
+      background-image: var(--primary-accent-hover);
     }
     .rolo-click:active, #loadButton:active, #new-post:active, #submit-post:active, .cover:active {
-      background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+      background-image: var(--primary-accent-active);
     }
     .back-button {
       text-decoration: none;
@@ -402,12 +498,12 @@
       position: sticky;
       top: 92.16px;
       z-index: 1;
-      background-color: white;
+      background-color: var(--background-primary);
     }
     .back-button:hover {
-      color: #888;
+      color: var(--tertiary-button);
       cursor: pointer;
-      fill: #888;
+      fill: var(--tertiary-button);
     }
     flex {
       display: flex;
@@ -427,25 +523,25 @@
     .rolo-container, .feed-container {
       overflow-wrap: anywhere;
       width: inherit;
-      background: #f5f5f5;
+      background: var(--header-primary);
       padding: 0.5rem;
       border-radius: 0.75rem;
       display: flex;
       flex-direction: column;
-      mix-blend-mode: multiply;
+      mix-blend-mode: var(--blend-mode);
     }
     .full-feed-container {
       overflow-wrap: anywhere;
       width: inherit;
-      background: #f5f5f5;
+      background: var(--header-primary);
       border-radius: 0.75rem;
       display: flex;
       flex-direction: column;
-      mix-blend-mode: multiply;
+      mix-blend-mode: var(--blend-mode);
     }
     reactors {
       display: grid;
-      background-color: #d9d9d9;
+      background-color: var(--secondary-button-active);
       padding: 0.5rem;
       gap: 1.5rem;
       grid-template-columns: auto auto auto auto;
@@ -467,21 +563,21 @@
       display: block;
       text-align: center;
       z-index: 1;
-      background-color: white;
+      background-color: var(--background-primary);
     }
     #new-post {
       display: flex;
       gap: 0.75rem;
       font-size: 1.1rem;
       font-weight: 600 !important;
-      -webkit-text-fill-color: white;
+      -webkit-text-fill-color: var(--background-primary);
       height: 2.5rem;
       width: -webkit-fill-available;
       z-index: 1;
       padding: calc(0.5rem + 2px);
       border-radius: 0.75rem;
       border-width: 0px;
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      background-image: var(--primary-accent);
       cursor: pointer;
       align-items: center;
     }
@@ -493,19 +589,19 @@
       justify-content: space-around;
       height: 64px;
       border-radius: 50%;
-      background-image: radial-gradient(circle, white 40%, #00000000 40%), conic-gradient(#0099ff var(--deg), #00000000 var(--deg));
+      background-image: radial-gradient(circle, white 40%, #00000000 40%), conic-gradient(var(--background-primary) var(--deg), #0099ff var(--deg));
     }
     .post-options {
       width: 64px;
       height: 1px;
-      background-color: #222;
+      background-color: var(--font-primary);
     }
     .default-user-photo {
       width: 50px;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
-      -webkit-text-fill-color: white;
+      background-image: var(--primary-accent);
+      -webkit-text-fill-color: var(--background-primary);
       font-size: 1.8rem;
       font-weight: 700 !important;
       display: flex;
@@ -523,18 +619,18 @@
       width: 4rem;
       border-radius: 50%;
       border-width: 0px;
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+      background-image: var(--primary-accent);
       cursor: pointer;
     }
     #cancel-post {
-      color: #888;
+      color: var(--tertiary-button);
       cursor: pointer;
     }
     #cancel-post:hover {
-      color: #999;
+      color: var(--tertiary-button-hover);
     }
     #cancel-post:active {
-      color: #aaa;
+      color: var(--tertiary-button-active);
     }
     #submit-post {
       cursor: pointer;
@@ -543,10 +639,10 @@
       grid-area: postbox;
       position: fixed;
       width: calc(850px - 16rem);
-      background-color: #f5f5f5;
+      background-color: var(--header-primary);
       overflow-wrap: anywhere;
       bottom: 0px;
-      border: 1px solid white;
+      border: 1px solid var(--background-primary);
       right: calc((100vw - 1rem - 849px)/2);
       z-index: 4;
       margin-top: 0.5rem;
@@ -560,7 +656,7 @@
       top: calc(100vh - 27em);
     }
     #post-text {
-      border-color: #00000000;
+      border-color: var(--background-invert);
       border-radius: 10px;
       height: 80vh;
       font-size: 24px;
@@ -575,7 +671,7 @@
       display: flex;
       gap: 1rem;
       position: fixed;
-      background: white;
+      background: var(--background-primary);
       left: 0px;
       right: 0px;
       bottom: 0px;
@@ -585,9 +681,9 @@
       align-items: center;
     }
     #notifCountDesktop {
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
-      -webkit-text-fill-color: white;
-      background-color: white;
+      background-image: var(--primary-accent);
+      -webkit-text-fill-color: var(--background-primary);
+      background-color: var(--background-primary);
       border-radius: 9px;
       text-align: center;
       font-size: 14px;
@@ -599,9 +695,9 @@
     }
     #notifCountMobile {
       position: absolute;
-      background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
-      -webkit-text-fill-color: white;
-      background-color: white;
+      background-image: var(--primary-accent);
+      -webkit-text-fill-color: var(--background-primary);
+      background-color: var(--background-primary);
       border-radius: 9px;
       margin-left: 15px;
       bottom: 45px;
@@ -625,26 +721,26 @@
       font-size: 1.25rem;
       padding: 0px;
       border-radius: 0.75rem;
-      background-color: white; 
-      border: 2px solid #d9d9d9;
+      background-color: var(--background-primary); 
+      border: 2px solid var(--secondary-button-active);
     }
     .user-options {
       width: -webkit-fit-available;
       height: 2px;
-      background-color: #d9d9d9;
+      background-color: var(--secondary-button-active);
     }
     .userInfoOptionsButton {
-      background-color: white;
+      background-color: var(--background-primary);
       border-width: 0px;
       cursor: pointer;
-      color: #222;
+      color: var(--font-primary);
       padding: 0.5rem;
       font-weight: 700 !important;
       font-size: 1.1rem;
       text-align: right;
     }
     .userInfoOptionsButton:hover {
-      background-color: #d9d9d9;
+      background-color: var(--secondary-button-active);
     }
     @keyframes spin {
       0% { transform: rotateZ(0deg); }
@@ -679,6 +775,12 @@
       }
       #userInfoDesktop {
         display: none;
+      }
+      .colorModeToggle {
+        position: fixed;
+
+        top: 21px;
+        right: 3rem;
       }
       #searcher {
         display: block;
@@ -721,7 +823,7 @@
         position: sticky;
         top: 0px;
         z-index: 1;
-        background-color: white;
+        background-color: var(--background-primary);
       }
       #new-post {
         display: none;
@@ -732,7 +834,7 @@
         z-index: 1;
         border-radius: 50%;
         border-width: 0px;
-        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        background-image: var(--primary-accent);
         cursor: pointer;
       }
       #loginMobile.active {
@@ -769,10 +871,6 @@
         top: 0px;
       }
     }
-    body {
-      margin: 0px;
-      padding: 0px;
-    }
     .hidden {
       display: none;
     }
@@ -786,12 +884,53 @@
       color: inherit;
     }
     a:hover {
-      color: #888;
+      color: var(--link-hover);
+    }
+    a.userRedir:hover {
+      color: var(--redir-hover);
     }
   </style>
   <script>
     var postObj = {};
     var file;
+
+    function toggleColorMode(mode) {
+
+      if (mode === null) {
+
+        if (localStorage.getItem("colorMode")) {
+
+          if (localStorage.getItem("colorMode") === "dark") {
+
+            document.getElementById("darkModeToggle").classList.add("hidden");
+            document.getElementById("lightModeToggle").classList.remove("hidden");
+
+            document.getElementsByTagName("body")[0].classList.add("darkMode");
+          }
+        }
+      } else {
+
+        if (mode === "dark") {
+
+          document.getElementById("darkModeToggle").classList.add("hidden");
+          document.getElementById("lightModeToggle").classList.remove("hidden");
+
+          document.getElementsByTagName("body")[0].classList.add("darkMode");
+
+          localStorage.setItem("colorMode", "dark");
+        } else if (mode === "light") {
+
+          document.getElementById("lightModeToggle").classList.add("hidden");
+          document.getElementById("darkModeToggle").classList.remove("hidden");
+
+          document.getElementsByTagName("body")[0].classList.remove("darkMode");
+
+          localStorage.setItem("colorMode", "light");
+        }
+      }
+    }
+
+    toggleColorMode(null);
       
     function toggleNav() {
       
