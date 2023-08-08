@@ -16,7 +16,10 @@
       <flex style="width: 850px; justify-content: space-between;">
         <a href="../../../" style="text-decoration: none; padding-right: 4rem;"><h1><brand>BlueSky</brand> Social Wrapper</h1></a>
         <flex>
-          <div onclick="toggleColorMode('dark')" class="colorModeToggle" id="darkModeToggle">
+          <div onclick="toggleColorMode('auto')" class="colorModeToggle" id="autoModeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"><path d="M15 2.75a.75.75 0 0 1-.75.75h-4a.75.75 0 0 1 0-1.5h4a.75.75 0 0 1 .75.75Zm-8.5.75v1.25a.75.75 0 0 0 1.5 0v-4a.75.75 0 0 0-1.5 0V2H1.75a.75.75 0 0 0 0 1.5H6.5Zm1.25 5.25a.75.75 0 0 0 0-1.5h-6a.75.75 0 0 0 0 1.5h6ZM15 8a.75.75 0 0 1-.75.75H11.5V10a.75.75 0 1 1-1.5 0V6a.75.75 0 0 1 1.5 0v1.25h2.75A.75.75 0 0 1 15 8Zm-9 5.25v-2a.75.75 0 0 0-1.5 0v1.25H1.75a.75.75 0 0 0 0 1.5H4.5v1.25a.75.75 0 0 0 1.5 0v-2Zm9 0a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1 0-1.5h6a.75.75 0 0 1 .75.75Z"></path></svg>
+          </div>
+          <div onclick="toggleColorMode('dark')" class="colorModeToggle hidden" id="darkModeToggle">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="#222"><path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path></svg>
           </div>
           <div onclick="toggleColorMode('light')" class="colorModeToggle hidden" id="lightModeToggle">
@@ -900,22 +903,73 @@
 
       if (mode === null) {
 
-        if (localStorage.getItem("colorMode")) {
+        if ((localStorage.getItem("colorMode")) && (localStorage.getItem("colorMode") != "auto")) {
 
-          if (localStorage.getItem("colorMode") === "dark") {
+          if (localStorage.getItem("colorMode") === "light") {
+
+            document.getElementById("autoModeToggle").classList.remove("hidden");
+            document.getElementById("darkModeToggle").classList.add("hidden");
+            document.getElementById("lightModeToggle").classList.add("hidden");
+
+            document.getElementsByTagName("body")[0].classList.remove("darkMode");
+          } else if (localStorage.getItem("colorMode") === "dark") {
+
+            document.getElementById("autoModeToggle").classList.remove("hidden");
+            document.getElementById("darkModeToggle").classList.add("hidden");
+            document.getElementById("lightModeToggle").classList.add("hidden");
+
+            document.getElementsByTagName("body")[0].classList.add("darkMode");
+          }
+        } else {
+
+          document.getElementById("autoModeToggle").classList.add("hidden");
+
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 
             document.getElementById("darkModeToggle").classList.add("hidden");
             document.getElementById("lightModeToggle").classList.remove("hidden");
 
             document.getElementsByTagName("body")[0].classList.add("darkMode");
+
+            localStorage.setItem("colorMode", "auto");
+          } else {
+
+            document.getElementById("lightModeToggle").classList.add("hidden");
+            document.getElementById("darkModeToggle").classList.remove("hidden");
+
+            document.getElementsByTagName("body")[0].classList.remove("darkMode");
+
+            localStorage.setItem("colorMode", "auto");
           }
         }
       } else {
 
-        if (mode === "dark") {
+        if (mode === "auto") {
+
+          document.getElementById("autoModeToggle").classList.add("hidden");
+
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+
+            document.getElementById("darkModeToggle").classList.add("hidden");
+            document.getElementById("lightModeToggle").classList.remove("hidden");
+
+            document.getElementsByTagName("body")[0].classList.add("darkMode");
+
+            localStorage.setItem("colorMode", "auto");
+          } else {
+
+            document.getElementById("lightModeToggle").classList.add("hidden");
+            document.getElementById("darkModeToggle").classList.remove("hidden");
+
+            document.getElementsByTagName("body")[0].classList.remove("darkMode");
+
+            localStorage.setItem("colorMode", "auto");
+          }
+        } else if (mode === "dark") {
 
           document.getElementById("darkModeToggle").classList.add("hidden");
-          document.getElementById("lightModeToggle").classList.remove("hidden");
+          document.getElementById("lightModeToggle").classList.add("hidden");
+          document.getElementById("autoModeToggle").classList.remove("hidden");
 
           document.getElementsByTagName("body")[0].classList.add("darkMode");
 
@@ -923,7 +977,8 @@
         } else if (mode === "light") {
 
           document.getElementById("lightModeToggle").classList.add("hidden");
-          document.getElementById("darkModeToggle").classList.remove("hidden");
+          document.getElementById("darkModeToggle").classList.add("hidden");
+          document.getElementById("autoModeToggle").classList.remove("hidden");
 
           document.getElementsByTagName("body")[0].classList.remove("darkMode");
 
