@@ -32,6 +32,33 @@ if ((((localStorage.getItem("accessJwt") != null) && (localStorage.getItem("refr
   }
 }
 
+export function colorway() {
+
+  var color;
+
+  if (localStorage.getItem("colorMode")) {
+
+    if (localStorage.getItem("colorMode") === "auto") {
+
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+
+        color = "dark";
+      } else {
+
+        color = "light";
+      }
+    } else {
+
+      color = localStorage.getItem("colorMode");
+    }
+  }
+
+  if (color === "dark") {
+
+    document.getElementsByTagName("body")[0].classList.add("darkMode");
+  }
+}
+
 var loginProps = document.getElementById("changeToLogin").getBoundingClientRect();
 const selected = document.getElementById("selected");
 
