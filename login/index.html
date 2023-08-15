@@ -14,23 +14,25 @@
     <wrapper>
       <br>
       <titling>
-        <h1><svg height="45px" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024" width="45px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <defs>
-          <linearGradient gradientTransform="matrix(1 0 0 1 8 -40)" gradientUnits="userSpaceOnUse" id="LinearGradient" x1="163.556" x2="832" y1="448" y2="448">
-          <stop offset="0" stop-color="#0099ff" stop-opacity="0.62855"/>
-          <stop offset="0.998975" stop-color="#3b82f6"/>
-          </linearGradient>
-          </defs>
-          <path d="M0 0L1024 0L1024 1024L0 1024L0 0Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
-          <g id="Layer-1" vectornator:layerName="Layer 1">
-          <g opacity="1" vectornator:layerName="Group 1">
-          <path d="M392 152C424 120 488 120 520 152C617.324 249.324 840 472 840 472C808 440 744 440 712 472C646.03 537.97 520 664 520 664C488 696 424 696 392 664C326.03 598.03 200 472 200 472C168 440 168 376 200 344C265.97 278.03 392 152 392 152Z" fill="url(#LinearGradient)" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Curve 1"/>
-          </g>
-          </g>
-          <g id="Layer-2" vectornator:layerName="Layer 2">
-          <path d="M584 856C552 888 488 888 456 856C390.03 790.03 264 664 264 664C232 632 232 568 264 536L392 664C424 696 488 696 520 664C585.97 598.03 712 472 712 472C744 440 808 440 840 472C872 504 872 568 840 600C758.416 681.584 584 856 584 856Z" fill="#222222" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Curve 2"/>
-          </g>
-          </svg><brand>Bluesky</brand> Social Wrapper</h1>
+        <h1>
+          <svg height="36px" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024" width="36px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <linearGradient gradientTransform="matrix(1.3617 0 0 1.3617 -185.191 -228.766)" gradientUnits="userSpaceOnUse" id="LinearGradient" x1="163.556" x2="832" y1="448" y2="448">
+                <stop offset="0" stop-color="#0099ff" stop-opacity="0.62855"/>
+                <stop offset="0.998975" stop-color="#3b82f6"/>
+              </linearGradient>
+            </defs>
+            <g id="Main-Object">
+              <g opacity="1">
+                <path d="M337.702 32.6808C381.277-10.8936 468.426-10.8936 512 32.6808C644.526 165.207 947.744 468.425 947.744 468.425C904.17 424.851 817.021 424.851 773.447 468.425C683.616 558.256 512 729.872 512 729.872C468.426 773.446 381.277 773.446 337.702 729.872C247.871 640.041 76.2558 468.425 76.2558 468.425C32.6814 424.851 32.6814 337.702 76.2558 294.127C166.087 204.296 337.702 32.6808 337.702 32.6808Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
+              </g>
+              <g opacity="1">
+                <path d="M337.702 32.6808C381.277-10.8936 468.426-10.8936 512 32.6808C644.526 165.207 947.744 468.425 947.744 468.425C904.17 424.851 817.021 424.851 773.447 468.425C683.616 558.256 512 729.872 512 729.872C468.426 773.446 381.277 773.446 337.702 729.872C247.871 640.041 76.2558 468.425 76.2558 468.425C32.6814 424.851 32.6814 337.702 76.2558 294.127C166.087 204.296 337.702 32.6808 337.702 32.6808Z" fill="url(#LinearGradient)" fill-rule="nonzero" opacity="1" stroke="none"/>
+              </g>
+              <path d="M599.149 991.318C555.574 1034.89 468.426 1034.89 424.851 991.318C335.02 901.487 163.405 729.872 163.405 729.872C119.83 686.297 119.83 599.148 163.405 555.574L337.702 729.872C381.277 773.446 468.426 773.446 512 729.872C601.831 640.041 773.447 468.425 773.447 468.425C817.021 424.851 904.17 424.851 947.744 468.425C991.319 511.999 991.319 599.148 947.744 642.723C836.651 753.816 599.149 991.318 599.149 991.318Z" fill="#222222" fill-rule="nonzero" opacity="1" stroke="none"/>
+            </g>
+          </svg>
+          <brand>Bluesky</brand> Social Wrapper</h1>
         <spacer>
           <chooser>
             <h4 style="grid-area: login;" class="typeChoose" id="changeToLogin">Login</h4>
@@ -96,6 +98,42 @@
         font-weight: 200 900;
         font-stretch: 75% 125%;
       }
+      body {
+
+        --main-gradient: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        --main-gradient-active: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+        
+        --input-primary: #0099ffAA;
+        --input-primary-active: #3b82f6FF;
+
+        --primary-font: #222;
+        --secondary-font: #888;
+
+        --hover-primary: #666;
+
+        --background-primary: white;
+
+        background-color: var(--background-primary);
+      }
+      body.darkMode {
+
+        --main-gradient: linear-gradient(to bottom right, #0099ffFF, #3b82f6FF);
+        --main-gradient-active: linear-gradient(to bottom right, #33ccffFF, #6ea5f9FF);
+
+        --input-primary: #0099ffFF;
+        --input-primary-active: #3b82f699;
+
+        --primary-font: #ddd;
+        --secondary-font: #fff;
+
+        --hover-primary: #999;
+
+        --background-primary: black;
+
+        & svg > g > path {
+          fill: #ddd;
+        }
+      }
       h1, h3, h4, .button {
         font-family: "Mona Sans";
       }
@@ -105,12 +143,12 @@
       h1 {
         font-size: 3em;
         font-weight: 900 !important;
-        color: #222;
+        color: var(--primary-font);
       }
       h3 {
         font-size: 2em;
         font-weight: 700 !important;
-        color: #888;
+        color: var(--secondary-font);
       }
       h3 img {
         width: 17px;
@@ -121,16 +159,16 @@
       h4 {
         font-size: 1.25em;
         font-weight: 800 !important;
-        color: #222;
+        color: var(--primary-font);
       }
       h5 {
         font-size: 1.25em;
         font-weight: 700 !important;
-        color: #222;
+        color: var(--primary-font);
       }
       p {
         font-weight: 700 !important;
-        color: #222;
+        color: var(--primary-font);
       }
       wrapper {
         display: flex;
@@ -143,7 +181,7 @@
         width: 50vw;
       }
       brand {
-        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        background-image: var(--main-gradient);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -173,14 +211,14 @@
         cursor: pointer;
       }
       .typeChoose:hover {
-        color: #666;
+        color: var(--hover-primary);
       }
       #selected {
         position: absolute;
         margin-bottom: 26.6px;
         padding-top: 0px;
-        background-color: white;
-        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        background-color: var(--background-primary);
+        background-image: var(--main-gradient);
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         transition: padding-top 0.1s ease-out 0s;
@@ -192,9 +230,9 @@
         font-size: 1rem;
         padding: 0.5rem;
         width: 250px;
-        border-color: #0099ffAA;
+        border-color: var(--input-primary);
         border-width: 4px;
-        border-bottom-color: #222;
+        border-bottom-color: var(--primary-font);
         border-bottom-width: 6px;
         border-style: solid;
         border-image-slice: 1;
@@ -203,8 +241,8 @@
         transition: border-color 0.75s cubic-bezier(0.13,0.82,0.47,0.98) 0s;
       }
       input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="username"]:focus {
-        border-color: #3b82f6FF;
-        border-bottom-color: #222;
+        border-color: var(--input-primary-active);
+        border-bottom-color: var(--primary-font);
       }
       mask {
         width: 274px;
@@ -221,8 +259,8 @@
       }
       .button {
         border-radius: 6px;
-        background-color: white;
-        background-image: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+        background-color: var(--background-primary);
+        background-image: var(--main-gradient);
         padding: 1rem;
         transition-duration: 0.25s;
         
@@ -240,14 +278,14 @@
         border-radius: 6px;
       }
       .button:active, #loginButton.trigger {
-        background-image: linear-gradient(to bottom right, #33ccffAA, #6ea5f9FF);
+        background-image: var(--main-gradient-active);
       }
       .buttonfloater {
         z-index: -1;
         transform: translateY(-22px);
         border-radius: 6px;
         position: sticky;
-        background-color: #222;
+        background-color: var(--primary-font);
         padding: 1rem;
         width: auto;
         --webkit-user-select: none;
@@ -320,5 +358,10 @@
         transform: translateY(0px);
       }
     </style>
+    <script type="module">
+      import { colorway } from "../../../login.js";
+
+      colorway();
+    </script>
   </body>
 </html>
