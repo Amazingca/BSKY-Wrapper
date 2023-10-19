@@ -301,7 +301,7 @@ export function isExplicit(labels) {
 
       for (var flag of labels) {
         console.log(labels)
-        if ((flag.val === "sexual") || (flag.val === "porn")) {
+        if ((flag.val === "sexual") || (flag.val === "porn") || (flag.val === "nudity")) {
   
           isExplicit = true;
         }
