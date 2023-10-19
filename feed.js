@@ -74,7 +74,7 @@ async function userFeed() {
   }
 }
 
-function artificialFeed() {
+async function artificialFeed() {
   
   var feedStruct = "";
 
@@ -103,6 +103,25 @@ function artificialFeed() {
         if (record.$type === "app.bsky.feed.post") {
 
           record.uri = "at://" + body.repo + "/" + body.ops[0].path;
+
+          if (record.embed) {
+
+            if (record.embed.$type === "app.bsky.embed.images") {
+
+              var item = record.embed.images[0].image.ref.value.buffer;
+
+              for (var i = 0; i < record.embed.images.length; i++) {
+
+                console.log(record, record.embed.images[i].image.ref.value)
+                record.embed.images[i].image.ref.value = await decode(record.embed.images[i].image.ref.value)
+              }
+            }
+          }
+
+          //var imgcid = decode(record.embeds.images[0].image.ref.$link);
+
+          if (item) console.log(item)
+
           const postStruct = await postDefault(body.repo, record, "feed");
 
           feedStruct = postStruct + feedStruct;

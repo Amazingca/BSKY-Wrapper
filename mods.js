@@ -1,4 +1,4 @@
-import { getUserRepo, listRecords } from "../../../api.js";
+import { cdnRoute, getUserRepo, listRecords } from "../../../api.js";
 import { postDefault } from "../../../struct/default.js";
 import { postFull } from "../../../struct/full.js";
 
@@ -7,7 +7,7 @@ export async function embeds(obj) {
 
   switch (obj["$type"]) {
     case "app.bsky.embed.images":
-      var amount = obj.images.length;
+      /*var amount = obj.images.length;
 
       if (amount === 1) {
         return (
@@ -28,7 +28,108 @@ export async function embeds(obj) {
         }
 
         return newElement + `Attached: ${amount} images</h3>`;
+      }*/
+
+      var imageEmbed = "<div style='display: grid; gap: 0.5rem; width: inherit;'>";
+
+      var divisor = 1;
+      if (obj.images.length > 1) {
+        divisor = 2;
       }
+
+      for (var i = 0; i < obj.images.length; i++) {
+
+        if (obj.images[i].image.ref.$link == undefined) {
+
+          console.log(obj);
+          return "";
+        }
+
+        obj.images[i].thumb = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + obj.images[i].image.ref.$link + "@jpeg";
+        obj.images[i].fullsize = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + obj.images[i].image.ref.$link + "@jpeg";
+        
+        if (obj.images[i].image.ref.$link == undefined) console.log(obj);
+        console.log(obj.images[i].image.ref.$link)
+
+        var row;
+        var rowend;
+        var column;
+        var columnend;
+        var width;
+        
+        if (i === 0) {
+          
+          row = 1;
+          column = 1;
+          
+          if (obj.images.length === 3) {
+             
+            
+            row = 1;
+            rowend = 3;
+            column = 1;
+            columnend = 3;
+          }
+        } else if (i === 1) {
+          row = 1;
+          column = 2;
+          
+          if (obj.images.length === 3) {
+
+            row = 2;
+            rowend = 1;
+            column = 3;
+            columnend = 3;
+          }
+        } else if (i === 2) {
+          row = 2;
+          column = 1;
+          
+          if (obj.images.length === 3) {
+
+            row = 2;
+            rowend = 2;
+            column = 3;
+            columnend = 3;
+          }
+        } else if (i === 3) {
+          row = 2;
+          column = 2;
+        }
+
+        var index;
+        var crops = "object-fit: cover; width: 100%; height: 100%;";
+        if (obj.images.length === 1) {
+          index = "object-fit: contain; grid-column-start: 1; grid-column-end: 2; grid-row-start: 1; grid-row-end: 2;";
+        } else if (obj.images.length === 2) {
+          index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${column}; grid-row-start: 1; grid-row-end: 2;`;
+          crops = "object-fit: cover; width: 100%; height: 100%;";
+        } else if (obj.images.length === 3) {
+          index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${columnend}; grid-row-start: ${row}; grid-row-end: ${rowend};`;
+          crops = "object-fit: cover; width: 100%; height: 100%;";
+        } else if (obj.images.length === 4) {
+          index = `aspect-ratio: 1/1; object-fit: cover; grid-column-start: ${column}; grid-column-end: ${column}; grid-row-start: ${row}; grid-row-end: ${row};`;
+          crops = "object-fit: cover; width: 100%; height: 100%;";
+        } else {
+          return "<div>More than 4 images</div>";
+        }
+
+        var blurs = "";
+        var clickFunc = `window.open('${obj.images[i].fullsize}')`;
+
+        if (obj.explicit === true) {
+
+          blurs = "filter: blur(8px);";
+          clickFunc = `this.style.filter = 'none'; this.onclick = function() { window.open('${obj.images[i].fullsize}'); }`;
+        }
+
+        imageEmbed =
+          imageEmbed +
+          `<div style="overflow: hidden; justify-content: center; border-radius: 7px; ${index}"><img onclick="${clickFunc}" src="${obj.images[i].thumb}" title="${obj.images[i].alt}" style="cursor: pointer; transition: 0.1s cubic-bezier(.3,.09,.46,1.01) 0s; ${crops} ${blurs}"></div>`;
+      }
+
+      return imageEmbed + "</div>";
+      break;
     case "app.bsky.embed.images#view":
       var imageEmbed =
         "<div style='display: grid; gap: 0.5rem; width: inherit;'>";

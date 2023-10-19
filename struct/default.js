@@ -155,6 +155,8 @@ export async function postDefault(userId, post, type) {
     }
     
     if (postObj.value.embed != undefined) {
+
+      postObj.value.embed.repoDid = userObj.did;
       
       if (postObj.value.text != "") {
         
