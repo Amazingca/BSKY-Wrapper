@@ -1,3 +1,5 @@
+export const cdnRoute = "https://av-cdn.bsky.app";
+
 export async function getPost(userId, postId) {
   
   try {

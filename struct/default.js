@@ -1,5 +1,5 @@
 import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
-import { labelHandle, labelUsername } from "../../../../labels.js";
+import { labelHandle, labelUsername, isExplicit } from "../../../../labels.js";
 import { embeds } from "../../../../mods.js";
 
 export async function postDefault(userId, post, type) {
@@ -9,6 +9,11 @@ export async function postDefault(userId, post, type) {
   
   var postObj;
   var isObj = false;
+
+  if ((userProfileObj === null) || (userObj === null)) {
+
+    return "";
+  }
   
   if (typeof post === 'object' && post.constructor === Object) {
     
@@ -75,14 +80,26 @@ export async function postDefault(userId, post, type) {
     
     var usernameElement;
     var handleElement;
+
+    var labels = null;
+
+    if (postObj.labels) {
+    
+      if (postObj.labels.values.length != 0) {
+
+        labels = postObj.labels;
+      }
+    }
+
+    const explicit = isExplicit(labels);
     
     if ((userProfileObj === null) || (userProfileObj[0].value.displayName === "") || (userProfileObj[0].value.displayName === undefined)) {
       
       usernameElement = "";
-      handleElement = labelHandle(userId, textSize, userObj.handle);
+      handleElement = labelHandle(userId, textSize, userObj.handle, labels);
     } else {
       
-      usernameElement = labelUsername(userId, textSize, userProfileObj[0].value.displayName);
+      usernameElement = labelUsername(userId, textSize, userProfileObj[0].value.displayName, labels);
       handleElement = `<h3 style="${textSize}">@<a onclick="addLocation(event);" href="${document.location.origin}/user/${userObj.handle}" title="Go to User Profile" class="userRedir">${userObj.handle}</a></h3>`;
     }
     
@@ -155,6 +172,10 @@ export async function postDefault(userId, post, type) {
     }
     
     if (postObj.value.embed != undefined) {
+
+      postObj.value.embed.explicit = explicit;
+
+      postObj.value.embed.repoDid = userObj.did;
       
       if (postObj.value.text != "") {
         

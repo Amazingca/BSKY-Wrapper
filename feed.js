@@ -5,6 +5,7 @@ import { activateListeners } from "./listeners.js";
 
 import { CarReader } from 'https://cdn.jsdelivr.net/npm/@ipld/car@5.1.1/+esm';
 import { decode, decodeMultiple } from 'https://cdn.jsdelivr.net/npm/cbor-x@1.5.1/+esm';
+import { CID } from 'https://cdn.jsdelivr.net/npm/multiformats@11.0.1/+esm'
 
 export var hasStoppedBuilding = true;
 export var stoppedBuilding = false;
@@ -74,7 +75,7 @@ async function userFeed() {
   }
 }
 
-function artificialFeed() {
+async function artificialFeed() {
   
   var feedStruct = "";
 
@@ -93,16 +94,31 @@ function artificialFeed() {
       const messageBuf = await event.data.arrayBuffer();
 
       const [header, body] = decodeMultiple(new Uint8Array(messageBuf))
-      if (header.op !== 1) return
+      if (header.op !== 1) return;
       const car = await CarReader.fromBytes(body.blocks);
 
       for (var block of car._blocks) {
         
-        const record = decode(block.bytes)
+        const record = decode(block.bytes);
 
         if (record.$type === "app.bsky.feed.post") {
 
           record.uri = "at://" + body.repo + "/" + body.ops[0].path;
+
+          if (record.embed) {
+
+            if (record.embed.$type === "app.bsky.embed.images") {
+
+              for (var i = 0; i < record.embed.images.length; i++) {
+
+                var decodedCid = CID.decode(record.embed.images[i].image.ref.value.subarray(1))
+                record.embed.images[i].image.ref.value = decodedCid.toString();
+
+                //console.log("https://av-cdn.bsky.app/img/feed_fullsize/plain/" + body.repo + "/" + decodedCid.toString() + "@jpeg");
+              }
+            }
+          }
+
           const postStruct = await postDefault(body.repo, record, "feed");
 
           feedStruct = postStruct + feedStruct;

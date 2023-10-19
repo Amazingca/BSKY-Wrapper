@@ -260,26 +260,31 @@ export function labelStruct(did, sourceLabels) {
 }
 
 export function isExplicit(labels) {
-
-  if (localStorage.getItem("labels") === null) {
-    
-    return "";
-  }
   
   const flagSaveData = JSON.parse(localStorage.getItem("labels"));
   
-  if (Object.keys(flagSaveData).length === 0) {
-    
-    return "";
-  }
+  var enabledFlags = ["LabeledAccounts"];
   
-  var enabledFlags = [];
-  
-  for (var i = 0; i < Object.keys(flagSaveData).length; i++) {
-    
-    if (flagSaveData[Object.keys(flagSaveData)[i]] === "true") {
+  if (flagSaveData) {
+
+    for (var i = 0; i < Object.keys(flagSaveData).length; i++) {
       
-      enabledFlags.push(Object.keys(flagSaveData)[i]);
+      if (flagSaveData[Object.keys(flagSaveData)[i]] === "true") {
+
+        var insideAlready = false;
+        for (var o = 0; i < enabledFlags.length; o++) {
+
+          if (Object.keys(flagSaveData)[i] === enabledFlags[o]) {
+
+            insideAlready = true;
+          }
+        }
+
+        if (insideAlready === false) {
+
+          enabledFlags.push(Object.keys(flagSaveData)[i]);
+        }
+      }
     }
   }
   
