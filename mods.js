@@ -37,19 +37,20 @@ export async function embeds(obj) {
         divisor = 2;
       }
 
+      //console.log("Building image objects for embeds: ", obj)
+
       for (var i = 0; i < obj.images.length; i++) {
 
-        if (obj.images[i].image.ref.$link == undefined) {
+        if ((obj.images[i].image.ref.$link == undefined) && (obj.images[i].image.ref.value == undefined)) {
 
-          console.log(obj);
+          console.log("No image in image embed obj!", obj);
           return "";
         }
 
-        obj.images[i].thumb = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + obj.images[i].image.ref.$link + "@jpeg";
-        obj.images[i].fullsize = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + obj.images[i].image.ref.$link + "@jpeg";
-        
-        if (obj.images[i].image.ref.$link == undefined) console.log(obj);
-        console.log(obj.images[i].image.ref.$link)
+        const imgCid = (obj.images[i].image.ref.$link != undefined) ? obj.images[i].image.ref.$link : obj.images[i].image.ref.value;
+
+        obj.images[i].thumb = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + imgCid + "@jpeg";
+        obj.images[i].fullsize = cdnRoute + "/img/feed_fullsize/plain/" + obj.repoDid + "/" + imgCid + "@jpeg";
 
         var row;
         var rowend;
