@@ -9,6 +9,8 @@
     <link rel="manifest" href="../../../manifest.json">
     <script type="module"src="../../../location.js"></script>
     <script type="module" src="../../../labels.js"></script>
+    <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
   </head>
   <body>
     <header>
@@ -714,13 +716,16 @@
       user-select: none;
       -webkit-user-select: none;
     }
+    #profileInfoModal.tempTransition {
+      transition: 0.10s cubic-bezier(.8,.2,.8,.2) 0s;
+    }
     #profileInfoModal {
       display: none;
-      transition: 0.1s cubic-bezier(.4,1.53,.81,1.24) 0s;
+      transition: 0.20s cubic-bezier(0,1,0,1) 0s;
       position: fixed;
-      bottom: 5rem;
-      right: 0rem;
-      z-index: 3;
+      bottom: -12rem; /*5rem*/
+      right: 0rem; /*-13rem*/
+      z-index: 1;
       font-weight: 700 !important;
       text-align: end;
       font-size: 1.25rem;
