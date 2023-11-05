@@ -4,11 +4,13 @@
   <head>
     <title>BlueSky Wrapper</title>
     <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1">
-    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-favicon?v=1679367426997">
+    <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827">
     <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/blue-app-favicon?v=1679196074840">
     <meta name="theme-color" content="#ffffff">
     <script type="module" src="../login.js"></script>
     <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   </head>
   <body>
     <wrapper>
@@ -32,11 +34,11 @@
               <path d="M599.149 991.318C555.574 1034.89 468.426 1034.89 424.851 991.318C335.02 901.487 163.405 729.872 163.405 729.872C119.83 686.297 119.83 599.148 163.405 555.574L337.702 729.872C381.277 773.446 468.426 773.446 512 729.872C601.831 640.041 773.447 468.425 773.447 468.425C817.021 424.851 904.17 424.851 947.744 468.425C991.319 511.999 991.319 599.148 947.744 642.723C836.651 753.816 599.149 991.318 599.149 991.318Z" fill="#222222" fill-rule="nonzero" opacity="1" stroke="none"/>
             </g>
           </svg>
-          <brand>Bluesky</brand> Social Wrapper</h1>
+          <brand>BlueSky</brand> Social Wrapper</h1>
         <spacer>
           <chooser>
             <h4 style="grid-area: login;" class="typeChoose" id="changeToLogin">Login</h4>
-            <div style="grid-area: split; border:0.5px solid black; height: 1.5em;"></div>
+            <div style="grid-area: split; border:0.5px solid var(--primary-font); height: 1.5em;"></div>
             <h4 style="grid-area: signup;" class="typeChoose" id="changeToSignup">Signup</h4>
             <div id="selected"></div>
           </chooser>
@@ -73,14 +75,10 @@
             <div class="buttonfloater"></div>
           </div>
         </brow>
-        <footer>
-          <a href="https://glitch.com" target="_blank">
-             <img src="https://cdn.glitch.global/c7535eed-09c9-422b-a9c9-01a0232a2d4c/favicon">
-          </a>
-        </footer>
       </titling>
       <br>
     </wrapper>
+    <img src="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/WrapperPattern.png?v=1699154679251" id="backer">
     <style>
       @font-face {
         font-family: 'Mona Sans';
@@ -112,6 +110,7 @@
         --hover-primary: #666;
 
         --background-primary: white;
+        --background-pattern-opacity: 0.25;
 
         background-color: var(--background-primary);
       }
@@ -129,6 +128,7 @@
         --hover-primary: #999;
 
         --background-primary: black;
+        --background-pattern-opacity: 0.5;
 
         & svg > g > path {
           fill: #ddd;
@@ -169,6 +169,15 @@
       p {
         font-weight: 700 !important;
         color: var(--primary-font);
+      }
+      #backer {
+        position: fixed;
+        top: 0px;
+        z-index: -1;
+        width: 100vw;
+        opacity: var(--background-pattern-opacity);
+        height: 100%;
+        object-fit: cover;
       }
       wrapper {
         display: flex;
@@ -357,11 +366,31 @@
         background-image: linear-gradient(to bottom right, #707070b0, #666666);
         transform: translateY(0px);
       }
+      body {
+        margin: 0px;
+      }
     </style>
     <script type="module">
       import { colorway } from "../../../login.js";
 
       colorway();
+
+      var windowHeight = window.outerHeight;
+      var windowWidth = window.innerWidth;
+
+      window.onresize = function() {
+
+        if ((windowHeight != window.outerHeight) || (windowWidth != window.innerWidth)) {
+
+          windowHeight = window.outerHeight;
+          windowWidth = window.innerWidth;
+        
+          var loginProps = document.getElementById("changeToLogin").getBoundingClientRect();
+          const selected = document.getElementById("selected");
+
+          selected.style.top = `calc(${loginProps.bottom}px + 0.4rem)`;
+        }
+      };
     </script>
   </body>
 </html>

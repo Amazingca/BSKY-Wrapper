@@ -51,6 +51,10 @@ export function colorway() {
 
       color = localStorage.getItem("colorMode");
     }
+  } else {
+
+    localStorage.setItem("colorMode", "auto");
+    colorway();
   }
 
   if (color === "dark") {
@@ -59,10 +63,14 @@ export function colorway() {
   }
 }
 
-var loginProps = document.getElementById("changeToLogin").getBoundingClientRect();
-const selected = document.getElementById("selected");
+setTimeout(function() {
 
-selected.style.top = `calc(${loginProps.bottom}px + 0.4rem)`;
+  var loginProps = document.getElementById("changeToLogin").getBoundingClientRect();
+  const selected = document.getElementById("selected");
+
+  selected.style.top = `calc(${loginProps.bottom}px + 0.4rem)`;
+}, 100);
+
 
 function changeLoginSelection() {
 
