@@ -249,6 +249,29 @@ export async function getUserInfo() {
   }
 }
 
+export async function isHidden(userId) {
+
+  const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
+
+  try {
+
+    if (userProfileObj[0].value.labels.values) {
+
+      for (var item of userProfileObj[0].value.labels.values) {
+
+        if (item.val == "!no-unauthenticated") {
+
+          return true;
+        }
+      }
+    }
+
+  } catch (e) {
+
+    return false;
+  }
+}
+
 export async function getToken() {
         
   var refreshToken = localStorage.getItem("refreshJwt");

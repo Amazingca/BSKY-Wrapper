@@ -1,7 +1,7 @@
 import { hasStoppedBuilding, stoppedBuilding, editExternalVars, modifyFlow } from "../../../feed.js";
 import { nameResolver } from "../../../mods.js";
 import { loadFirstReplies } from "../../../replies.js";
-import { getPost, getUserRepo, listRecords, getSession, getUserNotifCount } from "../../../api.js";
+import { getPost, getUserRepo, listRecords, getSession, getUserNotifCount, isHidden } from "../../../api.js";
 import { postDefault, user, userLight } from "../../../struct/default.js";
 import { userInfoModalBuild, postModalBuild } from "../../../struct/full.js";
 import { activateListeners } from "./listeners.js";
@@ -250,6 +250,15 @@ async function getUser(userId) {
         const userObj = await getUserRepo(userId);
         
         userId = userObj.did;
+
+        if (localStorage.getItem("accessJwt") == null) {
+
+            if (await isHidden(userId)) {
+
+                document.getElementById("userStruct").innerHTML = "<div class='feed-container'><h4>This user has opted into a no-visibility rule, so their profile will not be displayed.</h4></div>";
+                return;
+            }
+        }
         
         var hasPosts = false;
 
@@ -296,8 +305,19 @@ async function getUserFollows(userId) {
     try {
         
         const userObj = await getUserRepo(userId);
+
+        console.log("case case", userObj);
         
         userId = userObj.did;
+
+        if (localStorage.getItem("accessJwt") == null) {
+
+            if (await isHidden(userId)) {
+
+                document.getElementById("userStruct").innerHTML = "<div class='feed-container'><h4>This user has opted into a no-visibility rule, so their profile will not be displayed.</h4></div>";
+                return;
+            }
+        }
         
         var hasFollows = false;
 

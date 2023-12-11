@@ -1,10 +1,25 @@
-import { getPost, getUserRepo, listRecords, getUserInfo } from "../../../../api.js";
+import { getPost, getUserRepo, listRecords, getUserInfo, isHidden } from "../../../../api.js";
 import { labelHandle, labelUsername, isExplicit } from "../../../../labels.js";
 import { embeds } from "../../../../mods.js";
 
 export async function postDefault(userId, post, type) {
   
   const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
+
+  try {
+
+    if (localStorage.getItem("accessJwt") == null) {
+
+      if (await isHidden(userId)) {
+
+        return "<div><div class='feed-container'><h4>This user has opted into a no-visibility rule, so their profile will not be displayed.</h4></div></div>";
+      }
+    }
+  } catch (e) {
+
+    //console.log("User does not have preventive loading flags.");
+  }
+
   const userObj = await getUserRepo(userId);
   
   var postObj;
@@ -212,6 +227,7 @@ export async function postDefault(userId, post, type) {
 }
 
 export async function user(userId) {
+
   
   const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
   const userFollows = await listRecords(userId, "app.bsky.graph.follow");
@@ -273,6 +289,8 @@ export async function user(userId) {
 }
 
 export async function userLight(userId) {
+
+  if (await isHidden(userId)) return "";
   
   const userProfileObj = await listRecords(userId, "app.bsky.actor.profile");
   const userObj = await getUserRepo(userId);
