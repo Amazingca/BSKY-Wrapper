@@ -13,3 +13,5 @@ Both `stable` and `staging` builds are hosted online and therefore eligible for 
 
 Due to the current authentication method for the ATP, it is considered critical that these vulnerabilities be reported privately to ensure the safety of potential visitors.
 Please email Amazingca directly at [contact@amazingca.dev](mailto:contact@amazingca.dev) to report security and vulnerability issues.
+
+If these vulnerabilities regard the networking technology itself, please report it to Bluesky.
