@@ -1,4 +1,6 @@
-class Api {
+import Post from "./Post.mjs"
+
+export default class Api {
 
     // How many seconds have passed once a generated accessJwt expires.
     tokenRefresh = 7200;
@@ -8,6 +10,9 @@ class Api {
 
     // Public Bluesky API node.
     publicBlueskyApi = "https://public.api.bsky.app";
+
+    // Supported embed inheritance of app.bsky.embed.*
+    static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.external"];
 
     /**
      * Creates an Api object responsible for communicating with the PDS. One can create an Api object with or without authorization.
@@ -189,6 +194,24 @@ class Api {
     }
 
     /**
+     * Setter to set default feed when calling @function getFeed
+     * @param {string} defaultFeedUri The new default feed URI.
+     */
+    setDefaultFeed = (defaultFeedUri) => {
+
+        this.defaultFeedUri = defaultFeedUri;
+    }
+
+    /**
+     * Getter for default feed URI.
+     * @returns Default feed URI.
+     */
+    getDefaultFeed = () => {
+
+        return this.defaultFeedUri;
+    }
+
+    /**
      * Getter for returning the designated data server initalized by the constructor.
      * @returns The object's PDS url.
      */
@@ -362,21 +385,51 @@ class Api {
             return null;
         }
     }
+
+    /**
+     * Creates a new record from an authorized user on the specified PDS.
+     * @param {object} recordObject Mostly complete app.bsky.feed.post data, or Post object.
+     * @returns Confirmation URI / CID data, null if record creation was not successful.
+     */
+    newRecord = async (recordObject) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+
+            // Dev note for future: Use OR conditionals for other types, if they are used.
+            if (recordObject instanceof Post) {
+
+                const postJson = recordObject.toJson();
+
+                if (postJson.success == true) {
+
+                    recordObject = postJson.data;
+                } else {
+
+                    throw new Error("Could not obtain valid post JSON from provided instance of Post!");
+                }
+            }
+
+            recordObject.repo = this.authorization.handle;
+            recordObject.record.createdAt = new Date().toISOString();
+
+            const requestData = {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(recordObject)
+            };
+
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/com.atproto.repo.createRecord`, requestData).then(r => r.json());
+
+            return postRequest;
+        } catch (e) {
+
+            console.error(e);
+            return null;
+        }
+    }
 }
-
-const apiTester = new Api("https://bsky.social", 100);
-
-const asyncCheckers = async () => {
-
-    await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
-
-    //console.log("PDS:", apiTester.getDataServer());
-    //console.log("Is expired:", apiTester.checkTokenExpiry());
-    //console.log("Feed (What's Hot):", await apiTester.getFeed("at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"));
-    //console.log("Feed (What's Testing):", await apiTester.getFeed("at://did:plc:4usvqnzxonnvz2hyvx2msr4h/app.bsky.feed.generator/whats-testing"));
-    //console.log("Feed (Timeline):", await apiTester.getFeed());
-    //console.log("User records:", await apiTester.listRecords("app.bsky.feed.generator", "amazingca.dev"));
-    //console.log("Checker to see if user is private. Should be false:", await apiTester.isHidden("caleb.bsky.social"));
-}
-
-asyncCheckers();
