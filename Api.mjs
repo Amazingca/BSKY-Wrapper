@@ -387,6 +387,62 @@ export default class Api {
     }
 
     /**
+     * Responsible for uploading a file to the specified PDS. Most checkers are handled by the server on upload to reduce complexity here.
+     * Developer note: This has NOT been tested yet. Will do once higher-level code has been finished, like the file picker.
+     * @param {object} file The chosen file to upload as a blob.
+     * @returns The blob object data if the upload was successful. Will return null if not.
+     */
+    uploadBlob = async (file) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+
+            const blobReader = new FileReader();
+            var formattedBlob;
+
+            blobReader.onload = () => {
+
+                const blobData = blobReader.result;
+                
+                // Turn provided file into Uint8Array
+                formattedBlob = new Uint8Array(blobData);
+            };
+
+            // Read Array Buffer from our file, will trigger above ^ once done
+            reader.readAsArrayBuffer(file);
+
+            const requestData = {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Content-Type": file.type
+                },
+                body: formattedBlob
+            }
+
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/com.atproto.repo.uploadBlob`, requestData).then(r => r.json());
+
+            if (postRequest.blob) {
+
+                if (postRequest.error && postRequest.message) {
+
+                    throw new Error(`${postRequest.error}: ${postRequest.message}`);
+                } else {
+
+                    throw new Error("There was an error uploading the blob!");
+                }
+            }
+
+            return postRequest;
+        } catch (e) {
+
+            console.error(e);
+            return null;
+        }
+    }
+
+    /**
      * Creates a new record from an authorized user on the specified PDS.
      * @param {object} recordObject Mostly complete app.bsky.feed.post data, or Post object.
      * @returns Confirmation URI / CID data, null if record creation was not successful.

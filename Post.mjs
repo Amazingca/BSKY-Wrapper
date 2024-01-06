@@ -3,7 +3,8 @@ import Api from "./Api.mjs";
 export default class Post {
 
     // Embed limit for valid app.bsky.feed.post data.
-    embedLimit = 4;
+    // Developer note: This is really placeholder since a record can contain more than 4 embed items. Ten seems like a feasible shutoff, though am open to suggestions.
+    embedLimit = 10;
 
     // Post text. Can be empty if media is provided.
     //text = "";

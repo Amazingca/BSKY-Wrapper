@@ -44,4 +44,31 @@ const postCheckers = async () => {
     //console.log({thing: 1} instanceof Post);
 }
 
+/*
+
+Additional thoughts regarding creating a post record with embed media.
+This is the current flow that I am thinking about using:
+
+apiTester = new Api("https://bsky.social", 100)
+await apiTester.authorize({ AUTHORIZATION DATA })
+
+postTester = new Post({text: "Post containing media."})
+
+[ FILE CHOOSE => file ]
+
+blobData = await apiTester.uploadBlob(file)
+
+[ Note: Only showing the media client-side once it's been uploaded allows us to spread out API events. It also allows for a cleaner record creation process once the user sends it. ]
+
+if (blobData != null)
+
+    postTester.addEmbedData(blobData)
+
+await apiTester.newRecord(postTester)
+
+The toJson method on Post will determine, by the data in the embed array, what type of embed media to set.
+This allows us to cleanly manage our embed data without having to initalize it with types.
+
+*/
+
 postCheckers();
