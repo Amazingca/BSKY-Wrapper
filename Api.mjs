@@ -497,5 +497,5 @@ export default class Api {
  */
 sanitize = (data) => {
 
-    return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
+    return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
 }
