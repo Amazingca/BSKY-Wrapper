@@ -12,7 +12,7 @@ export default class Api {
     publicBlueskyApi = "https://public.api.bsky.app";
 
     // Supported embed inheritance of app.bsky.embed.*
-    static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.external"];
+    static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.audio", "app.bsky.embed.video", "app.bsky.embed.external"];
 
     /**
      * Creates an Api object responsible for communicating with the PDS. One can create an Api object with or without authorization.
@@ -423,7 +423,7 @@ export default class Api {
 
             const postRequest = await fetch(`${this.pdsUrl}/xrpc/com.atproto.repo.uploadBlob`, requestData).then(r => r.json());
 
-            if (postRequest.blob) {
+            if (!postRequest.blob) {
 
                 if (postRequest.error && postRequest.message) {
 

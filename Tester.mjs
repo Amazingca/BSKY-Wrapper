@@ -6,7 +6,7 @@ const postTester = new Post({text: "Hello, this is a test post coming from an Ap
 
 const asyncCheckers = async () => {
 
-    await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
+    //await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
     
     //console.log(await apiTester.newRecord(postTester));
 
@@ -24,6 +24,71 @@ asyncCheckers();
 //const postTester = new Post({embed: {type: "nothing", data: ["one", "two", "three", "four", "five"]}});
 
 const postCheckers = async () => {
+
+    postTester.setEmbed([
+        {
+            "blob": {
+                "$type": "blob",
+                "ref": {
+                    "$link": "bafkreiga4jolwtpmgpr7ohrw4pnz5rleok6vq4uipzindhxhwsa4nofyxu"
+                },
+                "mimeType": "image/png",
+                "size": 58300
+            },
+            "aspectRatio": {
+                "width": 1,
+                "height": 1
+            }
+        },
+        {
+            "blob": {
+                "$type": "blob",
+                "ref": {
+                    "$link": "bafkreiga4jolwtpmgpr7ohrw4pnz5rleok6vq4uipzindhxhwsa4nofyxu"
+                },
+                "mimeType": "image/png",
+                "size": 58300
+            },
+            "aspectRatio": {
+                "width": 1,
+                "height": 1
+            }
+        },
+        {
+            "blob": {
+                "$type": "blob",
+                "ref": {
+                    "$link": "bafkreiga4jolwtpmgpr7ohrw4pnz5rleok6vq4uipzindhxhwsa4nofyxu"
+                },
+                "mimeType": "image/png",
+                "size": 58300
+            },
+            "aspectRatio": {
+                "width": 1,
+                "height": 1
+            }
+        },
+        {
+            "blob": {
+                "$type": "blob",
+                "ref": {
+                    "$link": "bafkreiga4jolwtpmgpr7ohrw4pnz5rleok6vq4uipzindhxhwsa4nofyxu"
+                },
+                "mimeType": "image/png",
+                "size": 58300
+            },
+            "aspectRatio": {
+                "width": 1,
+                "height": 1
+            }
+        }
+    ]);
+
+    //console.log(postTester.toJson());
+
+    await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
+
+    console.log(await apiTester.newRecord(postTester));
 
     //postTester.arrangeEmbedData(0, 4);
 

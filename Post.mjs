@@ -3,8 +3,8 @@ import Api from "./Api.mjs";
 export default class Post {
 
     // Embed limit for valid app.bsky.feed.post data.
-    // Developer note: This is really placeholder since a record can contain more than 4 embed items. Ten seems like a feasible shutoff, though am open to suggestions.
-    embedLimit = 10;
+    // Developer note: This is really placeholder since a record can contain more than 4 non-image embed items. Ten seems like a feasible shutoff, though am open to suggestions.
+    embedLimit = 4;
 
     // Post text. Can be empty if media is provided.
     //text = "";
@@ -55,6 +55,18 @@ export default class Post {
     getEmbed = () => {
 
         return this.embed;
+    }
+
+    getEmbedFormats = () => {
+
+        var formats = [];
+
+        for (const item of this.embed) {
+
+            formats.push(item.blob.mimeType);
+        }
+
+        return formats;
     }
 
     /**
@@ -164,6 +176,7 @@ export default class Post {
 
     /**
      * Validates the data in the object to ensure that it is ready to be sent with @method Api.newRecord
+     * Most of these conditionals are ranked based on how common the error may be. That way we can catch it earlier and make the process faster.
      * @return Boolean on whether post object is valid.
      */
     validate = () => {
@@ -173,17 +186,35 @@ export default class Post {
 
         // If the embed type is not supported.
         if (this.getEmbed() != undefined) {
+
+            var embedFormats = this.getEmbedFormats();
             
             var supported = false;
             for (const type of Api.supportedEmbedTypes) {
+
+                var plural = "";
+                if (embedFormats[0].split("/")[0] == "image") plural = "s";
+
+                const preppedEmbedType = embedFormats[0].split("/")[0] + plural
                 
-                if (this.getEmbed().type == type) supported = true;
+                if ("app.bsky.embed." + preppedEmbedType == type) {
+
+                    this.preppedEmbedType = preppedEmbedType;
+                    supported = true;
+                }
             }
             if (supported == false) return false;
+
+            
+            var firstItem = embedFormats[0];
+            for (const item of embedFormats.slice(1)) {
+
+                if (item != firstItem) return false;
+            }
         }
 
         // If embed data is over the set limit.
-        if ((this.getEmbed() != undefined) && (this.getEmbed().data.length > this.embedLimit)) return false;
+        if ((this.getEmbed() != undefined) && (this.getEmbed().length > this.embedLimit)) return false;
 
         return true;
     }
@@ -197,12 +228,43 @@ export default class Post {
 
         if (this.validate() == false) return {success: false, data: null};
 
+        var embed = {};
+
+        if (this.getEmbed()) {
+
+            const embedData = this.getEmbed();
+
+            embed.$type = "app.bsky.embed." + this.preppedEmbedType;
+            embed[this.preppedEmbedType] = [];
+
+            for (const item of embedData) {
+
+                embed[this.preppedEmbedType].push({
+                    "alt": (item.alt) ? item.alt : "",
+                    "aspectRatio": {
+                        "width": item.aspectRatio.width,
+                        "height": item.aspectRatio.height
+                    },
+                    [item.blob.mimeType.split("/")[0]]: {
+                        "$type": "blob",
+                        "mimeType": item.blob.mimeType,
+                        "ref": {
+                            "$link": item.blob.ref.$link,
+                        },
+                        "size": item.blob.size
+                    }
+                })
+            }
+        }
+
         const parsedJson = {
             "collection": "app.bsky.feed.post",
             "record": {
                 "text": this.getText()
             }
         };
+
+        if (embed != {}) parsedJson.record.embed = embed;
 
         return {success: true, data: parsedJson};
     }
