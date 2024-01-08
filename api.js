@@ -115,7 +115,7 @@ export async function getUserFeed() {
     
     const feedReq = await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline?limit=100", req).then(r => r.json());
     
-    return feedReq;
+    return santizer(feedReq);
   } catch (e) {
     
     console.log(e);
@@ -406,5 +406,5 @@ export async function createAccountReq(inviteCode, userEmail, userHandle, userPa
 
 function santizer(item) {
 
-  return JSON.parse(JSON.stringify(item).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
+  return JSON.parse(JSON.stringify(item).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
 }
