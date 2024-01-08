@@ -146,7 +146,6 @@ export async function embeds(obj) {
         var rowend;
         var column;
         var columnend;
-        var width;
         
         if (i === 0) {
           
