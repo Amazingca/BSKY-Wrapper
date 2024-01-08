@@ -257,7 +257,7 @@ export default class Api {
 
             if (recordList.records.length > 0) {
 
-                return recordList;
+                return this.sanitize(recordList);
             } else {
 
                 return null;
@@ -374,7 +374,7 @@ export default class Api {
 
             if (hydratedFeedObj) {
 
-                return hydratedFeedObj;
+                return this.santize(hydratedFeedObj);
             } else {
 
                 throw new Error("Not retrievable.");
@@ -488,4 +488,14 @@ export default class Api {
             return null;
         }
     }
+}
+
+/**
+ * Addresses XSS vulnerabilities when data from Api.js is displayed through a web interface.
+ * @param {object} data Valid JSON data.
+ * @returns Replacement of "<" and ">" instances with their codified forms to avoid XSS injection.
+ */
+sanitize = (data) => {
+
+    return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
 }
