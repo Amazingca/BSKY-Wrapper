@@ -6,28 +6,64 @@ export default class Post {
     // Developer note: This is really placeholder since a record can contain more than 4 non-image embed items. Ten seems like a feasible shutoff, though am open to suggestions.
     embedLimit = 4;
 
-    // Post text. Can be empty if media is provided.
-    //text = "";
-
-    // Post media. In array form because multiple can be sent.
-    //media = [];
-
-    // Post facets. Includes optional formatting and mention pointers.
-    //facets = [];
-
-    // Post flags. Optional flags to set with the post.
-    //flags = [];
-
     /**
      * Constructor for the Post object. This is responsible for parsing the information in a post into valid app.bsky.feed.post data.
      * @param {object} param0 Optional parameter which contains predefined data for the post object. This is the easiest way to initialize the object, though may not be the easiest to work with for beginners.
      */
-    constructor ({text, embed, facets, flags} = {text: "", embed: {}, facets: {}, flags: {}}) {
+    constructor ({text, embed, facets, langs, labels, threadgate} = {text: "", embed: [], facets: [], langs: [], labels: [], threadgate: []}) {
 
+        /**
+         * Post text. Can be empty if media is provided.
+         * @type {string}
+         * @public
+         */
         this.text = (text != undefined) ? text : "";
+
+        /**
+         * Post embed date. In array form because multiple can be sent.
+         * @type {array}
+         * @public
+         */
         this.embed = embed;
+
+        /**
+         * Post facets. Includes optional formatting and mention pointers.
+         * @type {array}
+         * @public
+         */
         this.facets = facets;
-        this.flags = flags;
+
+        /**
+         * Post languages. Sets the included languages within a post using two-letter abbreviations.
+         * @type {array}
+         * @public
+         */
+        this.langs = langs;
+
+        /**
+         * Post labels. Optional labels to set with the post.
+         * @type {array}
+         * @public
+         */
+        this.labels = labels;
+
+        /**
+         * Post threadgate. Optional setting which gates who can reply to this specific post.
+         * 
+         * IMPORTANT:
+         * 
+         * In contrary to how this is done directly with the ATP, there are some changes which are meant to make interfacing with it here easier.
+         * By the definition of the lexicon, the supported types are "#mentionRule", "#followingRule", and "#listRule".
+         * However, instead of an empty gate object referencing a post which does not allow any replies, it will instead recognize the keyword "#allRules" to substitute.
+         * This is to allow an "all reply"/"no gate" feature using an empty threadgate inside the post object.
+         * 
+         * As a reminder "#allRules" is not recognized by the ATP and will only work here.
+         * 
+         * To reference a #listRule parameter, simply substitute the at-uri for the list in place for the lexicon definition. Post will understand this and do proper conversion using @method Post.toJson
+         * @type {array}
+         * @public
+         */
+        this.threadgate = threadgate;
     }
 
     /**
@@ -157,21 +193,57 @@ export default class Post {
     }
 
     /**
-     * Getter which retrieves the flags for the post.
-     * @returns Flags for the post.
+     * Getter which retrieves the languages for a post.
+     * @returns The languages for a post.
      */
-    getFlags = () => {
+    getLangs = () => {
 
-        return this.flags;
+        return this.langs;
     }
 
     /**
-     * Sets the post's flags.
-     * @param {array} flags The flags for the post.
+     * Sets the languages for the post.
+     * @param {array} langs The languages for the post.
      */
-    setFlags = (flags) => {
+    setLangs = (langs) => {
 
-        this.flags = flags;
+        this.langs = langs;
+    }
+
+    /**
+     * Getter which retrieves the labels for the post.
+     * @returns Labels for the post.
+     */
+    getLabels = () => {
+
+        return this.labels;
+    }
+
+    /**
+     * Sets the post's labels.
+     * @param {array} labels The labels for the post.
+     */
+    setLabels = (labels) => {
+
+        this.labels = labels;
+    }
+
+    /**
+     * Getter which retrieves the user types that are allowed to reply to the post.
+     * @returns Threadgate to be initalized for the post.
+     */
+    getThreadgate = () => {
+
+        return this.threadgate;
+    }
+
+    /**
+     * Sets the allowed user types to reply to the post.
+     * @param {object} threadgate The threadgate user types which are allowed to reply to the post.
+     */
+    setThreadgate = (threadgate) => {
+
+        this.threadgate = threadgate;
     }
 
     /**
@@ -213,6 +285,77 @@ export default class Post {
             }
         }
 
+        // If the facets are not supported.
+        if (this.getFacets() != undefined) {
+
+            const facets = this.getFacets();
+
+            var supported = true;
+
+            for (const facet of facets) {
+
+                var itemSupported = false;
+
+                var facetType = "";
+
+                if (facet.val.includes("did:plc:")) {
+
+                    facetType = "app.bsky.richtext.facet#mention";
+                } else if (facet.val.includes("https://") || facet.val.includes("at://")) {
+
+                    facetType = "app.bsky.richtext.facet#link";
+                } else if (facet.val.length <= 640) {
+
+                    if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
+
+                        facetType = "app.bsky.richtext.facet#tag";
+                    } else if (facet.val.match(/\p{Extended_Pictographic}/gu).length <= 64) {
+
+                        facetType = "app.bsky.richtext.facet#tag";
+                    }
+                }
+
+                for (const supportedFacet of Api.supportedFacetTypes) {
+
+                    if (facetType == supportedFacet) {
+
+                        itemSupported = true;
+                    }
+                }
+
+                if (itemSupported == false) {
+
+                    return false;
+                }
+            }
+        }
+
+        // If the threadgate type is not supported.
+        if (this.getThreadgate() != undefined) {
+
+            var threadgate = this.getThreadgate();
+
+            for (const threadgateItem of threadgate) {
+
+                var supported = false;
+                for (const type of Api.supportedThreadgates) {
+
+                    if (threadgateItem == type) {
+
+                        supported = true;
+                    } else if (threadgateItem.includes("at://") && threadgateItem.includes("/app.bsky.graph.list/")) {
+
+                        supported = true;
+                    }
+                }
+
+                if (supported == false) {
+
+                    return false;
+                }
+            }
+        }
+
         // If embed data is over the set limit.
         if ((this.getEmbed() != undefined) && (this.getEmbed().length > this.embedLimit)) return false;
 
@@ -221,7 +364,8 @@ export default class Post {
 
     /**
      * Constructs and returns valid app.bsky.feed.post JSON, excluding creation date and repo DID.
-     * Developer note: This is incomplete and only compiles the post text.
+     * In addition, this compiles the threadgate data, which is recognized by @method Api.newRecord and is created immediately after post creation.
+     * Developer note: This is mostly complete but has not been thoroughly tested.
      * @returns Mostly complete, valid app.bsky.feed.post JSON.
      */
     toJson = () => {
@@ -257,6 +401,96 @@ export default class Post {
             }
         }
 
+        var facets = [];
+
+        if (this.getFacets()) {
+
+            const facetData = this.getFacets();
+
+            for (const facet of facetData) {
+
+                var facetType = {};
+
+                if (facet.val.includes("did:plc:")) {
+
+                    facetType = {"pointer": "app.bsky.richtext.facet#mention", "ref": "did"};
+                } else if (facet.val.includes("https://") || facet.val.includes("at://")) {
+
+                    facetType = {"pointer": "app.bsky.richtext.facet#link", "ref": "uri"};
+                } else if (facet.val.length <= 640) {
+
+                    if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
+
+                        facetType = {"pointer": "app.bsky.richtext.facet#tag", "ref": "tag"};
+                    } else if (facet.val.match(/\p{Extended_Pictographic}/gu).length <= 64) {
+
+                        facetType = {"pointer": "app.bsky.richtext.facet#tag", "ref": "tag"};
+                    }
+                }
+
+                facets.push({
+                    "$type": "app.bsky.richtext.facet",
+                    "index": {
+                        "byteStart": facet.byteStart,
+                        "byteEnd": facet.byteEnd
+                    },
+                    "features": [
+                        {
+                            "$type": facetType.pointer,
+                            [facetType.ref]: facet.val
+                        }
+                    ]
+                })
+            }
+        }
+
+        var labels = {};
+
+        if (this.getLabels()) {
+
+            const labelData = this.getLabels();
+
+            labels = {
+                "$type": "com.atproto.label.defs#selfLabels",
+                "values": []
+            };
+
+            for (const label of labelData) {
+
+                labels.values.push({"val": label});
+            }
+        }
+
+        var threadgate = {};
+
+        if (this.getThreadgate()) {
+
+            const threadgateData = this.getThreadgate();
+
+            threadgate = {
+                "collection": "app.bsky.feed.threadgate",
+                "record": {
+                    "post": "hello",
+                    "allow": [],
+                    "$type": "app.bsky.feed.threadgate"
+                }
+            };
+
+            for (const item of threadgateData) {
+
+                if (item == "app.bsky.feed.threadgate#allRules") {
+                    
+                    threadgate.record.allow = [];
+                } else if (item.includes("at://") && item.includes("/app.bsky.graph.list/")) {
+
+                    threadgate.record.allow.push({"$type": "app.bsky.feed.threadgate#listRule", "list": item});
+                } else {
+
+                    threadgate.record.allow.push({"$type": item});
+                }
+            }
+        }
+
         const parsedJson = {
             "collection": "app.bsky.feed.post",
             "record": {
@@ -264,7 +498,11 @@ export default class Post {
             }
         };
 
-        if (embed != {}) parsedJson.record.embed = embed;
+        if (Object.keys(embed).length > 0) parsedJson.record.embed = embed;
+        if (facets.length > 0) parsedJson.record.facets = facets;
+        if (this.getLangs().length > 0) parsedJson.record.langs = this.getLangs();
+        if (Object.keys(labels).length > 0) parsedJson.record.labels = labels;
+        if (Object.keys(threadgate).length > 0) parsedJson.record.threadgate = threadgate;
 
         return {success: true, data: parsedJson};
     }

@@ -12,7 +12,17 @@ export default class Api {
     publicBlueskyApi = "https://public.api.bsky.app";
 
     // Supported embed inheritance of app.bsky.embed.*
+    // NOTE: Audio and video types are not referenced in the ATP lexicon, though are still valid blob types when uploading.
+    //       They are included for when they are likely supported in future versions of the ATP.
     static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.audio", "app.bsky.embed.video", "app.bsky.embed.external"];
+
+    // Supported facet types for an app.bsky.feed.post record.
+    static supportedFacetTypes = ["app.bsky.richtext.facet#mention", "app.bsky.richtext.facet#link", "app.bsky.richtext.facet#tag"];
+
+    // Supported threadgate types for an ATP thread; app.bsky.feed.threadgate#*
+    // Note: The allRules type is exclusive to this library and not supported by the ATP.
+    //       It is included for the intention of making threadgates easier to work with.
+    static supportedThreadgates = ["app.bsky.feed.threadgate#mentionRule", "app.bsky.feed.threadgate#followingRule", "app.bsky.feed.threadgate#listRule", "app.bsky.feed.threadgate#allRules"];
 
     /**
      * Creates an Api object responsible for communicating with the PDS. One can create an Api object with or without authorization.
@@ -232,7 +242,7 @@ export default class Api {
 
         if (userId == null) return null;
 
-        const supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.graph.follow"];
+        const supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.feed.threadgate", "app.bsky.graph.follow"];
         var isSupported = false;
         
         for (const supportedCollection of supportedCollections) {
@@ -470,6 +480,14 @@ export default class Api {
             recordObject.repo = this.authorization.handle;
             recordObject.record.createdAt = new Date().toISOString();
 
+
+            var threadgate = {};
+            if (recordObject.record.threadgate) {
+
+                threadgate = recordObject.record.threadgate;
+                delete recordObject.record.threadgate;
+            }
+
             const requestData = {
                 method: "POST",
                 headers: {
@@ -481,21 +499,35 @@ export default class Api {
 
             const postRequest = await fetch(`${this.pdsUrl}/xrpc/com.atproto.repo.createRecord`, requestData).then(r => r.json());
 
-            return postRequest;
+            if (postRequest.uri == null) {
+
+                throw new Error(JSON.stringify(postRequest));
+            }
+
+            if (Object.keys(threadgate).length == 0) {
+
+                return postRequest;
+            } else {
+
+                threadgate.rkey = postRequest.uri.split("/app.bsky.feed.post/")[1];
+                threadgate.record.post = postRequest.uri;
+
+                return [postRequest, await this.newRecord(threadgate)];
+            }
         } catch (e) {
 
             console.error(e);
             return null;
         }
     }
-}
 
-/**
- * Addresses XSS vulnerabilities when data from Api.js is displayed through a web interface.
- * @param {object} data Valid JSON data.
- * @returns Replacement of "<" and ">" instances with their codified forms to avoid XSS injection.
- */
-sanitize = (data) => {
+    /**
+     * Addresses XSS vulnerabilities when data from Api.js is displayed through a web interface.
+     * @param {object} data Valid JSON data.
+     * @returns Replacement of "<", ">", and quote instances with their codified forms to avoid XSS injection.
+     */
+    sanitize = (data) => {
 
-    return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
+        return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
+    }
 }

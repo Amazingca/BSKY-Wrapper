@@ -25,7 +25,7 @@ asyncCheckers();
 
 const postCheckers = async () => {
 
-    postTester.setEmbed([
+    /*postTester.setEmbed([
         {
             "blob": {
                 "$type": "blob",
@@ -82,9 +82,47 @@ const postCheckers = async () => {
                 "height": 1
             }
         }
+    ]);*/
+
+    postTester.setText("@caleb.bsky.social #testing-tag https://google.com Testing post with facets, flags, and threadgates.");
+
+    postTester.setFacets([
+        {
+            "byteStart": 0,
+            "byteEnd": 18,
+            "val": "did:plc:e2nwnarqo7kdbt7ngr3gejp6"
+        },
+        {
+            "byteStart": 19,
+            "byteEnd": 31,
+            "val": "testing-tag"
+        },
+        {
+            "byteStart": 32,
+            "byteEnd": 50,
+            "val": "https://google.com"
+        }
     ]);
 
-    //console.log(postTester.toJson());
+    postTester.setLangs(["en", "fr"]);
+
+    postTester.setLabels(["sexual", "porn"]);
+
+    // Most rules checker
+    postTester.setThreadgate([
+        "app.bsky.feed.threadgate#mentionRule",
+        "app.bsky.feed.threadgate#followingRule",
+        "at://did:plc:4usvqnzxonnvz2hyvx2msr4h/app.bsky.graph.list/3jvmxz3yj3t2b"
+    ]);
+
+    // All rules checker
+    /*postTester.setThreadgate([
+        "app.bsky.feed.threadgate#allRules"
+    ]);*/
+
+    //console.log(postTester.getEmbed());
+
+    //console.log(JSON.stringify(postTester.toJson()));
 
     await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
 
