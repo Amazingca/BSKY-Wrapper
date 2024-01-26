@@ -11,6 +11,9 @@ export default class Api {
     // Public Bluesky API node.
     publicBlueskyApi = "https://public.api.bsky.app";
 
+    // Limit for valid blob to upload to a repo. Any file must be under this limit to be included within a record.
+    static blobSizeLimit = 976.56;
+
     // Supported embed inheritance of app.bsky.embed.*
     // NOTE: Audio and video types are not referenced in the ATP lexicon, though are still valid blob types when uploading.
     //       They are included for when they are likely supported in future versions of the ATP.

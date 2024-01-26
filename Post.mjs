@@ -259,9 +259,16 @@ export default class Post {
         // If the embed type is not supported.
         if (this.getEmbed() != undefined) {
 
+            var supported = true;
+            for (const item of this.getEmbed()) {
+
+                if (item.blob.size > Api.blobSizeLimit) supported = false;
+            }
+            if (supported == false) return false;
+
             var embedFormats = this.getEmbedFormats();
             
-            var supported = false;
+            supported = false;
             for (const type of Api.supportedEmbedTypes) {
 
                 var plural = "";
