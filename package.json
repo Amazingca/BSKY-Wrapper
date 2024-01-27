@@ -1,0 +1,32 @@
+{
+  "name": "bsky-wrapper",
+  "version": "1.0.0",
+  "description": "This is a very ambitious project which intends to revamp the current iteration of the Blue Wrapper.",
+  "type": "module",
+  "main": "Tester.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amazingca/BSKY-Wrapper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Amazingca/BSKY-Wrapper/issues"
+  },
+  "homepage": "https://github.com/Amazingca/BSKY-Wrapper#readme",
+  "dependencies": {
+    "@remix-run/node": "^2.5.1",
+    "@remix-run/react": "^2.5.1",
+    "@remix-run/serve": "^2.5.1",
+    "isbot": "^4.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.5.1"
+  }
+}

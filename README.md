@@ -12,7 +12,15 @@ Direct DOM modification is certainly faster in many cases, though the complexiti
 
 While this project is being worked on, necessary updates will be pushed to the [main branch](https://github.com/Amazingca/BSKY-Wrapper) as they arise.
 
-### Current progress
+## Current progress
+
+### Jan 27, 2024
+
+In this most recent push, I have pre-added the baseline files which are meant to structure the fundamental aspects of the wrapper. Above the API handler, which has yet to meet the necessary goals for this current iteration, these files are critical to providing solid scalablity in the future. In addition, I have added the prerequisite package files for the React version that will be adopted (Remix). 
+
+Just to clarify, nothing in this area has been started yet. However, I find it useful to outline the processes and wireframe which shapes the core parts of the web-interface.
+
+### Dec 21, 2023
 
 Current effort is being made on the lowest level, the API handler. This is arguably the most important code for the entire program, as its capabilites depend on what information can be sent and recieved. 
 

@@ -1,5 +1,5 @@
-import Api from "./Api.mjs";
-import Post from "./Post.mjs";
+import Api from "./app/infra/Api.mjs";
+import Post from "./app/infra/Post.mjs";
 
 const apiTester = new Api("https://bsky.social", 100);
 const postTester = new Post({text: "Hello, this is a test post coming from an Api refactor at https://github.com/Amazingca/BSKY-Wrapper."});
@@ -126,7 +126,7 @@ const postCheckers = async () => {
 
     await apiTester.authorize("new", {identifier: process.env.TESTING_IDENTIFIER, password: process.env.TESTING_APP_PASSWORD});
 
-    console.log(await apiTester.newRecord(postTester));
+    //console.log(await apiTester.newRecord(postTester));
 
     //postTester.arrangeEmbedData(0, 4);
 
