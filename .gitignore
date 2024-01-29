@@ -2,4 +2,5 @@ start.sh
 start.bat
 node_modules
 build
+.cache
 public

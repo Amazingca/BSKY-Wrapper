@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Amazingca/BSKY-Wrapper#readme",
   "dependencies": {
+    "@primer/octicons-react": "^19.8.0",
     "@remix-run/node": "^2.5.1",
     "@remix-run/react": "^2.5.1",
     "@remix-run/serve": "^2.5.1",

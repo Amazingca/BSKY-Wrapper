@@ -1,0 +1,134 @@
+@font-face {
+    font-family: 'Mona Sans';
+    src:
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2-variations');
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+}
+  @font-face {
+    font-family: 'Hubot Sans';
+    src:
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2-variations');
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+}
+body {
+    margin: 0rem;
+
+    --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+
+    --sidebar-background: #1a1a1a;
+
+    --title-primary: #ddd;
+    --title-accent: linear-gradient(to bottom right, #0099ffFF, #3b82f6FF);
+
+    --action-item-primary: #fff;
+    --action-item-secondary: #ddd;
+
+    --action-icon-primary: #fff;
+    --action-icon-background: #2a2a2a;
+    --action-icon-background-secondary: #fff;
+
+    --footer-primary: #555;
+}
+#main {
+    display: grid;
+    grid-template-areas:
+        "devBanner devBanner devBanner"
+        "SideBar Center FooterBar";
+    grid-template-rows: 0rem auto;
+    column-gap: 2rem;
+    height: 100vh;
+}
+.devBanner {
+    grid-area: devBanner;
+
+    width: -webkit-fill-available;
+    background-color: lightsalmon;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 750 !important;
+    color: white;
+    font-family: "Hubot Sans";
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+h1, h2, f1 {
+    font-family: "Mona Sans";
+}
+h1 {
+    font-size: 2rem;
+    font-weight: 900 !important;
+}
+h2 {
+    font-size: 1.5rem;
+    color: var(--action-item-primary);
+    font-weight: 750 !important;
+}
+f1 {
+    font-size: 1rem;
+    color: var(--footer-primary);
+    font-weight: 400 !important;
+}
+f1 a {
+    color: inherit;
+    font-weight: 500 !important;
+    text-underline-offset: 0.1rem;
+}
+.About, .Acknowledgements, .Feed, .Profile, .Unsupported {
+    grid-area: Center;
+
+    width: -webkit-fill-available;
+    max-width: 10rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    padding-bottom: 0rem;
+
+    background-color: lightgreen;
+}
+.SideBar {
+    background-color: var(--sidebar-background);
+}
+.Title {
+    display: flex;
+    gap: 0.5rem;
+}
+.TitleAccent {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.TaskBar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.ActionItem {
+    display: flex;
+    gap: 1rem;
+}
+.ActionIcon {
+    width: 2rem;
+    height: 2rem;
+    padding: 1rem;
+    border-radius: 50%;
+}
+.FooterBar {
+    grid-area: FooterBar;
+
+    top: 0rem;
+    bottom: 0rem;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: flex-end;
+}
+.Footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
