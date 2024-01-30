@@ -18,6 +18,7 @@ body {
     margin: 0rem;
 
     --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+    --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
 
     --sidebar-background: #1a1a1a;
 
@@ -31,7 +32,12 @@ body {
     --action-icon-background: #2a2a2a;
     --action-icon-background-secondary: #fff;
 
+    --login-button-primary: #222;
+    --login-button-background: #fff;
+
     --footer-primary: #555;
+    
+    --transition-main: 0.1s cubic-bezier(0.3,0.09,0.46,1.01) 0s;
 }
 #main {
     display: grid;
@@ -39,6 +45,7 @@ body {
         "devBanner devBanner devBanner"
         "SideBar Center FooterBar";
     grid-template-rows: 0rem auto;
+    grid-template-columns: 1.5fr minmax(12rem, 1.25fr) 1fr;
     column-gap: 2rem;
     height: 100vh;
 }
@@ -78,11 +85,21 @@ f1 a {
     font-weight: 500 !important;
     text-underline-offset: 0.1rem;
 }
+.SideBar {
+    grid-area: SideBar;
+    
+    background-color: var(--sidebar-background);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 2rem;
+    padding-top: 2rem;
+}
 .About, .Acknowledgements, .Feed, .Profile, .Unsupported {
     grid-area: Center;
 
-    width: -webkit-fill-available;
-    max-width: 10rem;
+    max-width: 42rem;
     display: flex;
     flex-direction: column;
     padding: 1rem;
@@ -90,8 +107,10 @@ f1 a {
 
     background-color: lightgreen;
 }
-.SideBar {
-    background-color: var(--sidebar-background);
+.SideBar-Heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 .Title {
     display: flex;
@@ -104,17 +123,69 @@ f1 a {
 .TaskBar {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
+    width: 23rem;
+    margin-top: 4rem;
 }
 .ActionItem {
     display: flex;
     gap: 1rem;
+}
+.ActionItem, .LoginWith {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
 .ActionIcon {
     width: 2rem;
     height: 2rem;
     padding: 1rem;
     border-radius: 50%;
+}
+.ActionIcon, .LoginWith {
+    transition: var(--transition-main);
+}
+.ActionItem:hover .ActionIcon {
+    transform: scale(1.05);
+}
+.ActionIcon:hover {
+    transform: scale(1.05);
+}
+.ActionItem:active .ActionIcon {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px 0px #000;
+}
+.ActionIcon:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px 0px #000;
+}
+.ActionItem:hover .PaintbrushIcon, .ActionItem:active .PaintbrushIcon {
+    background-image: var(--secondary-accent);
+    background-clip: padding-box;
+}
+.UserBar {
+    display: flex;
+    gap: 2rem;
+}
+.LoginWith {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    width: 17rem;
+    height: 4rem;
+    border-radius: 4rem;
+    background-color: var(--login-button-background);
+}
+.LoginWith:hover {
+    transform: scale(1.015);
+}
+.LoginWith:active {
+    transform: scale(0.985);
+    box-shadow: 0 0 10px 0px #000;
+}
+.LoginWith h2 {
+    color: var(--login-button-primary);
 }
 .FooterBar {
     grid-area: FooterBar;

@@ -6,8 +6,10 @@ const SideBar = ({text}) => {
 
     return (
         <div className={"SideBar"}>
-            <Title accent="--title-accent" primary="--title-primary" />
-            <TaskBar />
+            <div className={"SideBar-Heading"}>
+                <Title accent="--title-accent" primary="--title-primary" />
+                <TaskBar />
+            </div>
             <UserBar />
         </div>
     )

@@ -27,8 +27,8 @@ const App = () => {
                 <Links />
             </head>
             <body>
-                <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
-                    {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
+                <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "developments") && "51px auto"}}>
+                    {process.env.NODE_ENV == "developments" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                     <SideBar />
                     <Outlet />
                     <FooterBar />
