@@ -45,7 +45,7 @@ body {
         "devBanner devBanner devBanner"
         "SideBar Center FooterBar";
     grid-template-rows: 0rem auto;
-    grid-template-columns: 1.5fr minmax(12rem, 1.25fr) 1fr;
+    grid-template-columns: 1.25fr minmax(12rem, 1.25fr) 1fr;
     column-gap: 2rem;
     height: 100vh;
 }
@@ -63,7 +63,7 @@ body {
     align-items: center;
     gap: 1rem;
 }
-h1, h2, f1 {
+h1, h2, h3, a1, f1 {
     font-family: "Mona Sans";
 }
 h1 {
@@ -75,12 +75,20 @@ h2 {
     color: var(--action-item-primary);
     font-weight: 750 !important;
 }
-f1 {
+h3 {
+    font-size: 1.25rem;
+    color: var(--sidebar-background);
+    font-weight: 700 !important;
+}
+/*a1 {
+    font-size: 1rem;
+}*/
+f1, a1 {
     font-size: 1rem;
     color: var(--footer-primary);
     font-weight: 400 !important;
 }
-f1 a {
+f1 a, a1 a {
     color: inherit;
     font-weight: 500 !important;
     text-underline-offset: 0.1rem;
@@ -102,10 +110,6 @@ f1 a {
     max-width: 42rem;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
-    padding-bottom: 0rem;
-
-    background-color: lightgreen;
 }
 .SideBar-Heading {
     display: flex;
@@ -187,6 +191,13 @@ f1 a {
 .LoginWith h2 {
     color: var(--login-button-primary);
 }
+.Header {
+    display: flex;
+    padding-top: 2rem;
+}
+.Header h1 {
+    color: var(--sidebar-background);
+}
 .FooterBar {
     grid-area: FooterBar;
 
@@ -202,4 +213,8 @@ f1 a {
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 1.5rem;
+}
+@media screen and (max-width: 1280px) {
+
+
 }
