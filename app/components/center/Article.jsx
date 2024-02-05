@@ -7,14 +7,14 @@ const Article = ({content}) => {
                 : ((typeof row == "string") && row.includes("# ")) ?
                     (row.includes("### ")) ?
                         <>
-                            <h3 style={{color: "var(--sidebar-background)"}}>
+                            <h3 style={{color: "var(--header-primary)"}}>
                                 {row.split("## ")[1]}
                             </h3>
                         </>
                     : (row.includes("## ")) &&
                         <>
                             <br />
-                            <h2 style={{color: "var(--sidebar-background)"}}>
+                            <h2 style={{color: "var(--header-primary)"}}>
                                 {row.split("# ")[1]}
                             </h2>
                         </>

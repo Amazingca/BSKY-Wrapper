@@ -21,6 +21,7 @@ body {
     --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
 
     --sidebar-background: #1a1a1a;
+    --background-primary: #fff;
 
     --title-primary: #ddd;
     --title-accent: linear-gradient(to bottom right, #0099ffFF, #3b82f6FF);
@@ -35,9 +36,23 @@ body {
     --login-button-primary: #222;
     --login-button-background: #fff;
 
+    --header-primary: #1a1a1a;
+
     --footer-primary: #555;
     
     --transition-main: 0.1s cubic-bezier(0.3,0.09,0.46,1.01) 0s;
+
+    background-color: var(--background-primary);
+
+    transition: var(--transition-main);
+}
+body.dark {
+
+    --background-primary: #000;
+
+    --header-primary: #ddd;
+
+    --footer-primary: #fff;
 }
 #main {
     display: grid;
@@ -60,7 +75,7 @@ body {
     color: white;
     font-family: "Hubot Sans";
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 1rem;
 }
 h1, h2, h3, a1, f1 {
@@ -104,7 +119,7 @@ f1 a, a1 a {
     padding: 2rem;
     padding-top: 2rem;
 }
-.About, .Acknowledgements, .Feed, .Profile, .Unsupported {
+.About, .Acknowledgments, .Feed, .Profile, .Unsupported {
     grid-area: Center;
 
     max-width: 42rem;
@@ -120,7 +135,7 @@ f1 a, a1 a {
     display: flex;
     gap: 0.5rem;
 }
-.TitleAccent {
+.TitleAccent, body.dark .LoginWith h2 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -163,7 +178,7 @@ f1 a, a1 a {
     transform: scale(0.95);
     box-shadow: 0 0 10px 0px #000;
 }
-.ActionItem:hover .PaintbrushIcon, .ActionItem:active .PaintbrushIcon {
+body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .ComposeIcon {
     background-image: var(--secondary-accent);
     background-clip: padding-box;
 }
@@ -188,6 +203,13 @@ f1 a, a1 a {
     transform: scale(0.985);
     box-shadow: 0 0 10px 0px #000;
 }
+body.dark .LoginWith {
+    background-image: var(--secondary-accent);
+    background-color: currentcolor;
+}
+body.dark .LoginWith h2 {
+    background-image: var(--primary-accent);
+}
 .LoginWith h2 {
     color: var(--login-button-primary);
 }
@@ -196,7 +218,7 @@ f1 a, a1 a {
     padding-top: 2rem;
 }
 .Header h1 {
-    color: var(--sidebar-background);
+    color: var(--header-primary);
 }
 .FooterBar {
     grid-area: FooterBar;
@@ -215,6 +237,45 @@ f1 a, a1 a {
     margin-bottom: 1.5rem;
 }
 @media screen and (max-width: 1280px) {
+    
+    #main {
+        grid-template-columns: 8rem 1.25fr 1fr;
+    }
+    .Title {
+        display: none;
+    }
+    .TaskBar {
+        align-items: flex-end;
+        margin-top: 0rem;
+    }
+    .ActionItem h2 {
+        display: none;
+    }
+}
+@media screen and (max-width: 722px) {
+    .devBanner {
+        align-items: center;
+    }
+    .FooterBar {
+        display: none;
+    }
+}
+@media screen and (max-width: 515px) {
+    #main {
+        grid-template-areas: 
+            "devBanner"
+            "Center";
+        grid-template-columns: 100vw;
+    }
+    .About, .Acknowledgments, .Feed, .Profile, .Unsupported {
+        padding: 1rem;
+    }
+    .SideBar {
+        display: none;
+    }
 
-
+}
+.ActionIcon svg {
+    width: 2rem;
+    height: 2rem;
 }

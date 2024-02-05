@@ -2,7 +2,7 @@ import Title from "./Title";
 import TaskBar from "./TaskBar";
 import UserBar from "./UserBar";
 
-const SideBar = ({text}) => {
+const SideBar = ({display}) => {
 
     return (
         <div className={"SideBar"}>
@@ -10,7 +10,7 @@ const SideBar = ({text}) => {
                 <Title accent="--title-accent" primary="--title-primary" />
                 <TaskBar />
             </div>
-            <UserBar />
+            <UserBar display={display} />
         </div>
     )
 }

@@ -8,7 +8,7 @@ const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="-
                 <defs>
                     <linearGradient id="paint0_linear_425_107" x1="0" y1="0" x2="2" y2="2" gradientUnits="userSpaceOnUse">
                         <stop stop-color="#0099FF"/>
-                        <stop offset="1" stop-color="#3B82F6"/>
+                        <stop offset="1" stop-color="#3B82F6" />
                     </linearGradient>
                 </defs>
             </svg>
@@ -16,8 +16,8 @@ const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="-
     }
 
     return (
-        <div style={{backgroundColor: `var(${backgroundColor})`}} className={`ActionIcon${(mainColor == "--primary-accent") ? " PaintbrushIcon": ""}`}>
-            {(mainColor != "--primary-accent") ? <Icon size={"2rem"} fill={`var(${mainColor})`} /> : GradientPaintbrush()}
+        <div style={{backgroundColor: `var(${backgroundColor})`}} className={`ActionIcon${(mainColor == "--primary-accent") ? " ComposeIcon": ""}`}>
+            {(mainColor != "--primary-accent") ? <Icon size={"small"} fill={`var(${mainColor})`} /> : GradientPaintbrush()}
         </div>
     )
 }

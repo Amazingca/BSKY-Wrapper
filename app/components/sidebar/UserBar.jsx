@@ -1,10 +1,16 @@
 import ActionIcon from "./ActionIcon";
 import {
     MoonIcon,
-    SunIcon
+    SunIcon,
+    DeviceDesktopIcon
 } from "@primer/octicons-react";
 
-const UserBar = () => {
+const UserBar = ({display}) => {
+
+    const toggleTheme = () => {
+
+        display.toggle();
+    }
 
     const mentionIcon = () => {
 
@@ -27,8 +33,8 @@ const UserBar = () => {
                 <h2>Login with</h2>
                 {mentionIcon()}
             </div>
-            <div>
-                <ActionIcon Icon={MoonIcon} mainColor="--action-item-secondary" />
+            <div onClick={toggleTheme}>
+                <ActionIcon Icon={(display.theme == "light") ? MoonIcon : (display.theme == "dark") ? SunIcon : DeviceDesktopIcon} mainColor="--action-item-secondary" />
             </div>
         </div>
     )
