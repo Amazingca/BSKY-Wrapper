@@ -229,6 +229,9 @@ body.dark .LoginWith h2 {
     height: auto;
     display: flex;
     align-items: flex-end;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 .Footer {
     display: flex;

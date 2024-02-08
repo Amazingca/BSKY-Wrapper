@@ -14,39 +14,62 @@ export default class Themes {
         }, []);
     }
 
+    // Startup theme coordinator to match with user preferences in local data
     sync = () => {
 
         if (this.localData.getTheme()) {
 
             if (this.localData.getTheme() == "light") this.setTheme("light");
             if (this.localData.getTheme() == "dark") this.setTheme("dark");
-            if (this.localData.getTheme() == "auto") this.auto();
+            if (this.localData.getTheme() == "auto") this.auto(true);
         } else {
 
-            this.auto();
+            this.auto(true);
         }
     }
 
-    auto = () => {
+    // Automatically sets theme based on system preferences
+    auto = (action) => {
 
-        if (window.matchMedia("(prefers-color-scheme: dark)")) {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
 
-            this.setTheme("dark");
+            if (action) {
+                
+                this.setTheme("dark");
+            } else {
+                
+                return "dark";
+            }
         } else {
 
-            this.setTheme("light");
+            if (action) {
+
+                this.setTheme("light");
+            } else {
+
+                return "light";
+            }
         }
     }
 
+    toAuto = () => {
+        
+        if (typeof document != "undefined") return (window.matchMedia("(prefers-color-scheme: dark)").matches == (((this.theme == "light") ? "dark" : "light") == "dark"));
+    }
+
+    // Toggles the theme back and forth, switches between "auto" depending on whether we are going back to default.
     toggle = () => {
 
         const newTheme = (this.theme == "light") ? "dark" : "light";
 
         this.setTheme(newTheme);
-        this.saveTheme(newTheme);
+        
+        const toAuto = (window.matchMedia("(prefers-color-scheme: dark)").matches == (newTheme == "dark"));
+
+        this.#saveTheme((toAuto) ? "auto" : newTheme);
     }
 
-    saveTheme = (newTheme) => {
+    #saveTheme = (newTheme) => {
 
         this.localData.saveTheme(newTheme);
     }

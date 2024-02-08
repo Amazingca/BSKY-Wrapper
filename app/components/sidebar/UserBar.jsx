@@ -4,6 +4,7 @@ import {
     SunIcon,
     DeviceDesktopIcon
 } from "@primer/octicons-react";
+import { useEffect, useState } from "react";
 
 const UserBar = ({display}) => {
 
@@ -27,6 +28,13 @@ const UserBar = ({display}) => {
         )
     }
 
+    // "Complex" state setter to make sure that we properly initalize the auto checker on load
+    const [isLocal, setLocality] = useState(false);
+    useEffect(() => {
+
+        setLocality(true);
+    }, []);
+
     return (
         <div className={"UserBar"}>
             <div className={"LoginWith"}>
@@ -34,7 +42,7 @@ const UserBar = ({display}) => {
                 {mentionIcon()}
             </div>
             <div onClick={toggleTheme}>
-                <ActionIcon Icon={(display.theme == "light") ? MoonIcon : (display.theme == "dark") ? SunIcon : DeviceDesktopIcon} mainColor="--action-item-secondary" />
+                <ActionIcon Icon={(isLocal && display.toAuto()) ? DeviceDesktopIcon : (display.theme == "light") ? MoonIcon : (display.theme == "dark") && SunIcon} mainColor="--action-item-secondary" />
             </div>
         </div>
     )
