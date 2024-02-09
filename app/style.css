@@ -17,14 +17,19 @@
 body {
     margin: 0rem;
 
+    --accent-primary: #0099FFFF;
+    --accent-secondary: #3b82f6FF;
+
     --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
     --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
+
+    --accent-primary: #0099FF;
 
     --sidebar-background: #1a1a1a;
     --background-primary: #fff;
 
     --title-primary: #ddd;
-    --title-accent: linear-gradient(to bottom right, #0099ffFF, #3b82f6FF);
+    --title-accent: linear-gradient(to bottom right, var(--accent-primary), var(--accent-secondary));
 
     --action-item-primary: #fff;
     --action-item-secondary: #ddd;
@@ -37,6 +42,11 @@ body {
     --login-button-background: #fff;
 
     --header-primary: #1a1a1a;
+
+    --input-box-accent: #0099ff54;
+
+    --input-name: #fff;
+    --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
 
     --footer-primary: #555;
     
@@ -78,7 +88,7 @@ body.dark {
     align-items: stretch;
     gap: 1rem;
 }
-h1, h2, h3, a1, f1 {
+h1, h2, h3, a1, f1, .InputName, .InputEntry {
     font-family: "Mona Sans";
 }
 h1 {
@@ -108,6 +118,14 @@ f1 a, a1 a {
     font-weight: 500 !important;
     text-underline-offset: 0.1rem;
 }
+.InputName {
+    color: var(--input-name);
+    font-weight: 750 !important;
+}
+.InputEntry {
+    color: var(--header-primary);
+    font-weight: 750 !important;
+}
 .SideBar {
     grid-area: SideBar;
     
@@ -119,7 +137,7 @@ f1 a, a1 a {
     padding: 2rem;
     padding-top: 2rem;
 }
-.About, .Acknowledgments, .Feed, .Profile, .Unsupported {
+.About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
     grid-area: Center;
 
     max-width: 42rem;
@@ -161,8 +179,9 @@ f1 a, a1 a {
     padding: 1rem;
     border-radius: 50%;
 }
-.ActionIcon, .LoginWith {
+.ActionIcon, .LoginWith, .InputPointer {
     transition: var(--transition-main);
+    cursor: pointer;
 }
 .ActionItem:hover .ActionIcon {
     transform: scale(1.05);
@@ -196,11 +215,13 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     border-radius: 4rem;
     background-color: var(--login-button-background);
 }
-.LoginWith:hover {
+.LoginWith:hover, .InputPointer:hover {
     transform: scale(1.015);
 }
-.LoginWith:active {
+.LoginWith:active, .InputPointer:active {
     transform: scale(0.985);
+}
+.LoginWith:active {
     box-shadow: 0 0 10px 0px #000;
 }
 body.dark .LoginWith {
@@ -219,6 +240,47 @@ body.dark .LoginWith h2 {
 }
 .Header h1 {
     color: var(--header-primary);
+}
+.InputName {
+    font-size: 1.25rem;
+    background-image: var(--input-accent);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    padding: 0.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    margin-bottom: -1rem;
+    width: max-content;
+    height: 2.25rem;
+}
+.InputEntry {
+    width: 20.75rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    background-color: var(--background-primary);
+    border: 0.2rem solid var(--accent-primary);
+    border-radius: 1rem;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+    outline: none;
+    box-shadow: 0 0 20px 4px var(--input-box-accent);
+}
+.InputPointer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background-color: var(--accent-primary);
+    width: 3rem;
+    height: 2rem;
+    border-radius: 1rem;
+    margin-top: -3rem;
+    margin-left: 19.5rem;
+}
+.InputPointerIcon {
+    width: 1.5rem;
+    height: 1.5rem;
 }
 .FooterBar {
     grid-area: FooterBar;
@@ -263,20 +325,25 @@ body.dark .LoginWith h2 {
         display: none;
     }
 }
-@media screen and (max-width: 515px) {
+@media screen and (max-width: 565px) {
     #main {
         grid-template-areas: 
             "devBanner"
             "Center";
         grid-template-columns: 100vw;
     }
-    .About, .Acknowledgments, .Feed, .Profile, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
         padding: 1rem;
     }
     .SideBar {
         display: none;
     }
-
+    .Header {
+        padding-top: 0rem;
+    }
+    .InputEntry {
+        width: -webkit-fill-available;
+    }
 }
 .ActionIcon svg {
     width: 2rem;
