@@ -1,7 +1,7 @@
 import { PencilIcon } from "@primer/octicons-react";
-import {useLocation, useNavigate } from "@remix-run/react";
+import { useLocation, useNavigate } from "@remix-run/react";
 
-const Input = ({name, type, prefill, lockedTo, setItem}) => {
+const Input = ({name, type, prefill, lockedTo, setItem, reference}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Input = ({name, type, prefill, lockedTo, setItem}) => {
             <div className={"InputName"}>
                 {name}
             </div>
-            <input type={type} placeholder={prefill} className={"InputEntry"} disabled={(lockedTo) && "disabled"} />
+            <input type={type} placeholder={prefill} className={"InputEntry"} disabled={(lockedTo) && "disabled"} ref={(reference) && reference}/>
             {(lockedTo) && <div onClick={goTo} className={"InputPointer"}><PencilIcon size={"small"} fill={"var(--input-name)"} className={"InputPointerIcon"} /></div>}
         </div>
     )

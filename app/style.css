@@ -44,6 +44,7 @@ body {
     --header-primary: #1a1a1a;
 
     --input-box-accent: #0099ff54;
+    --input-box-focus: #0099FF99;
 
     --input-name: #fff;
     --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
@@ -260,10 +261,14 @@ body.dark .LoginWith h2 {
     background-color: var(--background-primary);
     border: 0.2rem solid var(--accent-primary);
     border-radius: 1rem;
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     outline: none;
     box-shadow: 0 0 20px 4px var(--input-box-accent);
+    transition: var(--transition-main);
+}
+.InputEntry:focus {
+    box-shadow: 0 0 20px 3px var(--input-box-focus);
 }
 .InputPointer {
     position: relative;
@@ -276,7 +281,7 @@ body.dark .LoginWith h2 {
     height: 2rem;
     border-radius: 1rem;
     margin-top: -3rem;
-    margin-left: 19.5rem;
+    margin-left: 19rem;
 }
 .InputPointerIcon {
     width: 1.5rem;
@@ -344,8 +349,18 @@ body.dark .LoginWith h2 {
     .InputEntry {
         width: -webkit-fill-available;
     }
+    .InputPointer {
+        margin-left: auto;
+        margin-right: 1rem;
+    }
 }
 .ActionIcon svg {
     width: 2rem;
     height: 2rem;
+}
+input {
+    padding-block: 1px;
+}
+input:disabled {
+    opacity: 1.0;
 }

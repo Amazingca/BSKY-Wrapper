@@ -6,7 +6,7 @@ import {
     ToolsIcon,
     PaintbrushIcon
 } from "@primer/octicons-react";
-import {useLocation, useNavigate } from "@remix-run/react";
+import { useLocation, useNavigate } from "@remix-run/react";
 
 const TaskBar = () => {
 
