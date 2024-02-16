@@ -4,20 +4,31 @@ import {
     Outlet,
     Scripts
 } from "@remix-run/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SideBar from "./components/sidebar/SideBar";
 import FooterBar from "./components/footerbar/FooterBar";
 import { BeakerIcon } from "@primer/octicons-react";
 import Locale from "./infra/Locale.js";
+import Api from "./infra/Api.mjs";
 import Themes from "./infra/Themes.js";
 import stylesheet from "./style.css";
-import manifest from "./manifest.json";
+import manifest from "./app.webmanifest";
 
 const App = () => {
 
     const localData = new Locale();
 
     const [theme, setTheme] = useState("light");
+    const [server, setServer] = useState("https://bsky.social");
+
+    useEffect(() => {
+
+        setServer(localData.getServer());
+    }, []);
+
+    const apiInterface = new Api(server);
+
+    const context = [localData, apiInterface, server, setServer];
 
     const display = new Themes(localData, theme, setTheme);
 
@@ -40,7 +51,7 @@ const App = () => {
                 <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
                     {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                     <SideBar display={display} />
-                    <Outlet />
+                    <Outlet context={context} />
                     <FooterBar />
                 </div>
                 <Scripts />

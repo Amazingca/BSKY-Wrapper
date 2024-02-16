@@ -145,6 +145,9 @@ f1 a, a1 a {
     display: flex;
     flex-direction: column;
 }
+.Login, .Settings {
+    gap: 1rem;
+}
 .SideBar-Heading {
     display: flex;
     flex-direction: column;
@@ -242,6 +245,11 @@ body.dark .LoginWith h2 {
 .Header h1 {
     color: var(--header-primary);
 }
+.CenterSpacer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
 .InputName {
     font-size: 1.25rem;
     background-image: var(--input-accent);
@@ -306,6 +314,9 @@ body.dark .LoginWith h2 {
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
+input[type="password"] {
+    letter-spacing: 0.25rem;
+}
 @media screen and (max-width: 1280px) {
     
     #main {
@@ -340,6 +351,9 @@ body.dark .LoginWith h2 {
     .About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
         padding: 1rem;
     }
+    .Login, .Settings {
+        gap: 0rem;
+    }
     .SideBar {
         display: none;
     }
@@ -352,6 +366,9 @@ body.dark .LoginWith h2 {
     .InputPointer {
         margin-left: auto;
         margin-right: 1rem;
+    }
+    input[type="password"] {
+        letter-spacing: 0rem;
     }
 }
 .ActionIcon svg {

@@ -17,6 +17,19 @@ export default class Locale {
         this.#setData(this.locale);
     }
 
+    getServer = () => {
+
+        if (this.locale.server == undefined) this.locale.server = "https://bsky.social";
+
+        return this.locale.server;
+    }
+
+    setServer = (server) => {
+
+        this.locale.server = server;
+        this.push();
+    }
+
     getTheme = () => {
 
         return this.locale.theme;
