@@ -9,7 +9,7 @@ export default class Api {
     defaultFeedUri = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot";
 
     // Public Bluesky API node.
-    publicBlueskyApi = "https://public.api.bsky.app";
+    publicBlueskyApi = "https://api.bsky.app";
 
     // Limit for valid blob to upload to a repo. Any file must be under this limit to be included within a record.
     static blobSizeLimit = 976.56;
@@ -387,7 +387,7 @@ export default class Api {
 
             if (hydratedFeedObj) {
 
-                return this.santize(hydratedFeedObj);
+                return this.sanitize(hydratedFeedObj);
             } else {
 
                 throw new Error("Not retrievable.");
@@ -531,6 +531,6 @@ export default class Api {
      */
     sanitize = (data) => {
 
-        return JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
+        return data; //JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
     }
 }
