@@ -40,6 +40,7 @@ export default class Api {
         this.pdsUrl = pdsUrl;
         this.authorization = null;
         this.recordLimit = recordLimit;
+        this.doSanitize = true;
     }
 
     /**
@@ -234,6 +235,156 @@ export default class Api {
     }
 
     /**
+     * Getter for retrieving best place to get hydrated items. Uses authorization bases for this.
+     * @returns Preferred data server based on current authorization.
+     */
+    getPreferredDataServer = () => {
+
+        return (this.authorization != null) ? this.pdsUrl : this.publicBlueskyApi;
+    }
+
+    /**
+     * Optional setter that lets you choose whether to disable sanitization on returned data. True by default.
+     * @param {boolean} doSanitize Whether to sanitize returned data.
+     */
+    setSanitize = (doSanitize) => {
+
+        this.doSanitize = doSanitize;
+    }
+
+    /**
+     * Resolves the DID for a given user handle.
+     * @param {string} userHandle The handle of the user.
+     * @returns The DID for the user, if it exists. Null if it doesn't.
+     */
+    getUserDid = async (userHandle) => {
+
+        try {
+
+            const userDid = await fetch(`${this.pdsUrl}/xrpc/com.atproto.identity.resolveHandle?handle=${userHandle}`).then(r => r.json());
+
+            if (userDid.did) {
+
+                return userDid.did;
+            } else {
+
+                throw new Error("Error fetching user DID! =>", userDid);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves a user's hydrated profile object.
+     * @param {string} user User reference, either by handle or DID.
+     * @returns User profile object if one exists, empty if not.
+     */
+    getProfile = async (user) => {
+
+        if (this.authorization == null) if (await this.isHidden(user)) return {};
+
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) {
+
+            requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+        }
+
+        try {
+
+            const userProfileObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.actor.getProfile?actor=${user}`, requestData).then(r => r.json());
+
+            if (!userProfileObj.error) {
+
+                return userProfileObj;
+            } else {
+
+                throw new Error(userProfileObj);
+            }
+        } catch (e) {
+
+            console.warn("There was an error fetching the profile! =>", e);
+            return {};
+        }
+    }
+
+    getProfileFeed = async (user) => {
+
+        if (this.authorization == null) if (await this.isHidden(user)) return {};
+
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) {
+
+            requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+        }
+
+        try {
+
+            const userProfileFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.feed.getAuthorFeed?actor=${user}`, requestData).then(r => r.json());
+
+            if (!userProfileFeedObj.error) {
+
+                return userProfileFeedObj;
+            } else {
+
+                throw new Error(userProfileFeedObj);
+            }
+        } catch (e) {
+
+            console.warn("There was an error fetching the user's feed! =>", e);
+            return {};
+        }
+    }
+
+    /**
+     * Resolves a hydrated post thread.
+     * @param {object} user Reference for a user. Can be either a handle or DID, assigned with "ref", and the type provided under "type".
+     * @param {string} postId Reference key for a post record.
+     * @returns Object with post thread, otherwise empty.
+     */
+    getPostThread = async (user, postId) => {
+
+        if (this.authorization == null) if (await this.isHidden(user.ref)) return {};
+
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) {
+
+            requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+        }
+
+        try {
+
+            const hydratedPostThreadObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.feed.getPostThread?uri=at://${(user.type == "did") ? user.ref : await this.getUserDid(user.ref)}/app.bsky.feed.post/${postId}`, requestData).then(r => r.json());
+
+            if (!hydratedPostThreadObj.error) {
+
+                return this.sanitize(hydratedPostThreadObj);
+            } else {
+
+                throw new Error("Error retrieving post thread! =>", hydratedPostThreadObj);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return {};
+        }
+    }
+
+    /**
      * This is a low-level method which is responsible for all non-authenticated record retrievals.
      * It will return all records (in consideration with the record retrieval limit) inside the provided collection.
      * Before making an XRPC request, the method will perform a check beforehand to ensure that the provided collection exists within the supportedCollections array.
@@ -383,7 +534,7 @@ export default class Api {
 
         try {
 
-            const hydratedFeedObj = await fetch(`${(requestData.headers["Authorization"]) ? this.pdsUrl : this.publicBlueskyApi}/xrpc/${xrpcRequest}${(feedUri) ? "?feed=" + feedUri + "&" : "?"}limit=${this.recordLimit}`, requestData).then(r => r.json());
+            const hydratedFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}${(feedUri) ? "?feed=" + feedUri + "&" : "?"}limit=${this.recordLimit}`, requestData).then(r => r.json());
 
             if (hydratedFeedObj) {
 
@@ -531,6 +682,6 @@ export default class Api {
      */
     sanitize = (data) => {
 
-        return data; //JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
+        return (this.doSanitize == true) ? JSON.parse(JSON.stringify(data).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;")) : data;
     }
 }

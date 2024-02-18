@@ -53,6 +53,8 @@ body {
     --record-author-name: #222;
     --record-author-handle: #555;
     --record-text-primary: #000;
+    --record-metrics-icon: #555;
+    --record-metrics-text: #000;
 
     --footer-primary: #555;
     
@@ -69,9 +71,11 @@ body.dark {
     --header-primary: #ddd;
 
     --record-background: #1a1a1a;
-    --record-author-name: #ddd;
+    --record-author-name: #fff;
     --record-author-handle: #ddd;
     --record-text-primary: #fff;
+    --record-metrics-icon: #ddd;
+    --record-metrics-text: #fff;
 
     --footer-primary: #fff;
 }
@@ -130,7 +134,25 @@ p.DisplayName, a.Handle {
     color: var(--record-author-name);
     font-weight: 700 !important;
 }
+p.Handle {
+    font-weight: 550 !important;
+}
+.Profile .Details .DisplayName, .Profile .Details .Handle {
+    font-size: 1.35rem;
+}
+p.Handle, a.Handle {
+    color: var(--record-author-handle);
+}
 a.Handle {
+    font-weight: 600 !important;
+}
+.PostHeader .Timestamp {
+    color: var(--record-author-handle);
+}
+.Metrics div p {
+    font-weight: 600 !important;
+}
+.Metrics div p.Accent {
     color: var(--record-author-handle);
 }
 f1, a1 {
@@ -162,7 +184,7 @@ p.DisplayName a, p.Handle a, f1 a, a1 a {
     padding: 2rem;
     padding-top: 2rem;
 }
-.About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
+.About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
     grid-area: Center;
 
     max-width: 42rem;
@@ -175,7 +197,7 @@ p.DisplayName a, p.Handle a, f1 a, a1 a {
 .Login, .Settings {
     gap: 1rem;
 }
-.Feed {
+.Feed, .UserProfile, .UserPost {
     gap: 2rem;
 }
 .SideBar-Heading {
@@ -325,13 +347,24 @@ body.dark .LoginWith h2 {
     width: 1.5rem;
     height: 1.5rem;
 }
-.Post {
+.Post, .Profile {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     background-color: var(--record-background);
     padding: 0.75rem;
     border-radius: 0.75rem;
+}
+.Post .PostHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.PostHeader a.Timestamp {
+    text-decoration: none;
+}
+.PostHeader a.Timestamp:hover {
+    text-decoration: underline;
 }
 .Post .Author {
     display: flex;
@@ -343,11 +376,67 @@ body.dark .LoginWith h2 {
     height: 3rem;
     border-radius: 50%;
 }
-.Post .Author .Details {
-    /*display: flex;
-    flex-direction: column;*/
+.Post .Author, .Profile .Details p {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.PostFooter {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.PostFooter .Metrics {
+    display: flex;
+    justify-content: space-between;
+    max-width: 25rem;
+    gap: 1rem;
+}
+.PostFooter .Metrics div {
+    display: flex;
+    gap: 0.5rem;
+    width: 5rem;
+}
+.PostFooter .Metrics div p {
+    color: var(--record-metrics-text);
+}
+.PostFooter div svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+.Profile {
+    padding: 0rem;
+    margin-top: 2rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.Profile .Banner {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+.Profile .Details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.Profile .Inline {
+    padding: 0.75rem;
+    margin-top: -4.5rem;
+}
+.Profile .Avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: 0.2rem solid var(--record-background);
+    background: var(--record-background);
+}
+.Profile .Details .Metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.Profile .Details .Metrics div {
+    display: flex;
+    gap: 0.25rem;
 }
 .FooterBar {
     grid-area: FooterBar;
@@ -395,7 +484,7 @@ input[type="password"] {
     .devBanner {
         align-items: center;
     }
-    .About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
+    .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding-right: 2rem;
     }
     .FooterBar {
@@ -409,13 +498,13 @@ input[type="password"] {
             "Center";
         grid-template-columns: 100vw;
     }
-    .About, .Acknowledgments, .Feed, .Login, .Settings, .Profile, .Unsupported {
+    .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
     }
     .Login, .Settings {
         gap: 0rem;
     }
-    .Feed {
+    .Feed, .UserProfile, .UserPost {
         gap: 1rem;
     }
     .SideBar {
@@ -430,6 +519,9 @@ input[type="password"] {
     .InputPointer {
         margin-left: auto;
         margin-right: 1rem;
+    }
+    .Profile {
+        margin-top: 0rem;
     }
     input[type="password"] {
         letter-spacing: 0rem;

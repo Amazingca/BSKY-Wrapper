@@ -20,13 +20,18 @@ const App = () => {
 
     const [theme, setTheme] = useState("light");
     const [server, setServer] = useState("https://bsky.social");
+    const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
 
         setServer(localData.getServer());
+        setAuthorized(Object.keys(localData.getPrimaryUser()).length != 0);
     }, []);
 
     const apiInterface = new Api(server);
+
+    // Overrides sanitization on returned data.
+    apiInterface.setSanitize(false);
 
     const context = [localData, apiInterface, server, setServer];
 
@@ -50,7 +55,7 @@ const App = () => {
             <body className={theme}>
                 <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
                     {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
-                    <SideBar display={display} />
+                    <SideBar display={display} authorized={authorized} />
                     <Outlet context={context} />
                     <FooterBar />
                 </div>

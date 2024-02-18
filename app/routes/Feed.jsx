@@ -22,7 +22,7 @@ const Feed = () => {
         <div className={"Feed"}>
             <Header title="Feed" />
             {posts.feed.map((record) => (
-                <Post record={record} key={record.uri} />
+                <Post record={record} key={record.post.uri} />
             ))}
         </div>
     )

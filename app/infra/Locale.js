@@ -41,6 +41,11 @@ export default class Locale {
         this.push();
     }
 
+    getPrimaryUser = () => {
+
+        return (this.locale.users) ? this.locale.users[0] : {};
+    }
+
     #getData = () => {
 
         if (typeof document != "undefined") return JSON.parse(localStorage.getItem("locale"));
