@@ -7,7 +7,3 @@ build
 .wrangler
 public
 functions
-/functions/\[\[path\]\].js
-/functions/\[\[path\]\].js.map
-/functions/metafile.*
-/functions/version.txt
