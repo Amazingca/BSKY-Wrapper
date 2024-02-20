@@ -135,6 +135,7 @@ p, a {
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
+    word-break: break-word;
 
     color: var(--record-text-primary);
     font-weight: 400 !important;
