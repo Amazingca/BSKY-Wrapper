@@ -1,0 +1,3 @@
+[submodule "bsky-wrapper"]
+	path = bsky-wrapper
+	url = ./bsky-wrapper
