@@ -56,6 +56,16 @@ body {
     --record-metrics-icon: #555;
     --record-metrics-text: #000;
 
+    --metric-comment-primary: #38a4f7;
+    --metric-comment-accent: #38a4f722;
+    --metric-comment-accent-darker: #38a4f744;
+    --metric-repost-primary: #40a930;
+    --metric-repost-accent: #40a93022;
+    --metric-repost-accent-darker: #40a93044;
+    --metric-like-primary: #fa4355;
+    --metric-like-accent: #fa435522;
+    --metric-like-accent-darker: #fa435544;
+
     --footer-primary: #555;
     
     --transition-main: 0.1s cubic-bezier(0.3,0.09,0.46,1.01) 0s;
@@ -103,7 +113,7 @@ body.dark {
     align-items: stretch;
     gap: 1rem;
 }
-h1, h2, h3, a1, f1, p, a, .InputName, .InputEntry {
+h1, h2, h3, a1, footer, p, a, .InputName, .InputEntry {
     font-family: "Mona Sans";
 }
 h1 {
@@ -155,12 +165,12 @@ a.Handle {
 .Metrics div p.Accent {
     color: var(--record-author-handle);
 }
-f1, a1 {
+footer, a1 {
     font-size: 1rem;
     color: var(--footer-primary);
     font-weight: 400 !important;
 }
-p.DisplayName a, p.Handle a, f1 a, a1 a {
+p.DisplayName a, p.Handle a, footer a, a1 a {
     color: inherit;
     font-weight: 500 !important;
     text-underline-offset: 0.1rem;
@@ -383,6 +393,7 @@ body.dark .LoginWith h2 {
 .PostFooter {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 1.5rem;
 }
 .PostFooter .Metrics {
@@ -391,8 +402,9 @@ body.dark .LoginWith h2 {
     max-width: 25rem;
     gap: 1rem;
 }
-.PostFooter .Metrics div {
+.PostFooter .MetricItem {
     display: flex;
+    align-items: baseline;
     gap: 0.5rem;
     width: 5rem;
 }
@@ -402,6 +414,45 @@ body.dark .LoginWith h2 {
 .PostFooter div svg {
     width: 1.25rem;
     height: 1.25rem;
+}
+@keyframes MetricHover {
+    from {background-size: auto 0rem}
+    to {background-size: auto 2.2rem}
+}
+@keyframes MetricDefault { 
+    from {background-size: auto 2.2rem}
+    to {background-size: auto 0rem}
+}
+.PostFooter .MetricIcon {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+
+    padding: 0.4rem;
+    border-radius: 4rem;
+
+    background-image: var(--primary-accent);
+    background-repeat: no-repeat;
+
+    transition-duration: 0.1s;
+
+    animation-name: MetricDefault;
+    animation-duration: 0.3s;
+    background-size: auto 0rem;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+.PostFooter .MetricIcon:hover {
+    transform: scale(1.05);
+    animation-name: MetricHover;
+    background-size: auto 2.2rem;
+    animation-duration: 0.3s;
+    cursor: pointer;
+}
+.PostFooter .MetricIcon:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 5px #00000055;
 }
 .UserProfile .NoView {
     margin-top: 2rem;

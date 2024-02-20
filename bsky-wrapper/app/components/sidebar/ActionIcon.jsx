@@ -16,7 +16,7 @@ const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="-
     }
 
     return (
-        <div style={{backgroundColor: `var(${backgroundColor})`}} className={`ActionIcon${(mainColor == "--primary-accent") ? " ComposeIcon": ""}`}>
+        <div style={{backgroundColor: `var(${backgroundColor})`}} className={`ActionIcon${(mainColor == "--primary-accent") ? " ComposeIcon" : ""}`}>
             {(mainColor != "--primary-accent") ? <Icon size={"small"} fill={`var(${mainColor})`} /> : GradientPaintbrush()}
         </div>
     )

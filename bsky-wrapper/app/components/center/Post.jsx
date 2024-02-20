@@ -9,6 +9,7 @@ import {
     CommentIcon,
     KebabHorizontalIcon
 } from "@primer/octicons-react";
+import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
 
 const Post = ({record}) => {
@@ -59,18 +60,9 @@ const Post = ({record}) => {
             {(record.post.record.text) && <p>{record.post.record.text}</p>}
             <div className={"PostFooter"}>
                 <div className={"Metrics"}>
-                    <div onClick={replyToPost}>
-                        <CommentIcon size={"small"} fill={"var(--record-metrics-icon)"} />
-                        {(record.post.replyCount > 0) && <p>{record.post.replyCount}</p>}
-                    </div>
-                    <div onClick={repostPost}>
-                        <ArrowSwitchIcon size={"small"} fill={"var(--record-metrics-icon)"} />
-                        {(record.post.repostCount > 0) && <p>{record.post.repostCount}</p>}
-                    </div>
-                    <div onClick={likePost}>
-                        <HeartIcon size={"small"} fill={"var(--record-metrics-icon)"} />
-                        {(record.post.likeCount > 0) && <p>{record.post.likeCount}</p>}
-                    </div>
+                    <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />
+                    <MetricItem Icon={ArrowSwitchIcon} onClick={repostPost} fillColor="--metric-repost-primary" backgroundColor="--metric-repost-accent" metricData={record.post.repostCount} />
+                    <MetricItem Icon={HeartIcon} onClick={likePost} fillColor="--metric-like-primary" backgroundColor="--metric-like-accent" metricData={record.post.likeCount} />
                 </div>
                 <div className={"Options"}>
                     <KebabHorizontalIcon size={"small"} fill={"var(--record-metrics-icon)"} />
