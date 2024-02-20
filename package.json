@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Amazingca/BSKY-Wrapper#readme",
   "dependencies": {
+    "@primer/octicons-react": "^19.8.0",
     "@remix-run/cloudflare": "^2.6.0",
     "@remix-run/cloudflare-pages": "^2.6.0",
     "@remix-run/css-bundle": "^2.6.0",
