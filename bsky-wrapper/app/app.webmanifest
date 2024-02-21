@@ -3,7 +3,7 @@
     "short_name": "Blue Wrapper",
     "name": "Bluesky Social Wrapper",
     "description": "Unofficial web client for Bluesky Social.",
-    "start_url": "/login",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#0099ff",
     "theme_color": "#f5f5f5",
