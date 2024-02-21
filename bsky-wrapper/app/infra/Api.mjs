@@ -491,6 +491,24 @@ export default class Api {
     }
 
     /**
+     * Checker method that determines whether the supplied user, or user that is authenticated, has elected to have their account not shown publicly.
+     * @param {object} userObj Optional parameter that is the chosen user to check. The default is the authorized user, if it exists.
+     * @returns True if a "!no-unauthenticated" flag has been detected in public-facing flag record. False in all other conditions.
+     */
+    isHiddenHydrated = (userObj) => {
+
+        if (userObj.labels.length == 0) return false;
+
+        for (const label of userObj.labels) {
+
+            if (label == "!no-authenticated") {
+
+                return true;
+            }
+        }
+    }
+
+    /**
      * This method is responsible for returning a feed, based on authentication and what is passed as a feed URI.
      * There are four main branches that we can find ourselves in, being that a boolean of whether we are authenticated and whether we have a given feed URI yields four combinations.
      * We will authenticate requests for a feed that can be authenticated, while using a different url to make public API requests.

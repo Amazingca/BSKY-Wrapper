@@ -49,6 +49,7 @@ body {
     --input-name: #fff;
     --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
 
+    --record-prepend-primary: #555;
     --record-background: #f5f5f5;
     --record-author-name: #222;
     --record-author-handle: #555;
@@ -156,6 +157,9 @@ p.Handle, a.Handle {
 }
 a.Handle {
     font-weight: 600 !important;
+}
+.PostPrepend p {
+    color: var(--record-prepend-primary);
 }
 .PostHeader .Timestamp {
     color: var(--record-author-handle);
@@ -358,6 +362,11 @@ body.dark .LoginWith h2 {
     width: 1.5rem;
     height: 1.5rem;
 }
+.PostRoot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 .Post, .Profile {
     display: flex;
     flex-direction: column;
@@ -365,6 +374,19 @@ body.dark .LoginWith h2 {
     background-color: var(--record-background);
     padding: 0.75rem;
     border-radius: 0.75rem;
+}
+.ReplyConnector {
+    height: 2rem;
+    width: 0.5rem;
+    background-color: var(--record-background);
+    margin-left: 2rem;
+}
+.PostPrepend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    cursor: pointer;
 }
 .Post .PostHeader {
     display: flex;
