@@ -81,6 +81,7 @@ body.dark {
 
     --header-primary: #ddd;
 
+    --record-prepend-primary: #ddd;
     --record-background: #1a1a1a;
     --record-author-name: #fff;
     --record-author-handle: #ddd;
