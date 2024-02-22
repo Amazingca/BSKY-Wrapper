@@ -583,7 +583,7 @@ input[type="password"] {
     }
     .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
-        overflow-y: none;
+        overflow-y: unset;
     }
     .Login, .Settings {
         gap: 0rem;
