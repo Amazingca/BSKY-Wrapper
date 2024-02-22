@@ -212,6 +212,9 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     overflow-y: scroll;
     scrollbar-width: none;
 }
+.About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
+    display: none;
+}
 .Login, .Settings {
     gap: 1rem;
 }
@@ -580,6 +583,7 @@ input[type="password"] {
     }
     .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
+        overflow-y: none;
     }
     .Login, .Settings {
         gap: 0rem;
