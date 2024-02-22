@@ -37,6 +37,8 @@ body {
     --action-icon-primary: #fff;
     --action-icon-background: #2a2a2a;
     --action-icon-background-secondary: #fff;
+    
+    --primary-shadow: #000;
 
     --login-button-primary: #222;
     --login-button-background: #fff;
@@ -54,7 +56,7 @@ body {
     --record-author-name: #222;
     --record-author-handle: #555;
     --record-text-primary: #000;
-    --record-metrics-icon: #555;
+    --record-metric-shadow: #00000055;
     --record-metrics-text: #000;
 
     --metric-comment-primary: #38a4f7;
@@ -263,11 +265,11 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
 }
 .ActionItem:active .ActionIcon {
     transform: scale(0.95);
-    box-shadow: 0 0 10px 0px #000;
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
 }
 .ActionIcon:active {
     transform: scale(0.95);
-    box-shadow: 0 0 10px 0px #000;
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
 }
 body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .ComposeIcon {
     background-image: var(--secondary-accent);
@@ -294,7 +296,7 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     transform: scale(0.985);
 }
 .LoginWith:active {
-    box-shadow: 0 0 10px 0px #000;
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
 }
 body.dark .LoginWith {
     background-image: var(--secondary-accent);
@@ -476,7 +478,7 @@ body.dark .LoginWith h2 {
 }
 .PostFooter .MetricIcon:active {
     transform: scale(0.97);
-    box-shadow: 0 0 5px #00000055;
+    box-shadow: 0 0 5px var(--record-metric-shadow);
 }
 .UserProfile .NoView {
     margin-top: 2rem;
