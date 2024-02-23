@@ -34,7 +34,7 @@ const UserPost = () => {
 
     return (
         <div className={"UserPost"}>
-            <Header title={(post.thread) ? "Post Thread" : "Post"} />
+            <Header title={(post.thread && post.thread.parent) ? "Post Thread" : "Post"} />
             <div>
                 {(post.thread && post.thread.parent) && higherLevelPost(post.thread.parent)}
                 {(post.thread) ? <Post record={post.thread} /> : (Object.keys(post) == 0) && <NoView />}

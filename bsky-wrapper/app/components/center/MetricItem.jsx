@@ -11,6 +11,9 @@ const MetricItem = ({Icon, onClick, fillColor, backgroundColor, metricData, mini
 }
 
 MetricItem.defaultProps = {
+    fillColor: "--metric-primary",
+    backgroundColor: "--metric-accent",
+    metricData: 0,
     minimum: 0
 }
 

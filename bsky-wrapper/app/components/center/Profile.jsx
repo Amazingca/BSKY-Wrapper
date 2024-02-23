@@ -1,3 +1,5 @@
+import Facets from "./Facets";
+
 const Profile = ({user}) => {
     
     return (
@@ -10,7 +12,7 @@ const Profile = ({user}) => {
                         <p className={"DisplayName"}>{user.displayName}</p>
                         <p className={"Handle"}>@{user.handle}</p>
                     </div>
-                    {user.description.split("\n").map(line => <p key={line}>{line}</p>)}
+                    {(user.description) && <Facets text={user.description} />}
                     <div className={"Metrics"}>
                         <div><p>{user.followersCount}</p><p className={"Accent"}>Follower{(user.followersCount > 1) && "s"}</p></div>
                         <div><p>{user.followsCount}</p><p className={"Accent"}>Following</p></div>

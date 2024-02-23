@@ -18,10 +18,12 @@ const Feed = () => {
         getPosts();
     }, []);
 
+    var index = 0;
+
     return (
         <div className={"Feed"}>
             <Header title="Feed" />
-            {posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} key={record.post.uri} />)}
+            {posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

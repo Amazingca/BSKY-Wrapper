@@ -24,12 +24,14 @@ const UserProfile = () => {
         getUserItems();
     }, []);
 
+    var index = 0;
+
     return (
         <div className={"UserProfile"}>
             {(false) && <Header title="Profile" />}
             {(user.did) ? <Profile user={user} /> : (Object.keys(user) == 0) && <NoView />}
             {(posts.feed) && posts.feed.map((record) => (
-                <Post record={record} key={record.post.uri} />
+                <Post record={record} key={record.post.uri + "/target/" + index++} />
             ))}
         </div>
     )
