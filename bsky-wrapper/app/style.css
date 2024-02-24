@@ -56,6 +56,7 @@ body {
     --record-author-name: #222;
     --record-author-handle: #555;
     --record-text-primary: #000;
+    --record-external-background: #99999922;
     --record-metric-shadow: #00000055;
     --record-metrics-text: #000;
 
@@ -161,7 +162,7 @@ p.Handle {
 .Profile .Details .DisplayName, .Profile .Details .Handle {
     font-size: 1.35rem;
 }
-p.Handle, a.Handle {
+p.Handle, a.Handle, .InlineAuthor a {
     color: var(--record-author-handle);
 }
 a.Handle {
@@ -170,7 +171,12 @@ a.Handle {
 .PostPrepend p {
     color: var(--record-prepend-primary);
 }
-.PostHeader .Timestamp {
+.PostHeader .Timestamp, .InlinePost .Timestamp {
+    color: var(--record-author-handle);
+}
+.ExternalLink .ExternalHeader {
+    font-size: 1.25rem;
+    font-weight: 600 !important;
     color: var(--record-author-handle);
 }
 .Metrics div p {
@@ -196,6 +202,10 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
 .InputEntry {
     color: var(--header-primary);
     font-weight: 750 !important;
+}
+.InlinePost .InlineAuthor p, .InlinePost .InlineAuthor a {
+    font-size: 1.1rem;
+    font-weight: 500 !important
 }
 .SideBar {
     grid-area: SideBar;
@@ -406,10 +416,10 @@ body.dark .LoginWith h2 {
     justify-content: space-between;
     align-items: flex-start;
 }
-.PostHeader a.Timestamp {
+.PostHeader a.Timestamp, .InlinePost a.Timestamp {
     text-decoration: none;
 }
-.PostHeader a.Timestamp:hover {
+.PostHeader a.Timestamp:hover, .InlinePost a.Timestamp:hover {
     text-decoration: underline;
 }
 .Post .Author {
@@ -441,15 +451,40 @@ body.dark .LoginWith h2 {
     object-fit: cover;
     cursor: pointer;
 }
+.ExternalLink {
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    background-color: var(--record-external-background);
+    /*user-select: none; ** Might put this back in depending on what's more accessible for the user.
+    -webkit-user-select: none;*/
+    cursor: pointer;
+}
+.ExternalLink:active {
+    transform: scale(0.99);
+    box-shadow: 0 0 10px 0px var(--record-metric-shadow);
+}
+.ExternalLink img {
+    width: 100%;
+}
+.ExternalLink .ExternalTitling {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+}
+.ExternalLink:hover .ExternalHeader {
+    text-decoration: underline;
+}
 .PostFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 .PostFooter .Metrics {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     max-width: 25rem;
     gap: 1rem;
 }
@@ -542,6 +577,38 @@ body.dark .LoginWith h2 {
 .Profile .Details .Metrics div {
     display: flex;
     gap: 0.25rem;
+}
+.Post .NoView, .InlinePost {
+    margin-top: unset;
+    background-color: var(--record-external-background);
+}
+.InlinePost {
+    border-radius: 0.5rem;
+}
+.InlineNest {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+}
+.InlinePost .InlineHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.InlinePost .InlineAuthor, .InlineAuthor .Titlers {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+.Titlers {
+    flex-wrap: wrap;
+}
+.InlineAuthor img {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
 }
 .FooterBar {
     grid-area: FooterBar;

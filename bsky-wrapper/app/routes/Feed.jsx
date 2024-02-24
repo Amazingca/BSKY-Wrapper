@@ -23,7 +23,7 @@ const Feed = () => {
     return (
         <div className={"Feed"}>
             <Header title="Feed" />
-            {posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} key={record.post.uri + "/target/" + index++} />)}
+            {posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} apiInterface={apiInterface} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

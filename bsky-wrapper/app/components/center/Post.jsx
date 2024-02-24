@@ -15,7 +15,7 @@ import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
 
-const Post = ({record}) => {
+const Post = ({record, apiInterface}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -36,13 +36,13 @@ const Post = ({record}) => {
 
     const goToPost = () => {
 
-        if (window.getSelection().type == "Caret") {
+        /*if (window.getSelection().type == "Caret") {
             
             if (location.pathname != `/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`) {
                 
                 navigate(`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`);
             }
-        }
+        }*/
     }
 
     const replyToPost = () => {
@@ -65,7 +65,7 @@ const Post = ({record}) => {
             {(record.reply || record.reason) && (
                 <div onClick={goToPrependItem} className={"PostPrepend"}>
                     {(record.reason) ? <ArrowSwitchIcon size={"small"} fill="var(--record-prepend-primary)" /> : (record.reply) && <ReplyIcon size={"small"} fill="var(--record-prepend-primary)" />}
-                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? `Replied to ${record.reply.parent.author.displayName}` : ""}</p>
+                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? (apiInterface.isHiddenHydrated(record.reply.parent.author) == false) ? `Replied to ${record.reply.parent.author.displayName}` : " Replied to a user" : ""}</p>
                 </div>
             )}
             <div onClick={goToPost} className={"Post"}>
@@ -81,8 +81,8 @@ const Post = ({record}) => {
                         {Time.relative(record.post.record.createdAt)}
                     </Link>
                 </div>
-                {(record.post.record.text) && (record.post.record.facets) ? <Facets text={record.post.record.text} facets={record.post.record.facets} /> : <p>{record.post.record.text}</p>}
-                {(record.post.embed) && <Embed embed={record.post.embed} />}
+                {(record.post.record.text) && (record.post.record.facets) ? <Facets text={record.post.record.text} facets={record.post.record.facets} /> : <Facets text={record.post.record.text} />}
+                {(record.post.embed) && <Embed embed={record.post.embed} apiInterface={apiInterface} />}
                 <div className={"PostFooter"}>
                     <div className={"Metrics"}>
                         <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />

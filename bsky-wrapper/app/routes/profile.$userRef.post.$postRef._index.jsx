@@ -26,7 +26,7 @@ const UserPost = () => {
         return (
             <>
                 {(record.parent) && higherLevelPost(record.parent)}
-                {(record.post && (apiInterface.isHiddenHydrated(record.post.author) == false)) ? <Post record={record} /> : <NoView />}
+                {(record.post && (apiInterface.isHiddenHydrated(record.post.author) == false)) ? <Post record={record} apiInterface={apiInterface} /> : <NoView />}
                 <div className={"ReplyConnector"}></div>
             </>
         )
@@ -37,7 +37,7 @@ const UserPost = () => {
             <Header title={(post.thread && post.thread.parent) ? "Post Thread" : "Post"} />
             <div>
                 {(post.thread && post.thread.parent) && higherLevelPost(post.thread.parent)}
-                {(post.thread) ? <Post record={post.thread} /> : (Object.keys(post) == 0) && <NoView />}
+                {(post.thread) ? <Post record={post.thread} apiInterface={apiInterface} /> : (Object.keys(post) == 0) && <NoView />}
             </div>
         </div>
     )

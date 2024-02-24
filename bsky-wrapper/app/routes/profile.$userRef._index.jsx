@@ -30,9 +30,7 @@ const UserProfile = () => {
         <div className={"UserProfile"}>
             {(false) && <Header title="Profile" />}
             {(user.did) ? <Profile user={user} /> : (Object.keys(user) == 0) && <NoView />}
-            {(posts.feed) && posts.feed.map((record) => (
-                <Post record={record} key={record.post.uri + "/target/" + index++} />
-            ))}
+            {(posts.feed) && posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} apiInterface={apiInterface} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }
