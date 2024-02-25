@@ -65,7 +65,7 @@ const Post = ({record, apiInterface}) => {
             {(record.reply || record.reason) && (
                 <div onClick={goToPrependItem} className={"PostPrepend"}>
                     {(record.reason) ? <ArrowSwitchIcon size={"small"} fill="var(--record-prepend-primary)" /> : (record.reply) && <ReplyIcon size={"small"} fill="var(--record-prepend-primary)" />}
-                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? (apiInterface.isHiddenHydrated(record.reply.parent.author) == false) ? `Replied to ${record.reply.parent.author.displayName}` : " Replied to a user" : ""}</p>
+                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? (apiInterface.isHiddenHydrated(record.reply.parent.author) == false) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
                 </div>
             )}
             <div onClick={goToPost} className={"Post"}>
