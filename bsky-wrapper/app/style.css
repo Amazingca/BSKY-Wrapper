@@ -415,6 +415,10 @@ body.dark .LoginWith h2 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 0.75rem;
+}
+.PostHeader .Timestamp, .InlineHeader .Timestamp {
+    white-space: nowrap;
 }
 .PostHeader a.Timestamp, .InlinePost a.Timestamp {
     text-decoration: none;
@@ -432,7 +436,12 @@ body.dark .LoginWith h2 {
     height: 3rem;
     border-radius: 50%;
 }
-.Post .Author, .Profile .Details p {
+.Author .Details, .InlineAuthor .Titlers {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.Post .Author, .Profile .Details p, .InlinePost .InlineAuthor {
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -450,6 +459,9 @@ body.dark .LoginWith h2 {
     height: 100%;
     object-fit: cover;
     cursor: pointer;
+}
+a.ExternalLink {
+    text-decoration: none;
 }
 .ExternalLink {
     overflow: hidden;

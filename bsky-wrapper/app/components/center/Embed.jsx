@@ -53,13 +53,13 @@ const Embed = ({embed, apiInterface}) => {
                 </div>
             )}
             {(embed.$type == "app.bsky.embed.external#view") && (
-                <div onClick={() => window.open(embed.external.uri)} className={"ExternalLink"}>
+                <a href={embed.external.uri} target="_blank"  className={"ExternalLink"}>
                     {(embed.external.thumb) && <img src={embed.external.thumb} draggable="false" />}
                     <div className={"ExternalTitling"}>
                         <p className={"ExternalHeader"}>{(embed.external.title) ? embed.external.title : embed.external.uri}</p>
                         {(embed.external.description) && <p className={"ExternalDescription"}>{embed.external.description}</p>}
                     </div>
-                </div>
+                </a>
             )}
             {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? (apiInterface.isHiddenHydrated(embed.record.author) == false) ? <InlinePost record={embed.record} /> : <NoView /> : ""}
         </>
