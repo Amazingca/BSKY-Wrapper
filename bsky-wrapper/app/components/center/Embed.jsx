@@ -1,4 +1,5 @@
 import InlinePost from "./InlinePost";
+import FeedRecord from "./FeedRecord";
 import NoView from "./NoView";
 
 const Embed = ({embed, apiInterface}) => {
@@ -53,7 +54,7 @@ const Embed = ({embed, apiInterface}) => {
                 </div>
             )}
             {(embed.$type == "app.bsky.embed.external#view") && (
-                <a href={embed.external.uri} target="_blank"  className={"ExternalLink"}>
+                <a href={embed.external.uri} target="_blank" className={"ExternalLink"}>
                     {(embed.external.thumb) && <img src={embed.external.thumb} draggable="false" />}
                     <div className={"ExternalTitling"}>
                         <p className={"ExternalHeader"}>{(embed.external.title) ? embed.external.title : embed.external.uri}</p>
@@ -61,7 +62,7 @@ const Embed = ({embed, apiInterface}) => {
                     </div>
                 </a>
             )}
-            {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? (apiInterface.isHiddenHydrated(embed.record.author) == false) ? <InlinePost record={embed.record} /> : <NoView /> : ""}
+            {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? (apiInterface.isHiddenHydrated(embed.record.author) == false) ? <InlinePost record={embed.record} /> : <NoView /> : ((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.feed.defs#generatorView")) ? (apiInterface.isHiddenHydrated(embed.record.creator) == false) ? <FeedRecord record={embed.record} /> : <NoView /> : ""}
         </>
     )
 }

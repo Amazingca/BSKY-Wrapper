@@ -162,8 +162,9 @@ p.Handle {
 .Profile .Details .DisplayName, .Profile .Details .Handle {
     font-size: 1.35rem;
 }
-p.Handle, a.Handle, .InlineAuthor a {
+p.Handle, a.Handle, .InlineAuthor a, .FeedRecord .Headers div a p {
     color: var(--record-author-handle);
+    /* TODO: Figure out text decoration inheritence so underlines on feed record creator isn't mismatched */
 }
 a.Handle {
     font-weight: 600 !important;
@@ -203,9 +204,13 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     color: var(--header-primary);
     font-weight: 750 !important;
 }
-.InlinePost .InlineAuthor p, .InlinePost .InlineAuthor a {
+.InlinePost .InlineAuthor p, .InlinePost .InlineAuthor a, .FeedRecord .Headers div a p {
     font-size: 1.1rem;
     font-weight: 500 !important
+}
+.FeedRecord .Headers div p {
+    font-size: 1.1rem;
+    font-weight: 600 !important
 }
 .SideBar {
     grid-area: SideBar;
@@ -431,7 +436,7 @@ body.dark .LoginWith h2 {
     align-items: center;
     gap: 0.75rem;
 }
-.Post .Author .Avatar {
+.Post .Author .Avatar, .FeedRecord .Headers .Avatar {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
@@ -441,7 +446,7 @@ body.dark .LoginWith h2 {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-.Post .Author, .Profile .Details p, .InlinePost .InlineAuthor {
+.Post .Author, .Profile .Details p, .InlinePost .InlineAuthor, .FeedRecord .Headers {
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -471,6 +476,10 @@ a.ExternalLink {
     /*user-select: none; ** Might put this back in depending on what's more accessible for the user.
     -webkit-user-select: none;*/
     cursor: pointer;
+}
+.InlinePost .ExternalLink {
+    display: table-row-group;
+    background-color: unset;
 }
 .ExternalLink:active {
     transform: scale(0.99);
@@ -581,23 +590,23 @@ a.ExternalLink {
     border: 0.2rem solid var(--record-background);
     background: var(--record-background);
 }
-.Profile .Details .Metrics {
+.Profile .Details .Metrics, .FeedRecord .Metrics {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
-.Profile .Details .Metrics div {
+.Profile .Details .Metrics div, .FeedRecord .Metrics div {
     display: flex;
     gap: 0.25rem;
 }
-.Post .NoView, .InlinePost {
+.Post .NoView, .InlinePost, .FeedRecord {
     margin-top: unset;
     background-color: var(--record-external-background);
 }
-.InlinePost {
+.InlinePost, .FeedRecord {
     border-radius: 0.5rem;
 }
-.InlineNest {
+.InlineNest, .FeedRecord {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -620,6 +629,34 @@ a.ExternalLink {
 .InlineAuthor img {
     width: 2.25rem;
     height: 2.25rem;
+    border-radius: 50%;
+}
+.FeedRecord .Headers, .FeedRecord .Headers div a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.FeedRecord .Headers div {
+    display: flex;
+    flex-direction: column;
+}
+.FeedRecord .Headers div a {
+    flex-direction: unset;
+    gap: 0.25rem;
+    align-items: center;
+    width: fit-content;
+    padding: 0.2rem;
+    padding-right: 0.3rem;
+    border-radius: 1rem;
+    background-color: var(--record-external-background);
+    text-decoration: none;
+}
+.FeedRecord .Headers div a:hover {
+    text-decoration: underline;
+}
+.FeedRecord .Headers .Creator {
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
 }
 .FooterBar {
