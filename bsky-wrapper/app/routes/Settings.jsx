@@ -5,7 +5,7 @@ import { useRef, useEffect } from "react";
 
 const Settings = () => {
 
-    const [localData, apiInterface, server, setServer] = useOutletContext();
+    const {localData, apiInterface, server, setServer} = useOutletContext();
 
     const location = useLocation();
     const serverInput = useRef(null);

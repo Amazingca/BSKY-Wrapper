@@ -25,7 +25,21 @@ const App = () => {
     useEffect(() => {
 
         setServer(localData.getServer());
-        setAuthorized(Object.keys(localData.getPrimaryUser()).length != 0);
+
+        if (Object.keys(localData.getPrimaryUser()).length != 0) {
+
+            const tryAuthorize = async () => {
+
+                const successfulAuthorization = await apiInterface.authorize("refresh", localData.getPrimaryUser());
+
+                if (successfulAuthorization == true) {
+
+                    setAuthorized(true);
+                }
+            }
+
+            tryAuthorize();
+        }
     }, []);
 
     const apiInterface = new Api(server);
@@ -33,7 +47,7 @@ const App = () => {
     // Overrides sanitization on returned data.
     apiInterface.setSanitize(false);
 
-    const context = [localData, apiInterface, server, setServer];
+    const context = {localData: localData, apiInterface: apiInterface, server: server, setServer: setServer, authorized: authorized, setAuthorized: setAuthorized};
 
     const display = new Themes(localData, theme, setTheme);
 

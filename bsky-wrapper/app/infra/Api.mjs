@@ -44,10 +44,10 @@ export default class Api {
     }
 
     /**
-     * This method is responsible for verifying the authorzation object passed to the constructor. If successful, if will return the authorization object, or it will return null.
+     * This method is responsible for verifying the authorzation object passed to the constructor. If successful, if will build the authorization object, containing accessJwt, refreshJwt, handle, and DID.
      * @param {string} authType Type of authorization. This could be a new authorization, using an identifier and password, or by using a refreshJwt.
      * @param {object} authorizationObject The object passing the authorization, either an identifier and password, or refreshJwt.
-     * @returns Authorization object, if successful, containing accessJwt, refreshJwt, handle, and DID.
+     * @returns Boolean on whether authorization was successful.
      */
     authorize = async (authType, authorizationObject) => {
 
@@ -88,6 +88,8 @@ export default class Api {
 
                     this.pdsUrl = pdsUrl;
                 }
+
+                return true;
             } else {
 
                 throw new Error("Login was not successful.");
@@ -95,6 +97,8 @@ export default class Api {
         } catch (e) {
 
             console.warn(e);
+
+            return false;
         }
     }
 
@@ -138,6 +142,15 @@ export default class Api {
             console.warn(e);
             return null
         }
+    }
+
+    /**
+     * Getter to retrieve the authorization object.
+     * @returns Authorization object, null if one does not exist.
+     */
+    getAuthorization = () => {
+
+        return this.authorization;
     }
 
     /**
@@ -283,7 +296,7 @@ export default class Api {
      * @returns User profile object if one exists, empty if not.
      */
     getProfile = async (user) => {
-
+        
         if (this.authorization == null) if (await this.isHidden(user)) return {};
 
         var requestData = {

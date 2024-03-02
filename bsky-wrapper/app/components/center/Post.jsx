@@ -15,7 +15,7 @@ import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
 
-const Post = ({record, apiInterface}) => {
+const Post = ({record, apiInterface, authorized}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ const Post = ({record, apiInterface}) => {
                     </Link>
                 </div>
                 {(record.post.record.text) && (record.post.record.facets) ? <Facets text={record.post.record.text} facets={record.post.record.facets} /> : <Facets text={record.post.record.text} />}
-                {(record.post.embed) && <Embed embed={record.post.embed} apiInterface={apiInterface} />}
+                {(record.post.embed) && <Embed embed={record.post.embed} apiInterface={apiInterface} authorized={authorized} />}
                 <div className={"PostFooter"}>
                     <div className={"Metrics"}>
                         <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />

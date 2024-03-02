@@ -5,7 +5,7 @@ import { useOutletContext } from "@remix-run/react";
 
 const Login = () => {
 
-    const [localData, apiInterface, server, setServer] = useOutletContext();
+    const {localData, apiInterface, server, setAuthorized} = useOutletContext();
     
     var username = "";
     var password = "";
@@ -13,13 +13,29 @@ const Login = () => {
     const setUsername = (value) => {
 
         username = value;
-        console.log("Value changed to", username);
+        //console.log("Value changed to", username);
     }
 
-    const setPassword = (value) => {
+    const setPassword = async (value) => {
 
         password = value;
-        console.log("Value changed to", password);
+        //console.log("Value changed to", password);
+
+        if (password.match(/^[\w]{4}-[\w]{4}-[\w]{4}-[\w]{4}$/g)) {
+
+            console.log("Detected app password!");
+
+            const successfulAuthorization = await apiInterface.authorize("new", {identifier: username, password: password});
+
+            if (successfulAuthorization == true) {
+
+                console.log("Authenticated with API!");
+
+                setAuthorized(true);
+
+                localData.addUser(apiInterface.getAuthorization());
+            }
+        }
     }
 
     return (

@@ -1,8 +1,13 @@
+import { AlertFillIcon } from "@primer/octicons-react";
+
 const NoView = () => {
 
     return (
         <div className={"Post NoView"}>
-            <p>The record you are trying to view does not exist or is not publicly available.</p>
+            <div>
+                <AlertFillIcon size={"15.99"} fill={"var(--context-primary)"} />
+            </div>
+            <p>This record is not available</p>
         </div>
     )
 }

@@ -2,7 +2,7 @@ import InlinePost from "./InlinePost";
 import FeedRecord from "./FeedRecord";
 import NoView from "./NoView";
 
-const Embed = ({embed, apiInterface}) => {
+const Embed = ({embed, apiInterface, authorized}) => {
 
     const imageItemPointer = (count, index) => {
 
@@ -62,7 +62,7 @@ const Embed = ({embed, apiInterface}) => {
                     </div>
                 </a>
             )}
-            {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? (apiInterface.isHiddenHydrated(embed.record.author) == false) ? <InlinePost record={embed.record} /> : <NoView /> : ((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.feed.defs#generatorView")) ? (apiInterface.isHiddenHydrated(embed.record.creator) == false) ? <FeedRecord record={embed.record} /> : <NoView /> : ""}
+            {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? ((apiInterface.isHiddenHydrated(embed.record.author) == false) || (authorized == true)) ? <InlinePost record={embed.record} /> : <NoView /> : ((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.feed.defs#generatorView")) ? (apiInterface.isHiddenHydrated(embed.record.creator) == false) ? <FeedRecord record={embed.record} /> : <NoView /> : ""}
         </>
     )
 }

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 const UserProfile = () => {
 
-    const [localData, apiInterface, server, setServer] = useOutletContext();
+    const {apiInterface, authorized} = useOutletContext();
     const params = useParams();
 
     const [user, setUser] = useState({ref: null});
@@ -17,6 +17,8 @@ const UserProfile = () => {
 
         const getUserItems = async () => {
 
+            // TODO: Fix hidden user profile schema when authorized. 
+            // Info: Client load causes mismatched syncing which unintentionally hides hidden users when authenticated. Basically, it's too fast.
             setUser(await apiInterface.getProfile(params.userRef));
             setPosts(await apiInterface.getProfileFeed(params.userRef));
         }
@@ -30,7 +32,7 @@ const UserProfile = () => {
         <div className={"UserProfile"}>
             {(false) && <Header title="Profile" />}
             {(user.did) ? <Profile user={user} /> : (Object.keys(user) == 0) && <NoView />}
-            {(posts.feed) && posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} apiInterface={apiInterface} key={record.post.uri + "/target/" + index++} />)}
+            {(posts.feed) && posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

@@ -60,6 +60,9 @@ body {
     --record-metric-shadow: #00000055;
     --record-metrics-text: #000;
 
+    --context-primary: var(--accent-primary);
+    --context-background: #38a4f744;
+
     --metric-primary: #222;
     --metric-accent: #99999922;
     --metric-accent-darker: #99999944;
@@ -211,6 +214,10 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
 .FeedRecord .Headers div p {
     font-size: 1.1rem;
     font-weight: 600 !important
+}
+.NoView p {
+    font-weight: 500 !important;
+    letter-spacing: 0.02rem;
 }
 .SideBar {
     grid-area: SideBar;
@@ -602,6 +609,20 @@ a.ExternalLink {
 .Post .NoView, .InlinePost, .FeedRecord {
     margin-top: unset;
     background-color: var(--record-external-background);
+}
+.NoView {
+    display: flex;
+    flex-direction: unset;
+    align-items: center;
+    gap: 0.75rem;
+}
+.NoView div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--context-background);
 }
 .InlinePost, .FeedRecord {
     border-radius: 0.5rem;

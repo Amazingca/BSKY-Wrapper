@@ -5,13 +5,14 @@ import { useState, useEffect } from "react";
 
 const Feed = () => {
 
-    const [localData, apiInterface, server, setServer] = useOutletContext();
+    const {apiInterface, authorized} = useOutletContext();
     const [posts, setPosts] = useState({feed: []});
 
     useEffect(() => {
 
         const getPosts = async () => {
 
+            console.log(apiInterface.getAuthorization());
             setPosts(await apiInterface.getFeed());
         }
 
@@ -23,7 +24,7 @@ const Feed = () => {
     return (
         <div className={"Feed"}>
             <Header title="Feed" />
-            {posts.feed.map((record) => (apiInterface.isHiddenHydrated(record.post.author) == false) && <Post record={record} apiInterface={apiInterface} key={record.post.uri + "/target/" + index++} />)}
+            {posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

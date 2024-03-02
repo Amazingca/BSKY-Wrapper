@@ -46,6 +46,19 @@ export default class Locale {
         return (this.locale.users) ? this.locale.users[0] : {};
     }
 
+    addUser = (authorizationObject) => {
+
+        if (this.locale.users == undefined) {
+            
+            this.locale.users = [authorizationObject];
+        } else {
+
+            this.locale.users.push(authorizationObject);
+        }
+        
+        this.push();
+    }
+
     #getData = () => {
 
         if (typeof document != "undefined") return JSON.parse(localStorage.getItem("locale"));
