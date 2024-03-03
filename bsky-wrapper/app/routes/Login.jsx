@@ -1,11 +1,11 @@
 import Header from "../components/center/Header";
 import Input from "../components/center/Input";
-import { useEffect } from "react";
-import { useOutletContext } from "@remix-run/react";
+import { useOutletContext, useNavigate } from "@remix-run/react";
 
 const Login = () => {
 
-    const {localData, apiInterface, server, setAuthorized} = useOutletContext();
+    const {localData, apiInterface, server, setAuthorized, setAuthorization} = useOutletContext();
+    const navigate = useNavigate();
     
     var username = "";
     var password = "";
@@ -13,13 +13,11 @@ const Login = () => {
     const setUsername = (value) => {
 
         username = value;
-        //console.log("Value changed to", username);
     }
 
     const setPassword = async (value) => {
 
         password = value;
-        //console.log("Value changed to", password);
 
         if (password.match(/^[\w]{4}-[\w]{4}-[\w]{4}-[\w]{4}$/g)) {
 
@@ -34,6 +32,10 @@ const Login = () => {
                 setAuthorized(true);
 
                 localData.addUser(apiInterface.getAuthorization());
+
+                setAuthorization(apiInterface.getAuthorization());
+
+                navigate("/");
             }
         }
     }

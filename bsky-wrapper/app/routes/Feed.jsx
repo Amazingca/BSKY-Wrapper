@@ -11,8 +11,7 @@ const Feed = () => {
     useEffect(() => {
 
         const getPosts = async () => {
-
-            console.log(apiInterface.getAuthorization());
+            
             setPosts(await apiInterface.getFeed());
         }
 

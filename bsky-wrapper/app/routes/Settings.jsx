@@ -15,7 +15,6 @@ const Settings = () => {
         if (location.hash == "#server") {
             
             serverInput.current.focus();
-
         }
     }, []);
 

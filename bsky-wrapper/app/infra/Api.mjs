@@ -34,11 +34,11 @@ export default class Api {
      * @param {object} param1 The object that contains the authorization data. Pass an empty object if you are not authenticating a user.
      * @param {integer} recordLimit Optional parameter which sets a universal record return limit (useful for machines that can't handle as much data). Maximum can be 100.
      */
-    constructor (pdsUrl, recordLimit=50) {
+    constructor ({pdsUrl, authorization=null, recordLimit=50}) {
 
         this.plcRouting = "https://plc.directory";
-        this.pdsUrl = pdsUrl;
-        this.authorization = null;
+        this.pdsUrl = (pdsUrl.includes("https://")) ? pdsUrl : "https://" + pdsUrl;
+        this.authorization = authorization;
         this.recordLimit = recordLimit;
         this.doSanitize = true;
     }

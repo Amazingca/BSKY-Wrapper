@@ -18,9 +18,13 @@ const App = () => {
 
     const localData = new Locale();
 
+    // Note: This is required because our effect in root must fully initialize our API handler before components can load.
+    const [load, setLoad] = useState(false);
+
     const [theme, setTheme] = useState("light");
     const [server, setServer] = useState("https://bsky.social");
     const [authorized, setAuthorized] = useState(false);
+    const [authorization, setAuthorization] = useState(null);
 
     useEffect(() => {
 
@@ -35,19 +39,33 @@ const App = () => {
                 if (successfulAuthorization == true) {
 
                     setAuthorized(true);
+                    setAuthorization(apiInterface.getAuthorization());
                 }
+
+                setLoad(true);
             }
 
             tryAuthorize();
+        } else {
+
+            setLoad(true);
         }
     }, []);
 
-    const apiInterface = new Api(server);
+    const apiInterface = new Api({pdsUrl: server, authorization: authorization});
 
     // Overrides sanitization on returned data.
     apiInterface.setSanitize(false);
 
-    const context = {localData: localData, apiInterface: apiInterface, server: server, setServer: setServer, authorized: authorized, setAuthorized: setAuthorized};
+    const context = {
+        localData: localData,
+        apiInterface: apiInterface,
+        server: server,
+        setServer: setServer,
+        authorized: authorized,
+        setAuthorized: setAuthorized,
+        setAuthorization: setAuthorization
+    };
 
     const display = new Themes(localData, theme, setTheme);
 
@@ -55,24 +73,25 @@ const App = () => {
         <html>
             <head>
                 <title>BlueSky Wrapper</title>
-                <meta name="viewport" content="width=device-width, initial-scale: 1, maximum-scale=1"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
                 <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapper.png?v=1691731259916"/>
                 {(process.env.NODE_ENV == "development") && <meta name="theme-color" content="lightsalmon"/>}
                 <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)"/>
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
                 <link type="text/css" rel="stylesheet" href={stylesheet}/>
+                <meta httpEquiv="Content-Type" content="text/html;charset=utf-8"/>
                 <link rel="manifest" href={manifest}/>
                 <Meta />
                 <Links />
             </head>
             <body className={theme}>
-                <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
+                {(load) && <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
                     {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                     <SideBar display={display} authorized={authorized} />
                     <Outlet context={context} />
                     <FooterBar />
-                </div>
+                </div>}
                 <Scripts />
             </body>
         </html>
