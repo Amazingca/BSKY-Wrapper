@@ -5,15 +5,21 @@ const Facets = ({text, facets}) => {
 
     var index = 0;
 
-    const facetNester = (facet, string) => {
+    const facetNester = (facet, string, index=0) => {
 
-        switch (facet.features[0].$type) {
+        const innerContent = (index + 1 != facet.features.length) ? facetNester(facet, string, index + 1) : string;
+
+        switch (facet.features[index].$type) {
             case "app.bsky.richtext.facet#mention":
-                return (<Link to={`/profile/${facet.features[0].did}`}>{string}</Link>);
+                return (<Link to={`/profile/${facet.features[index].did}`}>{innerContent}</Link>);
             case "app.bsky.richtext.facet#link":
-                return (<Link to={facet.features[0].uri}>{string}</Link>);
+                return (<Link to={facet.features[index].uri}>{innerContent}</Link>);
             case "app.bsky.richtext.facet#tag":
-                return (<Link to={"./"}>{string}</Link>);
+                return (<Link to={"./"}>{innerContent}</Link>);
+            case "dev.amazingca.blue.facet#bolden":
+                return (<b>{innerContent}</b>);
+            case "dev.amazingca.blue.facet#italicize":
+                return (<i>{innerContent}</i>);
             default:
                 return string;
         }
@@ -49,7 +55,8 @@ const Facets = ({text, facets}) => {
             for (var o = 0; o < facetLength; o++) {
 
                 facetedArray[o] = byteArray[i];
-                i++;
+                //i++;
+                if (o + 1 != facetLength) i++;
             }
 
             const facetElement = facetNester(facets[target], decoder.decode(facetedArray));
@@ -68,7 +75,7 @@ const Facets = ({text, facets}) => {
 
             const text = decoder.decode(formattedText[i].data);
 
-            const lines = [...[(text.match(/^\\n/g)) && ""], ...text.split("\n"), ...[(text.match(/\\n$/g)) && ""]];
+            const lines = [...(text.match(/^\\n/g)) ? [""] : [], ...text.split("\n"), ...(text.match(/\\n$/g)) ? [""] : []];
 
             for (var o = 0; o < lines.length; o++) {
 

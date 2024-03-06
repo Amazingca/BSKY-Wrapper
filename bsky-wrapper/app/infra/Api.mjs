@@ -20,7 +20,9 @@ export default class Api {
     static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.audio", "app.bsky.embed.video", "app.bsky.embed.external"];
 
     // Supported facet types for an app.bsky.feed.post record.
-    static supportedFacetTypes = ["app.bsky.richtext.facet#mention", "app.bsky.richtext.facet#link", "app.bsky.richtext.facet#tag"];
+    // NOTE: Naming schemas under "dev.amazingca.blue.facets" are NOT currently supported by Bluesky.
+    //       However, they are still usable within the ATP which is why they are here. These are intended for text bolding & italicizing.
+    static supportedFacetTypes = ["app.bsky.richtext.facet#mention", "app.bsky.richtext.facet#link", "app.bsky.richtext.facet#tag", "dev.amazingca.blue.facet#bolden", "dev.amazingca.blue.facet#italicize"];
 
     // Supported threadgate types for an ATP thread; app.bsky.feed.threadgate#*
     // Note: The allRules type is exclusive to this library and not supported by the ATP.

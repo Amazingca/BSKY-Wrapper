@@ -305,13 +305,13 @@ export default class Post {
 
                 var facetType = "";
 
-                if (facet.val.includes("did:plc:")) {
+                if ((facet.type == "mention") && facet.val.includes("did:plc:")) {
 
                     facetType = "app.bsky.richtext.facet#mention";
-                } else if (facet.val.includes("https://") || facet.val.includes("at://")) {
+                } else if ((facet.type == "uri") && ((facet.val.includes("https://") || facet.val.includes("at://")))) {
 
                     facetType = "app.bsky.richtext.facet#link";
-                } else if (facet.val.length <= 640) {
+                } else if ((facet.type == "tag") && (facet.val.length <= 640)) {
 
                     if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
 
@@ -320,6 +320,12 @@ export default class Post {
 
                         facetType = "app.bsky.richtext.facet#tag";
                     }
+                } else if (facet.type == "bolden") {
+
+                    facetType = "dev.amazingca.blue.facet#bolden";
+                } else if (facet.type == "italicize") {
+
+                    facetType = "dev.amazingca.blue.facet#italicize";
                 }
 
                 for (const supportedFacet of Api.supportedFacetTypes) {
@@ -418,13 +424,13 @@ export default class Post {
 
                 var facetType = {};
 
-                if (facet.val.includes("did:plc:")) {
+                if ((facet.type == "mention") && facet.val.includes("did:plc:")) {
 
                     facetType = {"pointer": "app.bsky.richtext.facet#mention", "ref": "did"};
-                } else if (facet.val.includes("https://") || facet.val.includes("at://")) {
+                } else if ((facet.type == "uri") && ((facet.val.includes("https://") || facet.val.includes("at://")))) {
 
                     facetType = {"pointer": "app.bsky.richtext.facet#link", "ref": "uri"};
-                } else if (facet.val.length <= 640) {
+                } else if ((facet.type == "tag") && (facet.val.length <= 640)) {
 
                     if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
 
@@ -433,10 +439,16 @@ export default class Post {
 
                         facetType = {"pointer": "app.bsky.richtext.facet#tag", "ref": "tag"};
                     }
+                } else if (facet.type == "bolden") {
+
+                    facetType = {"pointer": "dev.amazingca.blue.facet#bolden"};
+                } else if (facet.type == "italicize") {
+
+                    facetType = {"pointer": "dev.amazingca.blue.facet#italicize"};
                 }
 
                 facets.push({
-                    "$type": "app.bsky.richtext.facet",
+                    "$type": (facetType.pointer.includes("app.bsky.richtext.facet")) ? "app.bsky.richtext.facet" : "dev.amazingca.blue.facet",
                     "index": {
                         "byteStart": facet.byteStart,
                         "byteEnd": facet.byteEnd
@@ -444,7 +456,7 @@ export default class Post {
                     "features": [
                         {
                             "$type": facetType.pointer,
-                            [facetType.ref]: facet.val
+                            ...(facetType.ref) ? {[facetType.ref]: facet.val} : {}
                         }
                     ]
                 })

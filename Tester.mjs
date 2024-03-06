@@ -1,7 +1,7 @@
-import Api from "./app/infra/Api.mjs";
-import Post from "./app/infra/Post.mjs";
+import Api from "./bsky-wrapper/app/infra/Api.mjs";
+import Post from "./bsky-wrapper/app/infra/Post.mjs";
 
-const apiTester = new Api("https://bsky.social", 100);
+const apiTester = new Api({pdsUrl: "https://bsky.social", recordLimit: 100});
 const postTester = new Post({text: "Hello, this is a test post coming from an Api refactor at https://github.com/Amazingca/BSKY-Wrapper."});
 
 const asyncCheckers = async () => {
@@ -90,17 +90,26 @@ const postCheckers = async () => {
         {
             "byteStart": 0,
             "byteEnd": 18,
+            "type": "mention",
             "val": "did:plc:e2nwnarqo7kdbt7ngr3gejp6"
         },
         {
             "byteStart": 19,
             "byteEnd": 31,
+            "type": "tag",
             "val": "testing-tag"
         },
         {
             "byteStart": 32,
             "byteEnd": 50,
+            "type": "uri",
             "val": "https://google.com"
+        },
+        {
+            "byteStart": 51,
+            "byteEnd": 58,
+            "type": "bolden",
+            "val": "Testing"
         }
     ]);
 
