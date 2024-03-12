@@ -215,9 +215,16 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     font-size: 1.1rem;
     font-weight: 600 !important
 }
-.NoView p {
+.NoView p, .Subject p {
     font-weight: 500 !important;
     letter-spacing: 0.02rem;
+}
+.Post .Subject p a {
+    text-decoration: none;
+    font-weight: 600 !important;
+}
+.Post .Subject p a:hover {
+    text-decoration: underline;
 }
 .SideBar {
     grid-area: SideBar;
@@ -230,7 +237,7 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     padding: 2rem;
     padding-top: 2rem;
 }
-.About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+.About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
     grid-area: Center;
 
     max-width: 42rem;
@@ -247,7 +254,7 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     gap: 1rem;
     overflow-y: clip;
 }
-.Feed, .UserProfile, .UserPost {
+.Feed, .Notifications, .UserProfile, .UserPost {
     gap: 2rem;
 }
 .SideBar-Heading {
@@ -303,6 +310,25 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     transform: scale(0.95);
     box-shadow: 0 0 10px 0px var(--primary-shadow);
 }
+.ActionIcon .Status {
+    position: relative;
+    margin-bottom: -1.5rem;
+    left: 2rem;
+    top: -1rem;
+    display: flex;
+    justify-content: center;
+    height: 1rem;
+    width: fit-content;
+    min-width: 1rem;
+    white-space: nowrap;
+    padding: 0.25rem;
+    border-radius: 2rem;
+    background-color: var(--action-icon-background-secondary);
+}
+.ActionIcon .Status p {
+    font-weight: 800 !important;
+    color: var(--sidebar-background);
+}
 body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .ComposeIcon {
     background-image: var(--secondary-accent);
     background-clip: padding-box;
@@ -311,20 +337,33 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     display: flex;
     gap: 2rem;
 }
+.ProfileThemeIcon img {
+    position: absolute;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    transition: var(--transition-main);
+}
+.ProfileThemeIcon:hover img, .ProfileThemeIcon:active img {
+    opacity: 0;
+    z-index: -1;
+}
 .LoginWith {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
-    width: 17rem;
+    width: 15rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     height: 4rem;
     border-radius: 4rem;
     background-color: var(--login-button-background);
 }
-.LoginWith:hover, .InputPointer:hover {
+.LoginWith:hover, .InputPointer:hover, .ProfileThemeIcon:hover img {
     transform: scale(1.015);
 }
-.LoginWith:active, .InputPointer:active {
+.LoginWith:active, .InputPointer:active, .ProfileThemeIcon:active img {
     transform: scale(0.985);
 }
 .LoginWith:active {
@@ -338,6 +377,8 @@ body.dark .LoginWith h2 {
     background-image: var(--primary-accent);
 }
 .LoginWith h2 {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
     color: var(--login-button-primary);
 }
 .Header {
@@ -610,7 +651,7 @@ a.ExternalLink {
     margin-top: unset;
     background-color: var(--record-external-background);
 }
-.NoView {
+.NoView, .Subject {
     display: flex;
     flex-direction: unset;
     align-items: center;
@@ -623,6 +664,17 @@ a.ExternalLink {
     padding: 0.5rem;
     border-radius: 50%;
     background-color: var(--context-background);
+}
+.Post .Subject .Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+.Post .Subject p {
+    letter-spacing: unset;
 }
 .InlinePost, .FeedRecord {
     border-radius: 0.5rem;
@@ -726,7 +778,7 @@ input[type="password"] {
     .devBanner {
         align-items: center;
     }
-    .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding-right: 2rem;
     }
     .FooterBar {
@@ -740,14 +792,14 @@ input[type="password"] {
             "Center";
         grid-template-columns: 100vw;
     }
-    .About, .Acknowledgments, .Feed, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
         overflow-y: unset;
     }
     .Login, .Settings {
         gap: 0rem;
     }
-    .Feed, .UserProfile, .UserPost {
+    .Feed, .Notifications, .UserProfile, .UserPost {
         gap: 1rem;
     }
     .SideBar {

@@ -1,4 +1,6 @@
-const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="--action-icon-background", hover={}}) => {
+import { useEffect } from "react";
+
+const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="--action-icon-background", status, hover={}}) => {
 
     const GradientPaintbrush = () => {
 
@@ -17,6 +19,7 @@ const ActionIcon = ({Icon, mainColor="--action-icon-primary", backgroundColor="-
 
     return (
         <div style={{backgroundColor: `var(${backgroundColor})`}} className={`ActionIcon${(mainColor == "--primary-accent") ? " ComposeIcon" : ""}`}>
+            {(status) && <div className={"Status"}><p>{status}</p></div>}
             {(mainColor != "--primary-accent") ? <Icon size={"small"} fill={`var(${mainColor})`} /> : GradientPaintbrush()}
         </div>
     )

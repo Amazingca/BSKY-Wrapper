@@ -40,6 +40,9 @@ const App = () => {
 
                     setAuthorized(true);
                     setAuthorization(apiInterface.getAuthorization());
+                } else {
+
+                    localData.removeUser(localData.getPrimaryUser().did);
                 }
 
                 setLoad(true);
@@ -88,7 +91,7 @@ const App = () => {
             <body className={theme}>
                 {(load) && <div id="main" style={{gridTemplateRows: (process.env.NODE_ENV == "development") && "51px auto"}}>
                     {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
-                    <SideBar display={display} authorized={authorized} />
+                    <SideBar display={display} authorized={authorized} apiInterface={apiInterface} />
                     <Outlet context={context} />
                     <FooterBar />
                 </div>}

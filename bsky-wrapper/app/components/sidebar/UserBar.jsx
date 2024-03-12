@@ -7,7 +7,7 @@ import {
 import { useLocation, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
-const UserBar = ({display}) => {
+const UserBar = ({display, authorized, apiInterface}) => {
 
     const toggleTheme = () => {
 
@@ -37,6 +37,19 @@ const UserBar = ({display}) => {
         )
     }
 
+    const [avatar, setAvatar] = useState("");
+    useEffect(() => {
+
+        const doSetAvatar = async () => {
+
+            const userObj = await apiInterface.getProfile(apiInterface.getAuthorization().did);
+
+            setAvatar(userObj.avatar);
+        }
+
+        doSetAvatar();
+    }, []);
+
     // "Complex" state setter to make sure that we properly initalize the auto checker on load
     const [isLocal, setLocality] = useState(false);
     useEffect(() => {
@@ -46,11 +59,12 @@ const UserBar = ({display}) => {
 
     return (
         <div className={"UserBar"}>
-            <div onClick={loginSwitch} className={"LoginWith"}>
-                <h2>Login with</h2>
-                {mentionIcon()}
+            <div onClick={(authorized == false) ? loginSwitch : () => {}} className={"LoginWith"}>
+                {(authorized) ? <h2>@{apiInterface.getAuthorization().handle}</h2> : <h2>Login with</h2>}
+                {(authorized == false) && mentionIcon()}
             </div>
-            <div onClick={toggleTheme}>
+            <div onClick={toggleTheme} className={"ProfileThemeIcon"}>
+                {(authorized == true) && <img src={avatar} />}
                 <ActionIcon Icon={(isLocal && display.toAuto()) ? DeviceDesktopIcon : (display.theme == "light") ? MoonIcon : (display.theme == "dark") && SunIcon} mainColor="--action-item-secondary" />
             </div>
         </div>

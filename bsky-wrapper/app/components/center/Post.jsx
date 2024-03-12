@@ -71,7 +71,7 @@ const Post = ({record, apiInterface, authorized}) => {
             <div onClick={goToPost} className={"Post"}>
                 <div className={"PostHeader"}>
                     <div className={"Author"}>
-                        <img src={record.post.author.avatar} className={"Avatar"} />
+                        {(record.post.author.avatar) && <img src={record.post.author.avatar} className={"Avatar"} />}
                         <div className={"Details"}>
                             <p className={"DisplayName"}>{record.post.author.displayName}</p>
                             <Link to={`/profile/${record.post.author.handle}`} className={"Handle"}>{record.post.author.handle}</Link>

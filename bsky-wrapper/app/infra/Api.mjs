@@ -667,7 +667,6 @@ export default class Api {
             recordObject.repo = this.authorization.handle;
             recordObject.record.createdAt = new Date().toISOString();
 
-
             var threadgate = {};
             if (recordObject.record.threadgate) {
 
@@ -700,6 +699,64 @@ export default class Api {
                 threadgate.record.post = postRequest.uri;
 
                 return [postRequest, await this.newRecord(threadgate)];
+            }
+        } catch (e) {
+
+            console.error(e);
+            return null;
+        }
+    }
+
+    getNotificationCount = async () => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+
+            const requestData = {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`
+                }
+            };
+
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.getUnreadCount`, requestData).then(r => r.json());
+
+            if (postRequest.count) {
+
+                return postRequest.count;
+            } else {
+
+                throw new Error("Error retrieving unread notification count! =>", postRequest);
+            }
+        } catch (e) {
+
+            console.error(e);
+            return null;
+        }
+    }
+
+    getNotifications = async () => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+
+            const requestData = {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`
+                }
+            };
+
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.listNotifications`, requestData).then(r => r.json());
+
+            if (postRequest.notifications) {
+
+                return postRequest;
+            } else {
+
+                throw new Error("Error retrieving notification feed! =>", postRequest);
             }
         } catch (e) {
 

@@ -59,6 +59,15 @@ export default class Locale {
         this.push();
     }
 
+    removeUser = (userDid) => {
+
+        this.locale.users = this.locale.users.filter(user => user.did != userDid);
+
+        if (this.locale.users.length == 0) delete this.locale.users;
+
+        this.push();
+    }
+
     #getData = () => {
 
         if (typeof document != "undefined") return JSON.parse(localStorage.getItem("locale"));
