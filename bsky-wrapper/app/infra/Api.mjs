@@ -84,7 +84,7 @@ export default class Api {
                 this.authorization = authorizationObject;
                 this.authorization["expirationDate"] = Math.round(Date.now() / 1000) + this.tokenRefresh;
 
-                const pdsUrl = await this.queryLocalizedPDS(this.authorization.did);
+                const pdsUrl = await this.queryLocalizedPDS();
 
                 if (pdsUrl) {
 
@@ -187,11 +187,13 @@ export default class Api {
     }
 
     /**
-     * This method returns a localized PDS url that is associated with a user's DID doc, if one exists.
-     * @param {string} did DID associated with an authorized user.
+     * This method returns a localized PDS url that is associated with a user's DID doc, if one exists, or through the authorized user data.
+     * @param {string} did DID associated with an authorized user, null if authorized.
      * @returns The user's localized PDS url. Null in all other cases.
      */
-    queryLocalizedPDS = async (did) => {
+    queryLocalizedPDS = async (did=null) => {
+
+        if ((did == null) && (this.authorization)) return this.authorization.didDoc.service.filter(item => item.type == "AtprotoPersonalDataServer")[0].serviceEndpoint;
 
         try {
 
@@ -255,6 +257,7 @@ export default class Api {
      */
     getPreferredDataServer = () => {
 
+        // TODO: Add synchronization fixes to allow for personal PDS syncing across all component branches; root works fine.
         return (this.authorization != null) ? this.pdsUrl : this.publicBlueskyApi;
     }
 
@@ -722,7 +725,7 @@ export default class Api {
 
             const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.getUnreadCount`, requestData).then(r => r.json());
 
-            if (postRequest.count) {
+            if (typeof postRequest.count != "undefined") {
 
                 return postRequest.count;
             } else {

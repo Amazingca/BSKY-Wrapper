@@ -38,17 +38,15 @@ const UserBar = ({display, authorized, apiInterface}) => {
     }
 
     const [avatar, setAvatar] = useState("");
-    useEffect(() => {
 
-        const doSetAvatar = async () => {
+    const doSetAvatar = async () => {
 
-            const userObj = await apiInterface.getProfile(apiInterface.getAuthorization().did);
+        const userObj = await apiInterface.getProfile(apiInterface.getAuthorization().did);
 
-            setAvatar(userObj.avatar);
-        }
-
-        doSetAvatar();
-    }, []);
+        setAvatar(userObj.avatar);
+    }
+    
+    if (authorized == true) doSetAvatar();
 
     // "Complex" state setter to make sure that we properly initalize the auto checker on load
     const [isLocal, setLocality] = useState(false);

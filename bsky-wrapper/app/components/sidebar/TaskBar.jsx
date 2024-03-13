@@ -40,17 +40,15 @@ const TaskBar = ({authorized, apiInterface}) => {
     }
 
     const [notificationCount, setNotificationCount] = useState(null);
-    useEffect(() => {
 
-        const getNotificationCount = async () => {
+    const getNotificationCount = async () => {
 
-            const currentNotificationCount = await apiInterface.getNotificationCount();
+        const currentNotificationCount = await apiInterface.getNotificationCount();
 
-            if (currentNotificationCount && (currentNotificationCount > 0)) setNotificationCount((currentNotificationCount >= 1000) ? "999+" : currentNotificationCount);
-        }
+        if (currentNotificationCount && (currentNotificationCount > 0)) setNotificationCount((currentNotificationCount >= 1000) ? "999+" : currentNotificationCount);
+    }
 
-        getNotificationCount();
-    }, []);
+    if (authorized == true) getNotificationCount();
 
     return (
         <div className={"TaskBar"}>

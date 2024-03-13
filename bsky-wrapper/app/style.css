@@ -109,7 +109,7 @@ body.dark {
         "devBanner devBanner devBanner"
         "SideBar Center FooterBar";
     grid-template-rows: 0rem auto;
-    grid-template-columns: 1.25fr minmax(12rem, 1.25fr) 1fr;
+    grid-template-columns: 1.25fr minmax(12rem, 1fr) 1fr;
     column-gap: 2rem;
     height: 100vh;
 }
@@ -240,7 +240,7 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
 .About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
     grid-area: Center;
 
-    max-width: 42rem;
+    max-width: inherit;
     display: flex;
     flex-direction: column;
     padding-bottom: 2rem;
@@ -671,6 +671,7 @@ a.ExternalLink {
     align-items: center;
     width: 2.5rem;
     height: 2.5rem;
+    aspect-ratio: 1/1;
     border-radius: 50%;
 }
 .Post .Subject p {

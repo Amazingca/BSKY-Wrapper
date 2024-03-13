@@ -45,19 +45,25 @@ const Post = ({record, apiInterface, authorized}) => {
         }*/
     }
 
+    const happeningSoon = (basic=false) => {
+
+        if ((authorized == false) && (basic == false)) navigate("/login");
+        else window.alert("This button doesn't do anything right now, but it will soon!");
+    }
+
     const replyToPost = () => {
 
-        navigate("/login");
+        happeningSoon();
     }
 
     const repostPost = () => {
 
-        navigate("/login");
+        happeningSoon();
     }
 
     const likePost = () => {
 
-        navigate("/login");
+        happeningSoon();
     }
 
     return (
@@ -90,7 +96,7 @@ const Post = ({record, apiInterface, authorized}) => {
                         <MetricItem Icon={HeartIcon} onClick={likePost} fillColor="--metric-like-primary" backgroundColor="--metric-like-accent" metricData={record.post.likeCount} />
                     </div>
                     <div className={"Options"}>
-                        <MetricItem Icon={KebabHorizontalIcon} onClick={() => window.alert("This button doesn't do anything right now, but it will soon!")} />
+                        <MetricItem Icon={KebabHorizontalIcon} onClick={() => happeningSoon(true)} />
                     </div>
                 </div>
             </div>

@@ -29,11 +29,11 @@ const Login = () => {
 
                 console.log("Authenticated with API!");
 
-                setAuthorized(true);
-
                 localData.addUser(apiInterface.getAuthorization());
 
                 setAuthorization(apiInterface.getAuthorization());
+
+                setAuthorized(true);
 
                 navigate("/");
             }
