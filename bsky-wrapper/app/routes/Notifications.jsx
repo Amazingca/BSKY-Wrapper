@@ -28,7 +28,7 @@ const Notifications = () => {
     return (
         <div className={"Notifications"}>
             <Header title="Notifications" />
-            {(notifications) && notifications.notifications.map(notification => <Notification record={notification} key={notification.uri + index++} />)}
+            {(notifications) && notifications.notifications.map(notification => <Notification record={notification} key={notification.uri + "/target/" + index++} />)}
         </div>
     )
 }

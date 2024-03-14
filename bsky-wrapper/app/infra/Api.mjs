@@ -587,6 +587,39 @@ export default class Api {
     }
 
     /**
+     * Returns a list of hydrated post records based on the term that is provided.
+     * @param {string} term The term to search posts for.
+     * @returns Hydrated post records that include provided term, if one exists.
+     */
+    queryPosts = async (term) => {
+
+        var xrpcRequest = "app.bsky.feed.searchPosts";
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+
+        try {
+
+            const queryResults = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}?q=${(term.split("")[0] == "#") ? "%23" + term.slice(1) : term}&limit=${this.recordLimit}`, requestData).then(r => r.json());
+
+            if (queryResults) {
+
+                return this.sanitize(queryResults);
+            } else {
+
+                throw new Error("Unable to query posts with the specified term! =>", term, queryResults);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    /**
      * Responsible for uploading a file to the specified PDS. Most checkers are handled by the server on upload to reduce complexity here.
      * Developer note: This has NOT been tested yet. Will do once higher-level code has been finished, like the file picker.
      * @param {object} file The chosen file to upload as a blob.

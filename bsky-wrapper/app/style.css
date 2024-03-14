@@ -44,6 +44,7 @@ body {
     --login-button-background: #fff;
 
     --header-primary: #1a1a1a;
+    --header-accent: #3a3a3a;
 
     --input-box-accent: #0099ff54;
     --input-box-focus: #0099FF99;
@@ -90,6 +91,7 @@ body.dark {
     --background-primary: #000;
 
     --header-primary: #ddd;
+    --header-accent: #ccc;
 
     --record-prepend-primary: #ddd;
     --record-background: #1a1a1a;
@@ -237,7 +239,7 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     padding: 2rem;
     padding-top: 2rem;
 }
-.About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+.About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
     grid-area: Center;
 
     max-width: inherit;
@@ -247,14 +249,14 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     overflow-y: scroll;
     scrollbar-width: none;
 }
-.About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
+.About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .Tag::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
     display: none;
 }
 .Login, .Settings {
     gap: 1rem;
     overflow-y: clip;
 }
-.Feed, .Notifications, .UserProfile, .UserPost {
+.Feed, .Tag, .Notifications, .UserProfile, .UserPost {
     gap: 2rem;
 }
 .SideBar-Heading {
@@ -383,7 +385,16 @@ body.dark .LoginWith h2 {
 }
 .Header {
     display: flex;
+    align-items: center;
+    gap: 1rem;
     padding-top: 2rem;
+}
+.Header h1.Accent {
+    color: var(--header-accent);
+}
+.Header svg {
+    width: 2rem;
+    height: 2rem;
 }
 .Header h1 {
     color: var(--header-primary);
@@ -779,7 +790,7 @@ input[type="password"] {
     .devBanner {
         align-items: center;
     }
-    .About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding-right: 2rem;
     }
     .FooterBar {
@@ -793,14 +804,14 @@ input[type="password"] {
             "Center";
         grid-template-columns: 100vw;
     }
-    .About, .Acknowledgments, .Feed, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
         overflow-y: unset;
     }
     .Login, .Settings {
         gap: 0rem;
     }
-    .Feed, .Notifications, .UserProfile, .UserPost {
+    .Feed, .Tag, .Notifications, .UserProfile, .UserPost {
         gap: 1rem;
     }
     .SideBar {

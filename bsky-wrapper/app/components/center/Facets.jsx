@@ -15,7 +15,7 @@ const Facets = ({text, facets}) => {
             case "app.bsky.richtext.facet#link":
                 return (<Link to={facet.features[index].uri}>{innerContent}</Link>);
             case "app.bsky.richtext.facet#tag":
-                return (<Link to={"./"}>{innerContent}</Link>);
+                return (<Link to={`/hashtag/${innerContent.slice(1)}`}>{innerContent}</Link>);
             case "dev.amazingca.blue.facet#bolden":
                 return (<b>{innerContent}</b>);
             case "dev.amazingca.blue.facet#italicize":
