@@ -115,6 +115,9 @@ body.dark {
     column-gap: 2rem;
     height: 100vh;
 }
+#main.hasDevBanner {
+    grid-template-rows: 51px auto;
+}
 .devBanner {
     grid-area: devBanner;
 
@@ -801,12 +804,19 @@ input[type="password"] {
     #main {
         grid-template-areas: 
             "devBanner"
-            "Center";
+            "Center"
+            "SideBar";
         grid-template-columns: 100vw;
+    }
+    #main.hasDevBanner {
+        grid-template-rows: 51px auto min-content;
+    }
+    .devBanner {
+        position: fixed;
     }
     .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         padding: 1rem;
-        overflow-y: unset;
+        /*overflow-y: unset;*/
     }
     .Login, .Settings {
         gap: 0rem;
@@ -815,6 +825,24 @@ input[type="password"] {
         gap: 1rem;
     }
     .SideBar {
+        flex-direction: row;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+        /*display: none;*/
+    }
+    .TaskBar {
+        width: auto;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    .LoginWith {
+        width: auto;
+    }
+    .LoginWith h2 {
+        font-size: 1.25rem;
+    }
+    .ProfileThemeIcon {
         display: none;
     }
     .Header {
