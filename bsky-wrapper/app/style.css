@@ -633,6 +633,7 @@ a.ExternalLink {
     background-repeat: no-repeat;
 }
 .Profile .Banner {
+    width: 100%;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
 }
