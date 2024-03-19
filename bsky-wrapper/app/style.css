@@ -106,21 +106,17 @@ body.dark {
     --footer-primary: #fff;
 }
 #main {
-    display: grid;
-    grid-template-areas:
-        "devBanner devBanner devBanner"
-        "SideBar Center FooterBar";
-    grid-template-rows: 0rem auto;
-    grid-template-columns: 1.25fr minmax(12rem, 1fr) 1fr;
-    column-gap: 2rem;
-    height: 100vh;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    min-height: 100vh;
 }
 #main.hasDevBanner {
-    grid-template-rows: 51px auto;
+    min-height: calc(100vh - 51px);
 }
 .devBanner {
-    grid-area: devBanner;
-
+    position: sticky;
+    top: 0px;
     width: -webkit-fill-available;
     background-color: lightsalmon;
     padding: 1rem;
@@ -232,8 +228,7 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     text-decoration: underline;
 }
 .SideBar {
-    grid-area: SideBar;
-    
+    flex: 1;
     background-color: var(--sidebar-background);
     display: flex;
     flex-direction: column;
@@ -243,13 +238,12 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     padding-top: 2rem;
 }
 .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
-    grid-area: Center;
-
-    max-width: inherit;
+    flex: 1;
+    min-width: 12rem;
+    max-width: 28vw;
     display: flex;
     flex-direction: column;
     padding-bottom: 2rem;
-    overflow-y: scroll;
     scrollbar-width: none;
 }
 .About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .Tag::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
@@ -263,9 +257,14 @@ p.DisplayName a, p.Handle a, footer a, a1 a {
     gap: 2rem;
 }
 .SideBar-Heading {
+    position: sticky;
+    top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+}
+#main.hasDevBanner .SideBar-Heading {
+    top: calc(2rem + 51px);
 }
 .Title {
     display: flex;
@@ -339,6 +338,8 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     background-clip: padding-box;
 }
 .UserBar {
+    position: sticky;
+    bottom: 2rem;
     display: flex;
     gap: 2rem;
 }
@@ -749,12 +750,12 @@ a.ExternalLink {
     border-radius: 50%;
 }
 .FooterBar {
-    grid-area: FooterBar;
-
+    flex: 1;
     top: 0rem;
     bottom: 0rem;
     width: auto;
     height: auto;
+    padding-right: 2rem;
     display: flex;
     align-items: flex-end;
 
@@ -762,6 +763,8 @@ a.ExternalLink {
     -webkit-user-select: none;
 }
 .Footer {
+    position: sticky;
+    bottom: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -770,9 +773,13 @@ a.ExternalLink {
 input[type="password"] {
     letter-spacing: 0.25rem;
 }
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1222px) {
     #main {
-        grid-template-columns: 8rem 1.25fr 1fr;
+        justify-content: space-between;
+    }
+    .SideBar {
+        flex: unset;
+        width: 4rem;
     }
     .Title {
         display: none;
@@ -784,40 +791,34 @@ input[type="password"] {
     .ActionItem h2 {
         display: none;
     }
+    .LoginWith {
+        display: none;
+    }
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+        max-width: 28rem;
+    }
+    .FooterBar {
+        flex: unset;
+    }
 }
 @media screen and (max-width: 722px) {
-    #main {
-        grid-template-areas:
-            "devBanner devBanner devBanner"
-            "SideBar Center Center";
-    }
     .devBanner {
         align-items: center;
     }
-    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
-        padding-right: 2rem;
-    }
     .FooterBar {
+        padding-right: 0rem;
+    }
+    .Footer {
         display: none;
     }
 }
 @media screen and (max-width: 565px) {
     #main {
-        grid-template-areas: 
-            "devBanner"
-            "Center"
-            "SideBar";
-        grid-template-columns: 100vw;
-    }
-    #main.hasDevBanner {
-        grid-template-rows: 51px auto min-content;
-    }
-    .devBanner {
-        position: fixed;
+        flex-direction: column-reverse;
     }
     .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+        max-width: unset;
         padding: 1rem;
-        /*overflow-y: unset;*/
     }
     .Login, .Settings {
         gap: 0rem;
@@ -826,11 +827,13 @@ input[type="password"] {
         gap: 1rem;
     }
     .SideBar {
+        position: sticky;
+        bottom: 0px;
         flex-direction: row;
         align-items: center;
         padding: 1rem;
         gap: 1rem;
-        /*display: none;*/
+        width: auto;
     }
     .TaskBar {
         width: auto;
@@ -838,6 +841,7 @@ input[type="password"] {
         gap: 1rem;
     }
     .LoginWith {
+        display: flex;
         width: auto;
     }
     .LoginWith h2 {
@@ -858,6 +862,9 @@ input[type="password"] {
     }
     .Profile {
         margin-top: 0rem;
+    }
+    .FooterBar {
+        display: none;
     }
     input[type="password"] {
         letter-spacing: 0rem;

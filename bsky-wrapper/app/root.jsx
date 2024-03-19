@@ -89,8 +89,8 @@ const App = () => {
                 <Links />
             </head>
             <body className={theme}>
+                {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                 {(load) && <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                    {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                     <SideBar display={display} authorized={authorized} apiInterface={apiInterface} />
                     <Outlet context={context} />
                     <FooterBar />
