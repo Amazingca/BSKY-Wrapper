@@ -20,13 +20,16 @@ export const meta = ({data, matches}) => {
 
     const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
+    var displayName = (data.userObj.displayName) ? data.userObj.displayName + " ": "";
+    var handle = (displayName == "") ? `(${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})` : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef;
+
     return [
         {
-            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName + " (" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${affix}` : `User Post${affix}`
+            title: (Object.keys(data.userObj).length > 0) ? `${displayName}${handle}${affix}` : `User Post${affix}`
         },
         {
             property: "og:title",
-            content: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName + " (" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}` : `User Post`
+            content: (Object.keys(data.userObj).length > 0) ? `${displayName}${handle}` : `User Post`
         },
         {
             property: "og:description",
