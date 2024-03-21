@@ -103,8 +103,8 @@ const App = () => {
                 <meta httpEquiv="Content-Type" content="text/html;charset=utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 {(process.env.NODE_ENV == "development") && <meta name="theme-color" content="lightsalmon"/>}
-                <meta name="theme-color" content="#0099FF" media="(prefers-color-scheme: light)"/>
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
+                <meta name="theme-color" content="#0099FF" media="(prefers-color-scheme: light)"/>
                 <meta property="og:type" content="website"/>
                 <meta property="og:site_name" content="Blue Wrapper"/>
                 <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
