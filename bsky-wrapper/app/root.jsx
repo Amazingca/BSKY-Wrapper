@@ -18,7 +18,7 @@ export const meta = () => {
 
     return [
         {
-            title: "Home – BlueSky Wrapper"
+            title: "Home – Blue Wrapper"
         },
         {
             property: "og:title",
@@ -34,7 +34,7 @@ export const meta = () => {
         },
         {
             name: "titleAffix",
-            content: " – BlueSky Wrapper"
+            content: " – Blue Wrapper"
         }
     ]
 }
