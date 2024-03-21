@@ -5,11 +5,11 @@ import { useState, useEffect } from "react";
 
 export const meta = ({matches}) => {
 
-    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+    const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
     return [
         {
-            title: `Notifications${prefix}`
+            title: `Notifications${affix}`
         },
         {
             property: "og:title",

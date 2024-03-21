@@ -18,11 +18,11 @@ export const loader = async ({params}) => {
 
 export const meta = ({data, matches}) => {
 
-    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+    const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
     return [
         {
-            title: (Object.keys(data.userObj).length > 0) ? `${(data.userObj.displayName) && data.userObj.displayName} (${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})${prefix}` : `User Profile${prefix}`
+            title: (Object.keys(data.userObj).length > 0) ? `${(data.userObj.displayName) && data.userObj.displayName} (${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})${affix}` : `User Profile${affix}`
         },
         {
             property: "og:title",
@@ -31,6 +31,10 @@ export const meta = ({data, matches}) => {
         {
             property: "og:description",
             content: ((Object.keys(data.userObj).length > 0) && data.userObj.description) ? data.userObj.description : ""
+        },
+        {
+            property: "og:image",
+            content: ((Object.keys(data.userObj).length > 0) && data.userObj.avatar) ? data.userObj.avatar : ""
         }
     ];
 };

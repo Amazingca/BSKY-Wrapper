@@ -5,14 +5,14 @@ import { useState, useEffect } from "react";
 
 export const meta = ({matches, location}) => {
 
-    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+    const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
     const tagBasis = location.pathname.split("/")[2];
     const tag = (tagBasis.slice(1) != "#") ? "#" + tagBasis : tagBasis;
 
     return [
         {
-            title: `${tag}${prefix}`
+            title: `${tag}${affix}`
         },
         {
             property: "og:title",

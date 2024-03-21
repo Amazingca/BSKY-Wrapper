@@ -29,7 +29,11 @@ export const meta = () => {
             content: "Third-party ATP client. Built with Remix and hosted on Cloudflare Pages."
         },
         {
-            name: "titlePrefix",
+            property: "og:image",
+            content: "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"
+        },
+        {
+            name: "titleAffix",
             content: " – BlueSky Wrapper"
         }
     ]
@@ -103,7 +107,6 @@ const App = () => {
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
                 <meta property="og:type" content="website"/>
                 <meta property="og:site_name" content="Blue Wrapper"/>
-                <meta property="og:image" content="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
                 <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
                 <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapper.png?v=1691731259916"/>
                 <link type="text/css" rel="stylesheet" href={stylesheet}/>

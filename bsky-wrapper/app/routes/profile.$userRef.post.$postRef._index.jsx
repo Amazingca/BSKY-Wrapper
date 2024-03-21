@@ -12,17 +12,17 @@ export const loader = async ({params}) => {
     return json({
         userRef: params.userRef,
         userObj: await apiInterface.getProfile(params.userRef),
-        postObj: await apiInterface.getPostThread(params.postRef)
+        postObj: await apiInterface.getPostThread({type: (params.userRef.includes("did:")) ? "did": "handle", ref: params.userRef}, params.postRef)
     });
 }
 
 export const meta = ({data, matches}) => {
 
-    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+    const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
     return [
         {
-            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${prefix}` : `User Post${prefix}`
+            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${affix}` : `User Post${affix}`
         },
         {
             property: "og:title",
@@ -31,6 +31,10 @@ export const meta = ({data, matches}) => {
         {
             property: "og:description",
             content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text : ""
+        },
+        {
+            property: "og:image",
+            content: ((Object.keys(data.userObj).length > 0) && data.userObj.avatar) ? data.userObj.avatar : ""
         }
     ];
 };

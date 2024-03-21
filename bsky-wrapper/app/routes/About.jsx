@@ -3,11 +3,11 @@ import Article from "../components/center/Article";
 
 export const meta = ({matches}) => {
 
-    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+    const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
     return [
         {
-            title: `About${prefix}`
+            title: `About${affix}`
         },
         {
             property: "og:title",
