@@ -22,11 +22,11 @@ export const meta = ({data, matches}) => {
 
     return [
         {
-            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) && data.userObj.displayName + " "}${(data.userObj.displayName) ? "(" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${affix}` : `User Post${affix}`
+            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName + " (" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${affix}` : `User Post${affix}`
         },
         {
             property: "og:title",
-            content: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) && data.userObj.displayName + " "}${(data.userObj.displayName) ? "(" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}` : `User Post`
+            content: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName + " (" + (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef + ")" : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}` : `User Post`
         },
         {
             property: "og:description",
