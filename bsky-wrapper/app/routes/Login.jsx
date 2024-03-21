@@ -9,6 +9,14 @@ export const meta = ({matches}) => {
     return [
         {
             title: `Login${prefix}`
+        },
+        {
+            property: "og:title",
+            content: "Login"
+        },
+        {
+            property: "og:description",
+            content: "Login to the Blue Wrapper."
         }
     ];
 };

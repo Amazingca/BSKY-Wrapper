@@ -10,6 +10,10 @@ export const meta = ({matches}) => {
     return [
         {
             title: `Notifications${prefix}`
+        },
+        {
+            property: "og:title",
+            content: "Notifications"
         }
     ];
 };

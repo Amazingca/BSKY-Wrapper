@@ -10,6 +10,14 @@ export const meta = ({matches}) => {
     return [
         {
             title: `Settings${prefix}`
+        },
+        {
+            property: "og:title",
+            content: "Settings"
+        },
+        {
+            property: "og:description",
+            content: "Modify settings for the Blue Wrapper."
         }
     ];
 };

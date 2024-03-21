@@ -23,6 +23,14 @@ export const meta = ({data, matches}) => {
     return [
         {
             title: (Object.keys(data.userObj).length > 0) ? `${(data.userObj.displayName) && data.userObj.displayName} (${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})${prefix}` : `User Profile${prefix}`
+        },
+        {
+            property: "og:title",
+            content: (Object.keys(data.userObj).length > 0) ? `${(data.userObj.displayName) && data.userObj.displayName} (${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})` : `User Profile`
+        },
+        {
+            property: "og:description",
+            content: ((Object.keys(data.userObj).length > 0) && data.userObj.description) ? data.userObj.description : ""
         }
     ];
 };

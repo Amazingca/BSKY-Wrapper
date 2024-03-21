@@ -11,7 +11,8 @@ export const loader = async ({params}) => {
 
     return json({
         userRef: params.userRef,
-        userObj: await apiInterface.getProfile(params.userRef)
+        userObj: await apiInterface.getProfile(params.userRef),
+        postObj: await apiInterface.getPostThread(params.postRef)
     });
 }
 
@@ -22,6 +23,14 @@ export const meta = ({data, matches}) => {
     return [
         {
             title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${prefix}` : `User Post${prefix}`
+        },
+        {
+            property: "og:title",
+            content: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}` : `User Post`
+        },
+        {
+            property: "og:description",
+            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text : ""
         }
     ];
 };

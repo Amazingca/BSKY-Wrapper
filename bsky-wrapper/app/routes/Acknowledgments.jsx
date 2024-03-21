@@ -8,6 +8,14 @@ export const meta = ({matches}) => {
     return [
         {
             title: `Acknowledgments${prefix}`
+        },
+        {
+            property: "og:title",
+            content: "Acknowledgments"
+        },
+        {
+            property: "og:description",
+            content: "Frameworks and graphics that make the Blue Wrapper possible."
         }
     ];
 };

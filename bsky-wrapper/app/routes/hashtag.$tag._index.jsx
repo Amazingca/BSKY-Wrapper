@@ -13,6 +13,14 @@ export const meta = ({matches, location}) => {
     return [
         {
             title: `${tag}${prefix}`
+        },
+        {
+            property: "og:title",
+            content: tag
+        },
+        {
+            property: "og:description",
+            content: `Posts with the ${tag} tag.`
         }
     ];
 };
