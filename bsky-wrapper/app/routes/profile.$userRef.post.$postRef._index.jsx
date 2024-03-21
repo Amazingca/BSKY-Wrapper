@@ -1,8 +1,30 @@
 import Header from "../components/center/Header";
 import Post from "../components/center/Post";
 import NoView from "../components/center/NoView";
-import { useOutletContext, useParams } from "@remix-run/react";
+import { json, useOutletContext, useParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
+import Api from "../infra/Api.mjs";
+
+export const loader = async ({params}) => {
+
+    const apiInterface = new Api({pdsUrl: "https://bsky.social"});
+
+    return json({
+        userRef: params.userRef,
+        userObj: await apiInterface.getProfile(params.userRef)
+    });
+}
+
+export const meta = ({data, matches}) => {
+
+    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+
+    return [
+        {
+            title: (Object.keys(data.userObj).length > 0) ? `Post by ${(data.userObj.displayName) ? data.userObj.displayName : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef}${prefix}` : `User Post${prefix}`
+        }
+    ];
+};
 
 const UserPost = () => {
 

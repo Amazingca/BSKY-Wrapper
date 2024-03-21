@@ -1,6 +1,17 @@
 import Header from "../components/center/Header";
 import Article from "../components/center/Article";
 
+export const meta = ({matches}) => {
+
+    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+
+    return [
+        {
+            title: `About${prefix}`
+        }
+    ];
+};
+
 const About = () => {
 
     const about = [

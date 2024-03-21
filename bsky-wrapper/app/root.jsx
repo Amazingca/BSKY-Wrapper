@@ -14,6 +14,19 @@ import Themes from "./infra/Themes.js";
 import stylesheet from "./style.css";
 import manifest from "./app.webmanifest";
 
+export const meta = () => {
+
+    return [
+        {
+            title: "Home – BlueSky Wrapper"
+        },
+        {
+            name: "titlePrefix",
+            content: " – BlueSky Wrapper"
+        }
+    ]
+}
+
 const App = () => {
 
     const localData = new Locale();
@@ -75,15 +88,14 @@ const App = () => {
     return (
         <html>
             <head>
-                <title>BlueSky Wrapper</title>
+                <meta httpEquiv="Content-Type" content="text/html;charset=utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-                <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
-                <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapper.png?v=1691731259916"/>
                 {(process.env.NODE_ENV == "development") && <meta name="theme-color" content="lightsalmon"/>}
                 <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)"/>
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
+                <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
+                <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapper.png?v=1691731259916"/>
                 <link type="text/css" rel="stylesheet" href={stylesheet}/>
-                <meta httpEquiv="Content-Type" content="text/html;charset=utf-8"/>
                 <link rel="manifest" href={manifest}/>
                 <Meta />
                 <Links />

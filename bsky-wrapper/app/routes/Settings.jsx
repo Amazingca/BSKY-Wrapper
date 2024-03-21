@@ -3,6 +3,17 @@ import Input from "../components/center/Input";
 import { useOutletContext, useLocation } from "@remix-run/react";
 import { useRef, useEffect } from "react";
 
+export const meta = ({matches}) => {
+
+    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+
+    return [
+        {
+            title: `Settings${prefix}`
+        }
+    ];
+};
+
 const Settings = () => {
 
     const {localData, apiInterface, server, setServer} = useOutletContext();

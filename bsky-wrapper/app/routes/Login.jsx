@@ -2,6 +2,17 @@ import Header from "../components/center/Header";
 import Input from "../components/center/Input";
 import { useOutletContext, useNavigate } from "@remix-run/react";
 
+export const meta = ({matches}) => {
+
+    const prefix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titlePrefix")[0].content;
+
+    return [
+        {
+            title: `Login${prefix}`
+        }
+    ];
+};
+
 const Login = () => {
 
     const {localData, apiInterface, server, setAuthorized, setAuthorization} = useOutletContext();

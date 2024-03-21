@@ -128,7 +128,7 @@ body.dark {
     align-items: stretch;
     gap: 1rem;
 }
-h1, h2, h3, a1, footer, p, a, .InputName, .InputEntry {
+h1, h2, h3, h4, footer, p, a, .InputName, .InputEntry {
     font-family: "Mona Sans";
 }
 h1 {
@@ -145,11 +145,13 @@ h3 {
     color: var(--sidebar-background);
     font-weight: 700 !important;
 }
-p, a {
+h4, p, a {
     margin-block-start: 0em;
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
+}
+p, a {
     word-break: break-word;
 
     color: var(--record-text-primary);
@@ -190,12 +192,12 @@ a.Handle {
 .Metrics div p.Accent {
     color: var(--record-author-handle);
 }
-footer, a1 {
+footer, h4 {
     font-size: 1rem;
     color: var(--footer-primary);
     font-weight: 400 !important;
 }
-p.DisplayName a, p.Handle a, footer a, a1 a {
+p.DisplayName a, p.Handle a, footer a, h4 a {
     color: inherit;
     font-weight: 500 !important;
     text-underline-offset: 0.1rem;
