@@ -836,6 +836,7 @@ input[type="password"] {
         padding: 1rem;
         gap: 1rem;
         width: auto;
+        overflow-x: scroll;
     }
     .TaskBar {
         width: auto;
