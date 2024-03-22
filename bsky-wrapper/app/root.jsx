@@ -111,6 +111,7 @@ const App = () => {
                 <meta name="theme-color" content="#0099FF" media="(prefers-color-scheme: light)"/>
                 <meta property="og:site_name" content="Blue Wrapper"/>
                 <meta property="og:type" content="article"/>
+                <meta name="twitter:card" content="summary_large_image"/>
                 <link rel="icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"/>
                 <link rel="apple-touch-icon" href="https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapper.png?v=1691731259916"/>
                 <link type="text/css" rel="stylesheet" href={stylesheet}/>
