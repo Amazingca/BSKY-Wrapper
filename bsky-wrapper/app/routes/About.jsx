@@ -18,10 +18,6 @@ export const meta = ({matches}) => {
             content: "About the Blue Wrapper."
         },
         {
-            property: "og:type",
-            content: "website"
-        },
-        {
             property: "og:image",
             content: "https://cdn.glitch.global/fa1b6839-ae9a-450b-b03b-be3be9c9b051/BlueWrapperTransparent.png?v=1691731693827"
         },

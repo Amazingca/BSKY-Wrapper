@@ -36,16 +36,12 @@ export const meta = ({data, matches}) => {
             content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text : ""
         },
         {
-            property: "og:type",
-            content: "article"
-        },
-        {
             property: "og:image",
             content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
         },
         {
-            property: "article:published_time",
-            content: (Object.keys(data.userObj).length > 0) ? data.postObj.thread.post.record.createdAt : ""
+            property: "twitter:card",
+            content: "summary_large_image"
         }
     ];
 };

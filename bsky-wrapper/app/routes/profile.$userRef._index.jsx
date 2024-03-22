@@ -33,10 +33,6 @@ export const meta = ({data, matches}) => {
             content: ((Object.keys(data.userObj).length > 0) && data.userObj.description) ? data.userObj.description : ""
         },
         {
-            property: "og:type",
-            content: "website"
-        },
-        {
             property: "og:image",
             content: ((Object.keys(data.userObj).length > 0) && data.userObj.avatar) ? data.userObj.avatar : ""
         }
