@@ -238,6 +238,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     justify-content: space-between;
     padding: 2rem;
     padding-top: 2rem;
+    z-index: 1;
 }
 .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
     flex: 1;
