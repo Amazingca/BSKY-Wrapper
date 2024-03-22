@@ -39,10 +39,10 @@ export const meta = ({data, matches}) => {
             property: "og:image",
             content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
         },
-        {
+        ...(data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
             property: "twitter:card",
             content: "summary_large_image"
-        }
+        }] : []
     ];
 };
 
