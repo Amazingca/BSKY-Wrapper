@@ -27,6 +27,7 @@ export const meta = ({data, matches}) => {
     var displayName = (data.userObj.displayName) ? data.userObj.displayName + " ": "";
     var handle = (displayName != "") ? `(${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})` : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef;
 
+    console.log(data.postObj.thread.post.record.text);
     return [
         {
             title: (Object.keys(data.userObj).length > 0) ? `Post by ${displayName}${handle}${affix}` : `User Post${affix}`
