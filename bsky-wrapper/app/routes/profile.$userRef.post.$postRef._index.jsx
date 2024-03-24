@@ -38,7 +38,7 @@ export const meta = ({data, matches}) => {
         },
         {
             property: "og:description",
-            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text.replaceAll("&quote;", "\"") : ""
+            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text.replaceAll("&quot;", "\"") : ""
         },
         {
             property: "og:image",
