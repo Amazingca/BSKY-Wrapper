@@ -15,7 +15,7 @@ import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
 
-const Post = ({record, apiInterface, authorized}) => {
+const Post = ({record, apiInterface, authorized, focused}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -66,18 +66,21 @@ const Post = ({record, apiInterface, authorized}) => {
             <div className={"Post"}>
                 <div className={"PostHeader"}>
                     <div className={"Author"}>
-                        {(record.post.author.avatar) && <img src={record.post.author.avatar} className={"Avatar"} />}
+                        {(record.post.author.avatar) && <img src={record.post.author.avatar} className={`Avatar${(focused == false) ? " Regular" : ""}`} />}
                         <div className={"Details"}>
-                            <p className={"DisplayName"}>{record.post.author.displayName}</p>
-                            <Link to={`/profile/${record.post.author.handle}`} className={"Handle"}>{record.post.author.handle}</Link>
+                            <p className={`DisplayName${(focused == false) ? " Regular" : ""}`}>{record.post.author.displayName}</p>
+                            <Link to={`/profile/${record.post.author.handle}`} className={`Handle${(focused == false) ? " Regular" : ""}`} unstable_viewTransition>@{record.post.author.handle}</Link>
                         </div>
                     </div>
-                    <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={new Date(record.post.record.createdAt).toUTCString()} className={"Timestamp"}>
-                        {Time.relative(record.post.record.createdAt)}
-                    </Link>
+                    {(focused == false) && (
+                        <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={new Date(record.post.record.createdAt).toUTCString()} className={"Timestamp"} unstable_viewTransition>
+                            {Time.relative(record.post.record.createdAt)}
+                        </Link>
+                    )}
                 </div>
                 {(record.post.record.text) && (record.post.record.facets) ? <Facets text={record.post.record.text} facets={record.post.record.facets} /> : <Facets text={record.post.record.text} />}
                 {(record.post.embed) && <Embed embed={record.post.embed} apiInterface={apiInterface} authorized={authorized} />}
+                {(focused == true) && <p className={"Timestamp"}>{new Date(record.post.record.createdAt).toUTCString()}</p>}
                 <div className={"PostFooter"}>
                     <div className={"Metrics"}>
                         <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />
@@ -92,5 +95,9 @@ const Post = ({record, apiInterface, authorized}) => {
         </div>
     )
 }
+
+Post.defaultProps = {
+    focused: false
+};
 
 export default Post;

@@ -68,7 +68,7 @@ const TaskBar = ({authorized, apiInterface}) => {
             <Link to="/settings" unstable_viewTransition>
                 <ActionItem Icon={ToolsIcon} description="Settings" mainColor="--action-item-secondary"/>
             </Link>
-            {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={func}/>}
+            {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={() => window.alert("This button doesn't do anything right now, but it will soon!")}/>}
         </div>
     )
 }

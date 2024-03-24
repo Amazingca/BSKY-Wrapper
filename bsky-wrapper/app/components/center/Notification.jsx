@@ -54,13 +54,13 @@ const Notification = ({record}) => {
     }
 
     return (
-        <div className={"Post"}>
+        <div className={`Post${(record.isRead == false) ? " Unread" : ""}`}>
             <div className={"Subject"}>
                 <div style={{backgroundColor: `var(${iconBackgroundColor})`}} className={"Icon"}>
                     <SubjectIcon size={"small"} fill={`var(${iconFillColor})`} />
                 </div>
                 <div>
-                    <p><Link to={`/profile/${record.author.handle}`}>@{record.author.handle}</Link> {subjectText}</p>
+                    <p><Link to={`/profile/${record.author.handle}`} unstable_viewTransition>@{record.author.handle}</Link> {subjectText}</p>
                 </div>
             </div>
         </div>

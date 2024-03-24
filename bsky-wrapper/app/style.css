@@ -19,6 +19,7 @@ body {
 
     --accent-primary: #0099FFFF;
     --accent-secondary: #3b82f6FF;
+    --accent-tertiary: #0099ff26;
 
     --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
     --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
@@ -164,6 +165,9 @@ p.DisplayName, a.Handle {
     color: var(--record-author-name);
     font-weight: 700 !important;
 }
+p.DisplayName.Regular, a.Handle.Regular {
+    font-size: 1rem;
+}
 p.Handle {
     font-weight: 550 !important;
 }
@@ -180,7 +184,7 @@ a.Handle {
 .PostPrepend p {
     color: var(--record-prepend-primary);
 }
-.PostHeader .Timestamp, .InlinePost .Timestamp {
+.Timestamp {
     color: var(--record-author-handle);
 }
 .ExternalLink .ExternalHeader {
@@ -213,7 +217,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     font-weight: 750 !important;
 }
 .InlinePost .InlineAuthor p, .InlinePost .InlineAuthor a, .FeedRecord .Headers div a p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500 !important
 }
 .FeedRecord .Headers div p {
@@ -251,6 +255,11 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     padding-bottom: 2rem;
     scrollbar-width: none;
 }
+.Replies {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
 .About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .Tag::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
     display: none;
 }
@@ -286,7 +295,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     width: 23rem;
     margin-top: 4rem;
 }
-.Taskbar a {
+.TaskBar a {
     text-decoration: none;
 }
 .ActionItem {
@@ -404,7 +413,6 @@ body.dark .LoginWith h2 {
     align-items: center;
     gap: 1rem;
     padding-top: 2rem;
-    overflow-x: scroll;
 }
 .Header h1.Accent {
     color: var(--header-accent);
@@ -479,6 +487,12 @@ body.dark .LoginWith h2 {
     padding: 0.75rem;
     border-radius: 0.75rem;
 }
+.Unread {
+    outline-color: var(--accent-primary);
+    outline-width: 2px;
+    outline-style: dashed;
+    background-color: var(--accent-tertiary);
+}
 .ReplyConnector {
     height: 2rem;
     width: 0.5rem;
@@ -516,6 +530,10 @@ body.dark .LoginWith h2 {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
+}
+.Post .Author .Avatar.Regular, .FeedRecord .Headers .Avatar.Regular {
+    width: 2.5rem;
+    height: 2.5rem;
 }
 .Author .Details, .InlineAuthor .Titlers {
     overflow: hidden;
@@ -869,6 +887,7 @@ input[type="password"] {
     }
     .Header {
         padding-top: 0rem;
+        overflow-x: scroll;
     }
     .InputEntry {
         width: -webkit-fill-available;

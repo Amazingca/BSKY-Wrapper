@@ -72,18 +72,28 @@ const UserPost = () => {
         return (
             <>
                 {(record.parent) && higherLevelPost(record.parent)}
-                {(record.post && ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == false))) ? <Post record={record} apiInterface={apiInterface} authorized={authorized} /> : <NoView />}
+                {(record.post && ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true))) ? <Post record={record} apiInterface={apiInterface} authorized={authorized} /> : <NoView />}
                 <div className={"ReplyConnector"}></div>
             </>
         )
     }
+
+    var index = 0;
 
     return (
         <div className={"UserPost"}>
             <Header title={(post.thread && post.thread.parent) ? "Post Thread" : "Post"} />
             <div>
                 {(post.thread && post.thread.parent) && higherLevelPost(post.thread.parent)}
-                {(post.thread) ? <Post record={post.thread} apiInterface={apiInterface} authorized={authorized} /> : (Object.keys(post) == 0) && <NoView />}
+                {(post.thread) ? <Post record={post.thread} apiInterface={apiInterface} authorized={authorized} focused={true} /> : (Object.keys(post) == 0) && <NoView />}
+                {(post.thread && (post.thread.replies.length > 0)) && (
+                    <>
+                        <h3>Replies:</h3>
+                        <div className={"Replies"}>
+                            {post.thread.replies.map((reply) => ((reply.$type == "app.bsky.feed.defs#threadViewPost" && ((apiInterface.isHiddenHydrated(reply.post.author) == false) || (authorized == true))) && <Post record={reply} apiInterface={apiInterface} authorized={authorized} key={reply.post.uri} />))}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     )

@@ -4,8 +4,6 @@ import NoView from "./NoView";
 
 const Embed = ({embed, apiInterface, authorized}) => {
 
-    console.log(embed, apiInterface, apiInterface);
-
     const imageItemPointer = (count, index) => {
 
         switch (count) {
