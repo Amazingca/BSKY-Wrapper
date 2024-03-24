@@ -100,7 +100,7 @@ const App = () => {
     return (
         <html>
             <head>
-                <meta httpEquiv="Content-Type" content="text/html;charset=utf-8"/>
+                <meta charset="UTF-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 {(process.env.NODE_ENV == "development") && <meta name="theme-color" content="lightsalmon"/>}
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
