@@ -34,17 +34,6 @@ const Post = ({record, apiInterface, authorized}) => {
         }
     }
 
-    const goToPost = () => {
-
-        /*if (window.getSelection().type == "Caret") {
-            
-            if (location.pathname != `/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`) {
-                
-                navigate(`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`);
-            }
-        }*/
-    }
-
     const happeningSoon = (basic=false) => {
 
         if ((authorized == false) && (basic == false)) navigate("/login");
@@ -74,7 +63,7 @@ const Post = ({record, apiInterface, authorized}) => {
                     <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? (apiInterface.isHiddenHydrated(record.reply.parent.author) == false) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
                 </div>
             )}
-            <div onClick={goToPost} className={"Post"}>
+            <div className={"Post"}>
                 <div className={"PostHeader"}>
                     <div className={"Author"}>
                         {(record.post.author.avatar) && <img src={record.post.author.avatar} className={"Avatar"} />}

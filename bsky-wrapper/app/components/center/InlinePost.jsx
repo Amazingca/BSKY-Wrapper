@@ -22,7 +22,7 @@ const InlinePost = ({record}) => {
                 </div>
                 {(record.value.text) && (record.value.facets) ? <Facets text={record.value.text} facets={record.value.facets} /> : <Facets text={record.value.text} />}
             </div>
-            {(record.embeds && record.embeds.length > 0 && record.embeds[0].$type != "app.bsky.embed.record#view") && <Embed embed={record.embeds[0]} />}
+            {(record.embeds && record.embeds.length > 0 && record.embeds[0].$type != "app.bsky.embed.record#view") && <Embed embed={(record.embeds[0].$type == "app.bsky.embed.recordWithMedia#view") ? record.embeds[0].media : record.embeds[0]} />}
         </div>
     )
 }

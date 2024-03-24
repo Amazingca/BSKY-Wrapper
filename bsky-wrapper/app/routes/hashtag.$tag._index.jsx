@@ -32,12 +32,43 @@ const Feed = () => {
     
     var tag = (params.tag.slice(1) != "#") ? "#" + params.tag : params.tag;
     const [posts, setPosts] = useState({posts: []});
+    var postsCache = {posts: []};
+
+    const queryPosts = async () => {
+
+        if (postsCache.posts.length == 0) {
+
+            var query = await apiInterface.queryPosts({term: tag});
+
+            console.log(query);
+
+            setPosts(query);
+            postsCache = query;
+        } else {
+
+            var newPosts = await apiInterface.queryPosts({term: tag, cursor: postsCache.cursor});
+            newPosts.posts = newPosts.posts.filter(n => postsCache.posts.filter(a => a.uri != n.uri).length == postsCache.posts.length);
+            newPosts.posts = [...postsCache.posts, ...newPosts.posts];
+
+            setPosts(newPosts);
+            postsCache = newPosts;
+        }
+    }
 
     useEffect(() => {
 
-        const queryPosts = async () => {
+        var isTriggered = false;
+        window.onscroll = function () {
             
-            setPosts(await apiInterface.queryPosts(tag));
+            if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 1000) < (window.visualViewport.height + window.visualViewport.pageTop)) {
+                
+                if (isTriggered == false) {
+                    
+                    isTriggered = true;
+                    queryPosts();
+                    isTriggered = false;
+                }
+            }
         }
 
         queryPosts();

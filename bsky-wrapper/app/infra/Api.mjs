@@ -332,7 +332,12 @@ export default class Api {
         }
     }
 
-    getProfileFeed = async (user) => {
+    /**
+     * Returns an author's feed.
+     * @param {object} options The user pointer and an optional cursor. 
+     * @returns The author's feed.
+     */
+    getProfileFeed = async ({user, cursor=null}) => {
 
         if (this.authorization == null) if (await this.isHidden(user)) return {};
 
@@ -348,7 +353,7 @@ export default class Api {
 
         try {
 
-            const userProfileFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.feed.getAuthorFeed?actor=${user}`, requestData).then(r => r.json());
+            const userProfileFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.feed.getAuthorFeed?actor=${user}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
 
             if (!userProfileFeedObj.error) {
 
@@ -532,10 +537,10 @@ export default class Api {
      * We will authenticate requests for a feed that can be authenticated, while using a different url to make public API requests.
      * The default unauthenticated return is the "What's Hot" feed, made by Bluesky.
      * The default authenticated return is the user's timeline.
-     * @param {string} uri Optional URI that points to a feed on the ATP.
+     * @param {object} options Optional URI that points to a feed on the ATP and the position within that feed (cursor).
      * @returns A hydrated feed object.
      */
-    getFeed = async (uri=null) => {
+    getFeed = async ({uri=null, cursor=null}) => {
 
         var xrpcRequest;
         var feedUri = uri;
@@ -570,7 +575,7 @@ export default class Api {
 
         try {
 
-            const hydratedFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}${(feedUri) ? "?feed=" + feedUri + "&" : "?"}limit=${this.recordLimit}`, requestData).then(r => r.json());
+            const hydratedFeedObj = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}${(feedUri) ? "?feed=" + feedUri + "&" : "?"}limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
 
             if (hydratedFeedObj) {
 
@@ -588,10 +593,10 @@ export default class Api {
 
     /**
      * Returns a list of hydrated post records based on the term that is provided.
-     * @param {string} term The term to search posts for.
+     * @param {object} options The term to search posts for and the optional cursor.
      * @returns Hydrated post records that include provided term, if one exists.
      */
-    queryPosts = async (term) => {
+    queryPosts = async ({term, cursor=null}) => {
 
         var xrpcRequest = "app.bsky.feed.searchPosts";
         var requestData = {
@@ -603,7 +608,7 @@ export default class Api {
 
         try {
 
-            const queryResults = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}?q=${(term.split("")[0] == "#") ? "%23" + term.slice(1) : term}&limit=${this.recordLimit}`, requestData).then(r => r.json());
+            const queryResults = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}?q=${(term.split("")[0] == "#") ? "%23" + term.slice(1) : term}&limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
 
             if (queryResults) {
 
@@ -743,6 +748,10 @@ export default class Api {
         }
     }
 
+    /**
+     * Getter for the current unread notifications for a user.
+     * @returns Notifications count for the user.
+     */
     getNotificationCount = async () => {
 
         try {
@@ -772,7 +781,12 @@ export default class Api {
         }
     }
 
-    getNotifications = async () => {
+    /**
+     * Returns the authorized user's notifications feed.
+     * @param {string} cursor Optional cursor for location pointing.
+     * @returns The notifications feed.
+     */
+    getNotifications = async (cursor=null) => {
 
         try {
 
@@ -785,7 +799,7 @@ export default class Api {
                 }
             };
 
-            const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.listNotifications`, requestData).then(r => r.json());
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.listNotifications?limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
 
             if (postRequest.notifications) {
 

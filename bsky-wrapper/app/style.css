@@ -26,6 +26,7 @@ body {
     --accent-primary: #0099FF;
 
     --sidebar-background: #1a1a1a;
+    --sidebar-background-translucent: #1a1a1acf;
     --background-primary: #fff;
 
     --title-primary: #ddd;
@@ -116,6 +117,7 @@ body.dark {
 }
 .devBanner {
     position: sticky;
+    z-index: 10;
     top: 0px;
     width: -webkit-fill-available;
     background-color: lightsalmon;
@@ -284,6 +286,9 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     width: 23rem;
     margin-top: 4rem;
 }
+.Taskbar a {
+    text-decoration: none;
+}
 .ActionItem {
     display: flex;
     gap: 1rem;
@@ -369,6 +374,10 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     border-radius: 4rem;
     background-color: var(--login-button-background);
 }
+a.LoginWith {
+    text-decoration: none;
+    white-space: nowrap;
+}
 .LoginWith:hover, .InputPointer:hover, .ProfileThemeIcon:hover img {
     transform: scale(1.015);
 }
@@ -395,6 +404,7 @@ body.dark .LoginWith h2 {
     align-items: center;
     gap: 1rem;
     padding-top: 2rem;
+    overflow-x: scroll;
 }
 .Header h1.Accent {
     color: var(--header-accent);
@@ -831,6 +841,9 @@ input[type="password"] {
     }
     .SideBar {
         position: sticky;
+        background-color: var(--sidebar-background-translucent);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
         bottom: 0px;
         flex-direction: row;
         align-items: center;

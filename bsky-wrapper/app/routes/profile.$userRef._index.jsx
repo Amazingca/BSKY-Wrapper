@@ -45,19 +45,53 @@ const UserProfile = () => {
     const params = useParams();
 
     const [user, setUser] = useState({ref: null});
-    const [posts, setPosts] = useState({ref: null});
+    const [posts, setPosts] = useState({feed: []});
+    var postsCache = {feed: []};
+
+    const getPosts = async () => {
+
+        if (postsCache.feed.length == 0) {
+
+            var feed = await apiInterface.getProfileFeed({user: params.userRef});
+
+            setPosts(feed);
+            postsCache = feed;
+        } else {
+
+            var newFeed = await apiInterface.getProfileFeed({user: params.userRef, cursor: postsCache.cursor});
+            newFeed.feed = newFeed.feed.filter(n => postsCache.feed.filter(a => a.post.uri != n.post.uri).length == postsCache.feed.length);
+            newFeed.feed = [...postsCache.feed, ...newFeed.feed];
+
+            setPosts(newFeed);
+            postsCache = newFeed;
+        }
+    }
+
+    const getUser = async () => {
+
+        // TODO: Fix hidden user profile schema when authorized & personal PDS loading (more in Api.getPreferredDataServer())
+        // Info: Client load causes mismatched syncing which unintentionally hides hidden users when authenticated. Basically, it's too fast.
+        setUser(await apiInterface.getProfile(params.userRef));
+    }
 
     useEffect(() => {
 
-        const getUserItems = async () => {
-
-            // TODO: Fix hidden user profile schema when authorized & personal PDS loading (more in Api.getPreferredDataServer())
-            // Info: Client load causes mismatched syncing which unintentionally hides hidden users when authenticated. Basically, it's too fast.
-            setUser(await apiInterface.getProfile(params.userRef));
-            setPosts(await apiInterface.getProfileFeed(params.userRef));
+        var isTriggered = false;
+        window.onscroll = function () {
+            
+            if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 1000) < (window.visualViewport.height + window.visualViewport.pageTop)) {
+                
+                if (isTriggered == false) {
+                    
+                    isTriggered = true;
+                    getPosts();
+                    isTriggered = false;
+                }
+            }
         }
 
-        getUserItems();
+        getUser();
+        getPosts();
     }, []);
 
     var index = 0;

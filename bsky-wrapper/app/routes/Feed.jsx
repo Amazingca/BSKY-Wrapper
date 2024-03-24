@@ -7,12 +7,41 @@ const Feed = () => {
 
     const {apiInterface, authorized} = useOutletContext();
     const [posts, setPosts] = useState({feed: []});
+    var postsCache = {feed: []};
+
+    const getPosts = async () => {
+
+        if (postsCache.feed.length == 0) {
+
+            var feed = await apiInterface.getFeed({});
+
+            setPosts(feed);
+            postsCache = feed;
+        } else {
+
+            var newFeed = await apiInterface.getFeed({cursor: postsCache.cursor});
+            newFeed.feed = newFeed.feed.filter(n => postsCache.feed.filter(a => a.post.uri != n.post.uri).length == postsCache.feed.length);
+            newFeed.feed = [...postsCache.feed, ...newFeed.feed];
+
+            setPosts(newFeed);
+            postsCache = newFeed;
+        }
+    }
 
     useEffect(() => {
 
-        const getPosts = async () => {
+        var isTriggered = false;
+        window.onscroll = function () {
             
-            setPosts(await apiInterface.getFeed());
+            if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 1000) < (window.visualViewport.height + window.visualViewport.pageTop)) {
+                
+                if (isTriggered == false) {
+                    
+                    isTriggered = true;
+                    getPosts();
+                    isTriggered = false;
+                }
+            }
         }
 
         getPosts();

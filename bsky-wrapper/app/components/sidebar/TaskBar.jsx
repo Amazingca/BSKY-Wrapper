@@ -6,7 +6,7 @@ import {
     ToolsIcon,
     PaintbrushIcon
 } from "@primer/octicons-react";
-import { useLocation, useNavigate } from "@remix-run/react";
+import { useLocation, useNavigate, Link } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
 const TaskBar = ({authorized, apiInterface}) => {
@@ -52,10 +52,22 @@ const TaskBar = ({authorized, apiInterface}) => {
 
     return (
         <div className={"TaskBar"}>
-            <ActionItem Icon={HomeIcon} description="Home" intent={goHome}/>
-            {(authorized) && <ActionItem Icon={BellIcon} description="Notifications" mainColor="--action-item-secondary" intent={goToNotifications} status={notificationCount} />}
-            {(authorized) && <ActionItem Icon={PersonIcon} description="Profile" mainColor="--action-item-secondary" intent={goToProfile}/>}
-            <ActionItem Icon={ToolsIcon} description="Settings" mainColor="--action-item-secondary" intent={goToSettings}/>
+            <Link to="/" unstable_viewTransition>
+                <ActionItem Icon={HomeIcon} description="Home" mainColor="--action-item-secondary"/>
+            </Link>
+            {(authorized) && (
+                <Link to="/notifications" unstable_viewTransition>
+                    <ActionItem Icon={BellIcon} description="Notifications" mainColor="--action-item-secondary" status={notificationCount} />
+                </Link>
+            )}
+            {(authorized) && (
+                <Link to={`/profile/${apiInterface.getAuthorization().handle}`} unstable_viewTransition>
+                    <ActionItem Icon={PersonIcon} description="Profile" mainColor="--action-item-secondary"/>
+                </Link>
+            )}
+            <Link to="/settings" unstable_viewTransition>
+                <ActionItem Icon={ToolsIcon} description="Settings" mainColor="--action-item-secondary"/>
+            </Link>
             {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={func}/>}
         </div>
     )

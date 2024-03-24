@@ -4,7 +4,7 @@ import {
     SunIcon,
     DeviceDesktopIcon
 } from "@primer/octicons-react";
-import { useLocation, useNavigate } from "@remix-run/react";
+import { useLocation, useNavigate, Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 const UserBar = ({display, authorized, apiInterface}) => {
@@ -57,10 +57,10 @@ const UserBar = ({display, authorized, apiInterface}) => {
 
     return (
         <div className={"UserBar"}>
-            <div onClick={(authorized == false) ? loginSwitch : () => {}} className={"LoginWith"}>
+            <Link to={(authorized == false) ? "/login" : ""} className={"LoginWith"} unstable_viewTransition>
                 {(authorized) ? <h2>@{apiInterface.getAuthorization().handle}</h2> : <h2>Login with</h2>}
                 {(authorized == false) && mentionIcon()}
-            </div>
+            </Link>
             <div onClick={toggleTheme} className={"ProfileThemeIcon"}>
                 {(authorized == true) && <img src={avatar} />}
                 <ActionIcon Icon={(isLocal && display.toAuto()) ? DeviceDesktopIcon : (display.theme == "light") ? MoonIcon : (display.theme == "dark") && SunIcon} mainColor="--action-item-secondary" />

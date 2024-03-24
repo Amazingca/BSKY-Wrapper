@@ -1,18 +1,22 @@
 import Header from "../components/center/Header";
 import Post from "../components/center/Post";
 import NoView from "../components/center/NoView";
-import { json, useOutletContext, useParams } from "@remix-run/react";
+import { json, useLoaderData, useOutletContext, useParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import Api from "../infra/Api.mjs";
 
-export const loader = async ({params}) => {
+export const loader = async ({request, params}) => {
+    
+    var urlParams = null;
+    if (request.url.includes("?")) urlParams = new URLSearchParams(request.url.split("?")[1]);
 
     const apiInterface = new Api({pdsUrl: "https://bsky.social"});
 
     return json({
         userRef: params.userRef,
         userObj: await apiInterface.getProfile(params.userRef),
-        postObj: await apiInterface.getPostThread({type: (params.userRef.includes("did:")) ? "did": "handle", ref: params.userRef}, params.postRef)
+        postObj: await apiInterface.getPostThread({type: (params.userRef.includes("did:")) ? "did": "handle", ref: params.userRef}, params.postRef),
+        urlParams: (urlParams && urlParams.get("prefersImage")) ? urlParams.get("prefersImage") : null
     });
 }
 
@@ -37,7 +41,7 @@ export const meta = ({data, matches}) => {
         },
         {
             property: "og:image",
-            content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
+            content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[(data.urlParams) ? data.urlParams - 1 : 0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
         },
         ...(data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
             property: "twitter:card",

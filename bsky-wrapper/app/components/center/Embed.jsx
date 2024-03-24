@@ -4,6 +4,8 @@ import NoView from "./NoView";
 
 const Embed = ({embed, apiInterface, authorized}) => {
 
+    console.log(embed, apiInterface, apiInterface);
+
     const imageItemPointer = (count, index) => {
 
         switch (count) {
@@ -63,6 +65,12 @@ const Embed = ({embed, apiInterface, authorized}) => {
                 </a>
             )}
             {((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.embed.record#viewRecord")) ? ((apiInterface.isHiddenHydrated(embed.record.author) == false) || (authorized == true)) ? <InlinePost record={embed.record} /> : <NoView /> : ((embed.$type == "app.bsky.embed.record#view") && (embed.record.$type == "app.bsky.feed.defs#generatorView")) ? (apiInterface.isHiddenHydrated(embed.record.creator) == false) ? <FeedRecord record={embed.record} /> : <NoView /> : ""}
+            {(embed.$type == "app.bsky.embed.recordWithMedia#view") && (
+                <>
+                    <Embed embed={embed.media}/>
+                    <Embed embed={{$type: "app.bsky.embed.record#view", record: embed.record.record}} apiInterface={apiInterface} authorized={authorized}/>
+                </>
+            )}
         </>
     )
 }
