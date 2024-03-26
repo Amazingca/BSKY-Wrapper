@@ -977,6 +977,9 @@ input[type="password"] {
     .Profile {
         margin-top: 0rem;
     }
+    .Replies {
+        gap: 1rem;
+    }
     .FooterBar {
         display: none;
     }
