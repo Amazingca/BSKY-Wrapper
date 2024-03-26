@@ -89,9 +89,9 @@ const App = () => {
             setLoad(true);
         }
 
-        if (navigator.userAgentData.platform) setOperatingSystem(navigator.userAgentData.platform);
+        if (navigator.userAgent) setOperatingSystem((navigator.userAgent.includes("Mac OS")) ? "Mac OS" : "other");
 
-        if (navigator.userAgentData.platform) {
+        if (navigator.userAgent) {
 
             var varShowKeybinds = false;
 
