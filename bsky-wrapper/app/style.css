@@ -54,6 +54,8 @@ body {
     --input-name: #fff;
     --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
 
+    --cover-dash: silver;
+
     --record-prepend-primary: #555;
     --record-background: #f5f5f5;
     --record-author-name: #222;
@@ -95,6 +97,8 @@ body.dark {
     --header-primary: #ddd;
     --header-accent: #ccc;
 
+    --cover-dash: gainsboro;
+
     --record-prepend-primary: #ddd;
     --record-background: #1a1a1a;
     --record-author-name: #fff;
@@ -130,6 +134,21 @@ body.dark {
     display: flex;
     align-items: stretch;
     gap: 1rem;
+}
+#bodyCover {
+    z-index: 10;
+    position: fixed;
+    bottom: 0rem;
+    top: 0rem;
+    left: 0rem;
+    right: 0rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: blur(0px);
+}
+#bodyCover ~ #main div {
+    filter: blur(10px);
 }
 h1, h2, h3, h4, footer, p, a, .InputName, .InputEntry {
     font-family: "Mona Sans";
@@ -235,6 +254,62 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
 .Post .Subject p a:hover {
     text-decoration: underline;
 }
+.CoverModal {
+    width: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: var(--record-background);
+    border-radius: 2rem;
+    outline: var(--cover-dash) dashed 2px;
+}
+.CoverModal h2, .CoverModal h3 {
+    margin: 0rem;
+    color: var(--header-primary);
+}
+.CoverModal .Heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+.CoverModal .Heading svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    transition: var(--transition-main);
+    cursor: pointer;
+}
+.CoverModal .Heading svg:hover {
+    transform: scale(1.05);
+}
+.CoverModal .Heading svg:active {
+    transform: scale(0.9);
+    filter: opacity(0.70);
+}
+.CoverModal .Content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.Keybind {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.Key {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--background-primary);
+    border-radius: 1rem;
+    padding: 1rem;
+    height: fit-content;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    outline: var(--accent-primary) solid 2px;
+    user-select: none;
+    -webkit-user-select: none;
+}
 .SideBar {
     flex: 1;
     background-color: var(--sidebar-background);
@@ -284,7 +359,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     display: flex;
     gap: 0.5rem;
 }
-.TitleAccent, body.dark .LoginWith h2 {
+.TitleAccent, body.dark .LoginWith h2, .Key h3 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -370,6 +445,9 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
 .ProfileThemeIcon:hover img, .ProfileThemeIcon:active img {
     opacity: 0;
     z-index: -1;
+}
+.ProfileThemeIcon img + div {
+    filter: unset !important;
 }
 .LoginWith {
     display: flex;
@@ -915,4 +993,7 @@ input {
 }
 input:disabled {
     opacity: 1.0;
+}
+#bodyLocked {
+    overflow: hidden;
 }

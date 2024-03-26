@@ -2,7 +2,8 @@ import {
     Links,
     Meta,
     Outlet,
-    Scripts
+    Scripts,
+    useNavigate
 } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import SideBar from "./components/sidebar/SideBar";
@@ -13,6 +14,8 @@ import Api from "./infra/Api.mjs";
 import Themes from "./infra/Themes.js";
 import stylesheet from "./style.css";
 import manifest from "./app.webmanifest";
+import CoverModal from "./components/cover/CoverModal.jsx";
+import Keybinds from "./components/cover/Keybinds.jsx";
 
 export const meta = () => {
 
@@ -50,6 +53,12 @@ const App = () => {
     const [server, setServer] = useState("https://bsky.social");
     const [authorized, setAuthorized] = useState(false);
     const [authorization, setAuthorization] = useState(null);
+    const [operatingSystem, setOperatingSystem] = useState("");
+    const [showKeybinds, setShowKeybinds] = useState(false);
+
+    const navigate = useNavigate();
+
+    var varAuthorized = [false, null];
 
     useEffect(() => {
 
@@ -64,6 +73,7 @@ const App = () => {
                 if (successfulAuthorization == true) {
 
                     setAuthorized(true);
+                    varAuthorized = [true, apiInterface.getAuthorization().handle];
                     setAuthorization(apiInterface.getAuthorization());
                 } else {
 
@@ -77,6 +87,47 @@ const App = () => {
         } else {
 
             setLoad(true);
+        }
+
+        if (navigator.userAgentData.platform) setOperatingSystem(navigator.userAgentData.platform);
+
+        if (navigator.userAgentData.platform) {
+
+            var varShowKeybinds = false;
+
+            document.getElementsByTagName("html")[0].addEventListener("keydown", (keypress) => {
+
+                if ((keypress.ctrlKey == true) && (keypress.key == "/") && (varShowKeybinds == false)) {
+                    
+                    varShowKeybinds = true;
+                    setShowKeybinds(true);
+                } else if ((((keypress.ctrlKey == true) && (keypress.key == "/")) || (keypress.key == "Escape")) && (varShowKeybinds == true)) {
+                    
+                    varShowKeybinds = false;
+                    setShowKeybinds(false);
+                }
+
+                if (keypress.ctrlKey == true) {
+
+                    switch (keypress.key) {
+                        case "h":
+                            navigate("/");
+                            break;
+                        case "n":
+                            if (varAuthorized[0]) navigate("/notifications");
+                            break;
+                        case "p":
+                            if (varAuthorized[0]) navigate(`/profile/${varAuthorized[1]}`);
+                            break;
+                        case "s":
+                            navigate("/settings");
+                            break;
+                        case "c":
+                            if (varAuthorized[0]) window.alert("This shortcut doesn't do anything right now, but it will soon!");
+                            break;
+                    }
+                }
+            });
         }
     }, []);
 
@@ -100,7 +151,7 @@ const App = () => {
     return (
         <html>
             <head>
-                <meta charset="UTF-8"/>
+                <meta charSet="UTF-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
                 {(process.env.NODE_ENV == "development") && <meta name="theme-color" content="lightsalmon"/>}
                 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"/>
@@ -114,13 +165,22 @@ const App = () => {
                 <Meta />
                 <Links />
             </head>
-            <body className={theme}>
+            <body className={theme} id={(showKeybinds) ? "bodyLocked" : ""}>
                 {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
-                {(load) && <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                    <SideBar display={display} authorized={authorized} apiInterface={apiInterface} />
-                    <Outlet context={context} />
-                    <FooterBar />
-                </div>}
+                {(load) && (
+                    <>
+                        {(showKeybinds) && (
+                            <div id="bodyCover">
+                                <CoverModal title={"Shortcuts"} InnerModal={Keybinds} authorized={authorized} operatingSystem={operatingSystem} display={setShowKeybinds} />
+                            </div>
+                        )}
+                        <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
+                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} />
+                            <Outlet context={context} />
+                            <FooterBar />
+                        </div>
+                    </>
+                )}
                 <Scripts />
             </body>
         </html>

@@ -3,6 +3,8 @@ import { Fragment } from "react";
 
 const Facets = ({text, facets}) => {
 
+    if (text.length == 0) return (<></>);
+
     var index = 0;
 
     const facetNester = (facet, string, index=0) => {
