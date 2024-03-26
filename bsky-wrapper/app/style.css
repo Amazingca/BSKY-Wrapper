@@ -164,7 +164,7 @@ h2 {
 }
 h3 {
     font-size: 1.25rem;
-    color: var(--sidebar-background);
+    color: var(--header-primary);
     font-weight: 700 !important;
 }
 h4, p, a {
