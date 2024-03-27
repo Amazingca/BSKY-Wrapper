@@ -77,7 +77,9 @@ const App = () => {
                     setAuthorization(apiInterface.getAuthorization());
                 } else {
 
-                    localData.removeUser(localData.getPrimaryUser().did);
+                    console.log("Removing user:", localData.getPrimaryUser());
+
+                    //localData.removeUser(localData.getPrimaryUser().did);
                 }
 
                 setLoad(true);

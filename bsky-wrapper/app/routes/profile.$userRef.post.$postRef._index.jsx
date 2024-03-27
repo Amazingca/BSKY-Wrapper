@@ -43,7 +43,7 @@ export const meta = ({data, matches}) => {
             property: "og:image",
             content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[(data.urlParams) ? data.urlParams - 1 : 0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
         },
-        ...(data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
+        ...((Object.keys(data.userObj).length > 0) && data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
             property: "twitter:card",
             content: "summary_large_image"
         }] : []
@@ -77,8 +77,6 @@ const UserPost = () => {
             </>
         )
     }
-
-    var index = 0;
 
     return (
         <div className={"UserPost"}>
