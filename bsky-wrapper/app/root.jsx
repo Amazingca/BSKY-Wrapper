@@ -64,7 +64,7 @@ const App = () => {
 
         setServer(localData.getServer());
 
-        if (Object.keys(localData.getPrimaryUser()).length != 0) {
+        if (localData.getPrimaryUser() != {}) {
 
             const tryAuthorize = async () => {
 

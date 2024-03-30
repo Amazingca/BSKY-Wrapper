@@ -43,7 +43,7 @@ export default class Locale {
 
     getPrimaryUser = () => {
 
-        return (this.locale.users) ? this.locale.users[0] : {};
+        return (this.locale.users) ? this.locale.users[this.locale.users.length - 1] : {};
     }
 
     addUser = (authorizationObject) => {
