@@ -566,9 +566,7 @@ body.dark .LoginWith h2 {
     border-radius: 0.75rem;
 }
 .Unread {
-    outline-color: var(--accent-primary);
-    outline-width: 2px;
-    outline-style: dashed;
+    outline: var(--accent-primary) dashed 2px;
     background-color: var(--accent-tertiary);
 }
 .ReplyConnector {
@@ -881,6 +879,51 @@ a.ExternalLink {
 }
 input[type="password"] {
     letter-spacing: 0.25rem;
+}
+.Checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 0.2rem solid var(--accent-primary);
+    user-select: none;
+    -webkit-user-select: none;
+}
+.Checkbox:active {
+    box-shadow: 0 0 6px 1px var(--input-box-focus);
+}
+.Checkbox, .Checkbox div svg {
+    transition: var(--transition-main);
+    fill: var(--accent-primary);
+    stroke: var(--accent-primary);
+}
+.Checkbox.checked {
+    background-color: var(--accent-primary);
+}
+.Checkbox div {
+    width: 1.25rem;
+    height: 1.25rem;
+    position: absolute;
+    overflow: hidden;
+}
+.Checkbox div svg {
+    width: 0rem;
+    height: 0rem;
+}
+.Checkbox.unChecked .notChecked svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+.Checkbox.checked .isChecked svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: var(--background-primary);
+    stroke: var(--background-primary);
+}
+.Checkbox.unChecked:active .notChecked svg, .Checkbox.checked:active .isChecked svg {
+    transform: scale(0.9);
 }
 @media screen and (max-width: 1222px) {
     #main {
