@@ -27,6 +27,8 @@ export const meta = ({data, matches}) => {
     var displayName = (data.userObj.displayName) ? data.userObj.displayName + " ": "";
     var handle = (displayName != "") ? `(${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})` : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef;
 
+    //console.log(data.postObj.thread.post.record.text.replaceAll("&quot;", "\""));
+
     return [
         {
             title: (Object.keys(data.userObj).length > 0) ? `Post by ${displayName}${handle}${affix}` : `User Post${affix}`
@@ -37,7 +39,7 @@ export const meta = ({data, matches}) => {
         },
         {
             property: "og:description",
-            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text : ""
+            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text.replaceAll("&quot;", "\"") : ""
         },
         {
             property: "og:image",
