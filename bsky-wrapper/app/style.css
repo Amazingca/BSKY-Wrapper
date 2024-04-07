@@ -145,11 +145,12 @@ body.dark {
     display: flex;
     justify-content: center;
     align-items: center;
-    filter: blur(0px);
+    background-color: var(--sidebar-background-translucent);
 }
-#bodyCover ~ #main div {
+/* NOTE: Removing to test new view */
+/*#bodyCover ~ #main div {
     filter: blur(10px);
-}
+}*/
 h1, h2, h3, h4, footer, p, a, .InputName, .InputEntry {
     font-family: "Mona Sans";
 }
