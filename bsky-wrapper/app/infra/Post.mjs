@@ -10,7 +10,7 @@ export default class Post {
      * Constructor for the Post object. This is responsible for parsing the information in a post into valid app.bsky.feed.post data.
      * @param {object} param0 Optional parameter which contains predefined data for the post object. This is the easiest way to initialize the object, though may not be the easiest to work with for beginners.
      */
-    constructor ({text, embed, facets, langs, labels, threadgate} = {text: "", embed: [], facets: [], langs: [], labels: [], threadgate: []}) {
+    constructor ({text, embed, facets, langs, labels, threadgate, reply} = {}) {
 
         /**
          * Post text. Can be empty if media is provided.
@@ -24,28 +24,28 @@ export default class Post {
          * @type {array}
          * @public
          */
-        this.embed = embed;
+        this.embed = (embed) ? embed : {data: []};
 
         /**
          * Post facets. Includes optional formatting and mention pointers.
          * @type {array}
          * @public
          */
-        this.facets = facets;
+        this.facets = (facets) ? facets : [];
 
         /**
          * Post languages. Sets the included languages within a post using two-letter abbreviations.
          * @type {array}
          * @public
          */
-        this.langs = langs;
+        this.langs = (langs) ? langs : [];
 
         /**
          * Post labels. Optional labels to set with the post.
          * @type {array}
          * @public
          */
-        this.labels = labels;
+        this.labels = (labels) ? labels : [];
 
         /**
          * Post threadgate. Optional setting which gates who can reply to this specific post.
@@ -63,7 +63,14 @@ export default class Post {
          * @type {array}
          * @public
          */
-        this.threadgate = threadgate;
+        this.threadgate = (threadgate) ? threadgate : [];
+
+        /**
+         * Optional reply header that targets a specific record & CID (for replying to posts).
+         * @type {object}
+         * @public
+         */
+        this.reply = (reply) ? reply : null;
     }
 
     /**
@@ -97,7 +104,7 @@ export default class Post {
 
         var formats = [];
 
-        for (const item of this.embed) {
+        for (const item of this.embed.data) {
 
             formats.push(item.blob.mimeType);
         }
@@ -247,132 +254,150 @@ export default class Post {
     }
 
     /**
+     * Getter which retrieves the reply configuration for the current post (if it is a reply).
+     * @returns Reply object that references parent/root record.
+     */
+    getReply = () => {
+
+        return this.reply;
+    }
+
+    /**
      * Validates the data in the object to ensure that it is ready to be sent with @method Api.newRecord
      * Most of these conditionals are ranked based on how common the error may be. That way we can catch it earlier and make the process faster.
      * @return Boolean on whether post object is valid.
      */
     validate = () => {
 
-        // If we have nothing to send.
-        if ((this.getText() == "") && (this.getEmbed() == undefined)) return false;
+        try {
 
-        // If the embed type is not supported.
-        if (this.getEmbed() != undefined) {
-
-            var supported = true;
-            for (const item of this.getEmbed()) {
-
-                if (item.blob.size > Api.blobSizeLimit) supported = false;
-            }
-            if (supported == false) return false;
-
-            var embedFormats = this.getEmbedFormats();
+            // If we have nothing to send.
+            if ((this.getText() == "") && (this.getEmbed().data.length == 0)) throw new Error("Not enough data to send (post / embed)");
             
-            supported = false;
-            for (const type of Api.supportedEmbedTypes) {
+            // If the embed type is not supported.
+            if (this.getEmbed().data.length > 0) {
 
-                var plural = "";
-                if (embedFormats[0].split("/")[0] == "image") plural = "s";
-
-                const preppedEmbedType = embedFormats[0].split("/")[0] + plural
+                var supported = true;
+                for (const item of this.getEmbed().data) {
+                    
+                    if (item.blob.size > Api.blobSizeLimit) supported = false;
+                }
+                if (supported == false) throw new Error("Embed data is over set limit");
                 
-                if ("app.bsky.embed." + preppedEmbedType == type) {
+                var embedFormats = this.getEmbedFormats();
+                
+                supported = false;
+                for (const type of Api.supportedEmbedTypes) {
 
-                    this.preppedEmbedType = preppedEmbedType;
-                    supported = true;
+                    var plural = "";
+                    if (embedFormats[0].split("/")[0] == "image") plural = "s";
+
+                    const preppedEmbedType = embedFormats[0].split("/")[0] + plural
+                    
+                    if ("app.bsky.embed." + preppedEmbedType == type) {
+
+                        this.preppedEmbedType = preppedEmbedType;
+                        supported = true;
+                    }
+                }
+                if (supported == false) throw new Error("Embed(s) are not supported");
+                
+                var firstItem = embedFormats[0];
+                for (const item of embedFormats.slice(1)) {
+
+                    if (item != firstItem) throw new Error("Embed formats are not consistent");
                 }
             }
-            if (supported == false) return false;
-
             
-            var firstItem = embedFormats[0];
-            for (const item of embedFormats.slice(1)) {
+            // If the facets are not supported.
+            if (this.getFacets().length > 0) {
 
-                if (item != firstItem) return false;
-            }
-        }
+                const facets = this.getFacets();
 
-        // If the facets are not supported.
-        if (this.getFacets() != undefined) {
+                var supported = true;
 
-            const facets = this.getFacets();
+                for (const facet of facets) {
 
-            var supported = true;
+                    var itemSupported = false;
 
-            for (const facet of facets) {
+                    var facetType = "";
 
-                var itemSupported = false;
+                    if ((facet.type == "mention") && facet.val.includes("did:plc:")) {
 
-                var facetType = "";
+                        facetType = "app.bsky.richtext.facet#mention";
+                    } else if ((facet.type == "uri") && ((facet.val.includes("https://") || facet.val.includes("at://")))) {
 
-                if ((facet.type == "mention") && facet.val.includes("did:plc:")) {
+                        facetType = "app.bsky.richtext.facet#link";
+                    } else if ((facet.type == "tag") && (facet.val.length <= 640)) {
 
-                    facetType = "app.bsky.richtext.facet#mention";
-                } else if ((facet.type == "uri") && ((facet.val.includes("https://") || facet.val.includes("at://")))) {
+                        if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
 
-                    facetType = "app.bsky.richtext.facet#link";
-                } else if ((facet.type == "tag") && (facet.val.length <= 640)) {
+                            facetType = "app.bsky.richtext.facet#tag";
+                        } else if (facet.val.match(/\p{Extended_Pictographic}/gu).length <= 64) {
 
-                    if (facet.val.match(/\p{Extended_Pictographic}/gu) == null) {
+                            facetType = "app.bsky.richtext.facet#tag";
+                        }
+                    } else if (facet.type == "bolden") {
 
-                        facetType = "app.bsky.richtext.facet#tag";
-                    } else if (facet.val.match(/\p{Extended_Pictographic}/gu).length <= 64) {
+                        facetType = "dev.amazingca.blue.facet#bolden";
+                    } else if (facet.type == "italicize") {
 
-                        facetType = "app.bsky.richtext.facet#tag";
+                        facetType = "dev.amazingca.blue.facet#italicize";
                     }
-                } else if (facet.type == "bolden") {
 
-                    facetType = "dev.amazingca.blue.facet#bolden";
-                } else if (facet.type == "italicize") {
+                    for (const supportedFacet of Api.supportedFacetTypes) {
 
-                    facetType = "dev.amazingca.blue.facet#italicize";
-                }
+                        if (facetType == supportedFacet) {
 
-                for (const supportedFacet of Api.supportedFacetTypes) {
-
-                    if (facetType == supportedFacet) {
-
-                        itemSupported = true;
+                            itemSupported = true;
+                        }
                     }
-                }
 
-                if (itemSupported == false) {
+                    if (itemSupported == false) {
 
-                    return false;
-                }
-            }
-        }
-
-        // If the threadgate type is not supported.
-        if (this.getThreadgate() != undefined) {
-
-            var threadgate = this.getThreadgate();
-
-            for (const threadgateItem of threadgate) {
-
-                var supported = false;
-                for (const type of Api.supportedThreadgates) {
-
-                    if (threadgateItem == type) {
-
-                        supported = true;
-                    } else if (threadgateItem.includes("at://") && threadgateItem.includes("/app.bsky.graph.list/")) {
-
-                        supported = true;
+                        throw new Error("Facet(s) are not supported");
                     }
                 }
+            }
+            
+            // If the threadgate type is not supported.
+            if (this.getThreadgate().length > 0) {
 
-                if (supported == false) {
+                var threadgate = this.getThreadgate();
 
-                    return false;
+                for (const threadgateItem of threadgate) {
+
+                    var supported = false;
+                    for (const type of Api.supportedThreadgates) {
+
+                        if (threadgateItem == type) {
+
+                            supported = true;
+                        } else if (threadgateItem.includes("at://") && threadgateItem.includes("/app.bsky.graph.list/")) {
+
+                            supported = true;
+                        }
+                    }
+
+                    if (supported == false) {
+
+                        throw new Error("Threadgate type is not supported");
+                    }
                 }
             }
+            
+            // If embed count is over the set limit.
+            if ((this.getEmbed() != undefined) && (this.getEmbed().data.length > this.embedLimit)) throw new Error("Embed count is over the set limit");
+
+            // If reply target is wrong.
+            if (this.reply) if (!this.reply.root.cid || !this.reply.root.uri || !this.reply.parent.cid || !this.reply.parent.uri) throw new Error("Doesn't have enough target information to reply to a post");
+
+            return true;
+        } catch (e) {
+
+            console.warn(e);
+            return false;
         }
-
-        // If embed data is over the set limit.
-        if ((this.getEmbed() != undefined) && (this.getEmbed().length > this.embedLimit)) return false;
-
-        return true;
     }
 
     /**
@@ -387,9 +412,9 @@ export default class Post {
 
         var embed = {};
 
-        if (this.getEmbed()) {
+        if (this.getEmbed().data.length > 0) {
 
-            const embedData = this.getEmbed();
+            const embedData = this.getEmbed().data;
 
             embed.$type = "app.bsky.embed." + this.preppedEmbedType;
             embed[this.preppedEmbedType] = [];
@@ -398,10 +423,6 @@ export default class Post {
 
                 embed[this.preppedEmbedType].push({
                     "alt": (item.alt) ? item.alt : "",
-                    "aspectRatio": {
-                        "width": item.aspectRatio.width,
-                        "height": item.aspectRatio.height
-                    },
                     [item.blob.mimeType.split("/")[0]]: {
                         "$type": "blob",
                         "mimeType": item.blob.mimeType,
@@ -416,7 +437,7 @@ export default class Post {
 
         var facets = [];
 
-        if (this.getFacets()) {
+        if (this.getFacets().length > 0) {
 
             const facetData = this.getFacets();
 
@@ -465,7 +486,7 @@ export default class Post {
 
         var labels = {};
 
-        if (this.getLabels()) {
+        if (this.getLabels().length > 0) {
 
             const labelData = this.getLabels();
 
@@ -482,7 +503,7 @@ export default class Post {
 
         var threadgate = {};
 
-        if (this.getThreadgate()) {
+        if (this.getThreadgate().length > 0) {
 
             const threadgateData = this.getThreadgate();
 
@@ -522,6 +543,7 @@ export default class Post {
         if (this.getLangs().length > 0) parsedJson.record.langs = this.getLangs();
         if (Object.keys(labels).length > 0) parsedJson.record.labels = labels;
         if (Object.keys(threadgate).length > 0) parsedJson.record.threadgate = threadgate;
+        if (this.reply) parsedJson.record.reply = this.reply;
 
         return {success: true, data: parsedJson};
     }

@@ -11,8 +11,8 @@ export default class Api {
     // Public Bluesky API node.
     publicBlueskyApi = "https://api.bsky.app";
 
-    // Limit for valid blob to upload to a repo. Any file must be under this limit to be included within a record.
-    static blobSizeLimit = 976.56;
+    // Limit for valid blob (in bytes) to upload to a repo. Any file must be under this limit to be included within a record.
+    static blobSizeLimit = 976560;
 
     // Supported embed inheritance of app.bsky.embed.*
     // NOTE: Audio and video types are not referenced in the ATP lexicon, though are still valid blob types when uploading.
@@ -630,7 +630,7 @@ export default class Api {
      * @param {object} file The chosen file to upload as a blob.
      * @returns The blob object data if the upload was successful. Will return null if not.
      */
-    uploadBlob = async (file) => {
+    uploadBlob = async (file, callback) => {
 
         try {
 
@@ -639,44 +639,44 @@ export default class Api {
             const blobReader = new FileReader();
             var formattedBlob;
 
-            blobReader.onload = () => {
+            blobReader.onload = async () => {
 
                 const blobData = blobReader.result;
                 
                 // Turn provided file into Uint8Array
                 formattedBlob = new Uint8Array(blobData);
+                
+                const requestData = {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                        "Content-Type": file.type
+                    },
+                    body: formattedBlob
+                }
+
+                const postRequest = await fetch(`${this.getPreferredDataServer()}/xrpc/com.atproto.repo.uploadBlob`, requestData).then(r => r.json());
+
+                if (!postRequest.blob) {
+
+                    if (postRequest.error && postRequest.message) {
+
+                        throw new Error(`${postRequest.error}: ${postRequest.message}`);
+                    } else {
+
+                        throw new Error("There was an error uploading the blob!");
+                    }
+                }
+
+                callback(postRequest);
             };
 
             // Read Array Buffer from our file, will trigger above ^ once done
-            reader.readAsArrayBuffer(file);
-
-            const requestData = {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
-                    "Content-Type": file.type
-                },
-                body: formattedBlob
-            }
-
-            const postRequest = await fetch(`${this.pdsUrl}/xrpc/com.atproto.repo.uploadBlob`, requestData).then(r => r.json());
-
-            if (!postRequest.blob) {
-
-                if (postRequest.error && postRequest.message) {
-
-                    throw new Error(`${postRequest.error}: ${postRequest.message}`);
-                } else {
-
-                    throw new Error("There was an error uploading the blob!");
-                }
-            }
-
-            return postRequest;
+            blobReader.readAsArrayBuffer(file);
         } catch (e) {
 
             console.error(e);
-            return null;
+            callback(null);
         }
     }
 
@@ -733,7 +733,7 @@ export default class Api {
 
             if (Object.keys(threadgate).length == 0) {
 
-                return postRequest;
+                return [postRequest];
             } else {
 
                 threadgate.rkey = postRequest.uri.split("/app.bsky.feed.post/")[1];

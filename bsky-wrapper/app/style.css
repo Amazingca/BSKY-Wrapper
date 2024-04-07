@@ -257,7 +257,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
 }
 .CoverModal {
     width: auto;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -292,6 +292,10 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+.CoverModal .Composer {
+    display: flex;
+    flex-direction: column;
 }
 .Keybind {
     display: flex;
@@ -421,6 +425,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     padding: 0.25rem;
     border-radius: 2rem;
     background-color: var(--action-icon-background-secondary);
+    outline: var(--sidebar-background) solid 0.3rem; /* NOTE: Might remove depending on use case. */
 }
 .ActionIcon .Status p {
     font-weight: 800 !important;
@@ -891,6 +896,12 @@ input[type="password"] {
     border: 0.2rem solid var(--accent-primary);
     user-select: none;
     -webkit-user-select: none;
+    cursor: pointer;
+}
+.Checkbox.Small {
+    align-items: flex-start;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 .Checkbox:active {
     box-shadow: 0 0 6px 1px var(--input-box-focus);
@@ -909,17 +920,19 @@ input[type="password"] {
     position: absolute;
     overflow: hidden;
 }
+.Checkbox.Small div {
+    width: 1rem;
+    height: 1rem;
+}
 .Checkbox div svg {
     width: 0rem;
     height: 0rem;
 }
-.Checkbox.unChecked .notChecked svg {
-    width: 1.25rem;
-    height: 1.25rem;
+.Checkbox.unChecked .notChecked svg, .Checkbox.checked .isChecked svg {
+    width: inherit;
+    height: inherit;
 }
 .Checkbox.checked .isChecked svg {
-    width: 1.25rem;
-    height: 1.25rem;
     fill: var(--background-primary);
     stroke: var(--background-primary);
 }

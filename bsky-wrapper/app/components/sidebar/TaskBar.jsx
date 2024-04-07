@@ -9,7 +9,7 @@ import {
 import { useLocation, useNavigate, Link } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
-const TaskBar = ({authorized, apiInterface}) => {
+const TaskBar = ({authorized, apiInterface, setShowComposer}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -68,7 +68,7 @@ const TaskBar = ({authorized, apiInterface}) => {
             <Link to="/settings" unstable_viewTransition>
                 <ActionItem Icon={ToolsIcon} description="Settings" mainColor="--action-item-secondary"/>
             </Link>
-            {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={() => window.alert("This button doesn't do anything right now, but it will soon!")}/>}
+            {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={() => setShowComposer([true, null])}/>}
         </div>
     )
 }

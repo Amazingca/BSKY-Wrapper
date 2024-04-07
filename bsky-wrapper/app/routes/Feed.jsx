@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 const Feed = () => {
 
-    const {apiInterface, authorized} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer} = useOutletContext();
     const [posts, setPosts] = useState({feed: []});
     var postsCache = {feed: []};
 
@@ -52,7 +52,7 @@ const Feed = () => {
     return (
         <div className={"Feed"}>
             <Header title="Feed" />
-            {posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} key={record.post.uri + "/target/" + index++} />)}
+            {posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

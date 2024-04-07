@@ -54,7 +54,7 @@ export const meta = ({data, matches}) => {
 
 const UserPost = () => {
 
-    const {apiInterface, authorized} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer} = useOutletContext();
     const params = useParams();
 
     const [post, setPost] = useState({"ref": null});
@@ -74,7 +74,7 @@ const UserPost = () => {
         return (
             <>
                 {(record.parent) && higherLevelPost(record.parent)}
-                {(record.post && ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true))) ? <Post record={record} apiInterface={apiInterface} authorized={authorized} /> : <NoView />}
+                {(record.post && ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true))) ? <Post record={record} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} /> : <NoView />}
                 <div className={"ReplyConnector"}></div>
             </>
         )
@@ -85,12 +85,12 @@ const UserPost = () => {
             <Header title={(post.thread && post.thread.parent) ? "Post Thread" : "Post"} />
             <div>
                 {(post.thread && post.thread.parent) && higherLevelPost(post.thread.parent)}
-                {(post.thread) ? <Post record={post.thread} apiInterface={apiInterface} authorized={authorized} focused={true} /> : (Object.keys(post) == 0) && <NoView />}
+                {(post.thread) ? <Post record={post.thread} apiInterface={apiInterface} authorized={authorized} focused={true} setShowComposer={setShowComposer} /> : (Object.keys(post) == 0) && <NoView />}
                 {(post.thread && (post.thread.replies.length > 0)) && (
                     <>
                         <h3>Replies:</h3>
                         <div className={"Replies"}>
-                            {post.thread.replies.map((reply) => ((reply.$type == "app.bsky.feed.defs#threadViewPost" && ((apiInterface.isHiddenHydrated(reply.post.author) == false) || (authorized == true))) && <Post record={reply} apiInterface={apiInterface} authorized={authorized} key={reply.post.uri} />))}
+                            {post.thread.replies.map((reply) => ((reply.$type == "app.bsky.feed.defs#threadViewPost" && ((apiInterface.isHiddenHydrated(reply.post.author) == false) || (authorized == true))) && <Post record={reply} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={reply.post.uri} />))}
                         </div>
                     </>
                 )}

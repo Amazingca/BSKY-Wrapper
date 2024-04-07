@@ -15,7 +15,7 @@ import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
 
-const Post = ({record, apiInterface, authorized, focused}) => {
+const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Post = ({record, apiInterface, authorized, focused}) => {
 
     const replyToPost = () => {
 
-        happeningSoon();
+        setShowComposer([true, {root: {uri: (record.post.record.reply) ? record.post.record.reply.root.uri : record.post.uri, cid: (record.post.record.reply) ? record.post.record.reply.root.cid : record.post.cid}, parent: {uri: record.post.uri, cid: record.post.cid}}]);
     }
 
     const repostPost = () => {
@@ -60,7 +60,7 @@ const Post = ({record, apiInterface, authorized, focused}) => {
             {(record.reply || record.reason) && (
                 <div onClick={goToPrependItem} className={"PostPrepend"}>
                     {(record.reason) ? <ArrowSwitchIcon size={"small"} fill="var(--record-prepend-primary)" /> : (record.reply) && <ReplyIcon size={"small"} fill="var(--record-prepend-primary)" />}
-                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? (apiInterface.isHiddenHydrated(record.reply.parent.author) == false) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
+                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? ((apiInterface.isHiddenHydrated(record.reply.parent.author) == false) || (authorized == true)) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
                 </div>
             )}
             <div className={"Post"}>

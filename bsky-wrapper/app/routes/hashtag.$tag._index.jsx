@@ -27,7 +27,7 @@ export const meta = ({matches, location}) => {
 
 const Feed = () => {
 
-    const {apiInterface, authorized} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer} = useOutletContext();
     const params = useParams();
     
     var tag = (params.tag.slice(1) != "#") ? "#" + params.tag : params.tag;
@@ -79,7 +79,7 @@ const Feed = () => {
     return (
         <div className={"Tag"}>
             <Header title="Tag" subroute={tag} />
-            {posts.posts.map((record) => ((apiInterface.isHiddenHydrated(record.author) == false) || (authorized == true)) && <Post record={{post: record}} apiInterface={apiInterface} authorized={authorized} key={record.uri + "/target/" + index++} />)}
+            {posts.posts.map((record) => ((apiInterface.isHiddenHydrated(record.author) == false) || (authorized == true)) && <Post record={{post: record}} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={record.uri + "/target/" + index++} />)}
         </div>
     )
 }

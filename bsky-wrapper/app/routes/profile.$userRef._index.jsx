@@ -41,7 +41,7 @@ export const meta = ({data, matches}) => {
 
 const UserProfile = () => {
 
-    const {apiInterface, authorized} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer} = useOutletContext();
     const params = useParams();
 
     const [user, setUser] = useState({ref: null});
@@ -100,7 +100,7 @@ const UserProfile = () => {
         <div className={"UserProfile"}>
             {(false) && <Header title="Profile" />}
             {(user.did) ? <Profile user={user} /> : (Object.keys(user) == 0) && <NoView />}
-            {(posts.feed) && posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} key={record.post.uri + "/target/" + index++} />)}
+            {(posts.feed) && posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={record.post.uri + "/target/" + index++} />)}
         </div>
     )
 }

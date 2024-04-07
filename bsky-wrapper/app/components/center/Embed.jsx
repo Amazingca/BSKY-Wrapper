@@ -39,6 +39,8 @@ const Embed = ({embed, apiInterface, authorized}) => {
         }
     }
 
+    var index = 0;
+
     return (
         <>
             {(embed.$type == "app.bsky.embed.images#view") && (
@@ -47,7 +49,7 @@ const Embed = ({embed, apiInterface, authorized}) => {
                         <div style={{
                             gridArea: imageItemPointer(embed.images.length, embed.images.indexOf(image)),
                             aspectRatio: (embed.images.length == 1) ? "unset" : "1 / 1"
-                        }} className={"ImageGridItem"} key={image.thumb}>
+                        }} className={"ImageGridItem"} key={image.thumb + "#" + index++}>
                             <img src={image.thumb} title={image.alt} onClick={() => window.open(image.fullsize)} />
                         </div>
                     ))}

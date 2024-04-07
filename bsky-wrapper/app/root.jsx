@@ -16,6 +16,7 @@ import stylesheet from "./style.css";
 import manifest from "./app.webmanifest";
 import CoverModal from "./components/cover/CoverModal.jsx";
 import Keybinds from "./components/cover/Keybinds.jsx";
+import Composer from "./components/cover/composer/Composer.jsx";
 
 export const meta = () => {
 
@@ -55,6 +56,7 @@ const App = () => {
     const [authorization, setAuthorization] = useState(null);
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
+    const [showComposer, setShowComposer] = useState([false, null]);
 
     const navigate = useNavigate();
 
@@ -125,7 +127,7 @@ const App = () => {
                             navigate("/settings");
                             break;
                         case "c":
-                            if (varAuthorized[0]) window.alert("This shortcut doesn't do anything right now, but it will soon!");
+                            if (varAuthorized[0]) setShowComposer([true, null]);
                             break;
                     }
                 }
@@ -145,7 +147,8 @@ const App = () => {
         setServer: setServer,
         authorized: authorized,
         setAuthorized: setAuthorized,
-        setAuthorization: setAuthorization
+        setAuthorization: setAuthorization,
+        setShowComposer: setShowComposer
     };
 
     const display = new Themes(localData, theme, setTheme);
@@ -171,13 +174,17 @@ const App = () => {
                 {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                 {(load) && (
                     <>
-                        {(showKeybinds) && (
+                        {(showKeybinds) ? (
                             <div id="bodyCover">
                                 <CoverModal title={"Shortcuts"} InnerModal={Keybinds} authorized={authorized} operatingSystem={operatingSystem} display={setShowKeybinds} />
                             </div>
-                        )}
+                        ) : (showComposer[0]) ? (
+                            <div id="bodyCover">
+                                <CoverModal title={(!showComposer[1]) ? "Compose" : "Reply"} InnerModal={Composer} apiInterface={apiInterface} authorized={authorized} operatingSystem={operatingSystem} display={setShowComposer} to={(showComposer[1]) ? showComposer[1] : null} />
+                            </div>
+                        ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} />
+                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>
