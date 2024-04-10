@@ -2,16 +2,12 @@ export default class Time {
 
     static relative = (timestamp) => {
 
-        //const original = new Date(timestamp);
-
         const second = "s";
         const minute = "m";
         const hour = "h";
         const day = "d";
         const month = " month"
         const year = " year";
-
-        //const currentDate = new Date();
 
         const offset = Math.floor((new Date() - new Date(timestamp)) / 1000);
 
@@ -52,5 +48,15 @@ export default class Time {
         }
 
         return relativeTimestamp + " ago";
+    }
+
+    static format = (timestamp) => {
+
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        const date = new Date(timestamp);
+
+        return `${days[date.getDay()]}, ${date.toLocaleString()}`;
     }
 }

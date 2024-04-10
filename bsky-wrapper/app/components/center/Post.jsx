@@ -73,14 +73,14 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
                         </div>
                     </div>
                     {(focused == false) && (
-                        <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={new Date(record.post.record.createdAt).toUTCString()} className={"Timestamp"} unstable_viewTransition>
+                        <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={Time.format(record.post.record.createdAt)} className={"Timestamp"} unstable_viewTransition>
                             {Time.relative(record.post.record.createdAt)}
                         </Link>
                     )}
                 </div>
                 {(record.post.record.text) && (record.post.record.facets) ? <Facets text={record.post.record.text} facets={record.post.record.facets} /> : <Facets text={record.post.record.text} />}
                 {(record.post.embed) && <Embed embed={record.post.embed} apiInterface={apiInterface} authorized={authorized} />}
-                {(focused == true) && <p className={"Timestamp"}>{new Date(record.post.record.createdAt).toUTCString()}</p>}
+                {(focused == true) && <p className={"Timestamp"}>{Time.format(record.post.record.createdAt)}</p>}
                 <div className={"PostFooter"}>
                     <div className={"Metrics"}>
                         <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />
