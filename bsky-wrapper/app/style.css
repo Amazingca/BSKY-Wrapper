@@ -201,6 +201,20 @@ p.Handle, a.Handle, .InlineAuthor a, .FeedRecord .Headers div a p {
 a.Handle {
     font-weight: 600 !important;
 }
+.Profile .Details .FeatureStack {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.Flag {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600 !important;
+    padding: 0.25rem;
+    border-radius: 0.45rem;
+}
 .PostPrepend p {
     color: var(--record-prepend-primary);
 }

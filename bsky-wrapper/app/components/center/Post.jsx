@@ -60,7 +60,7 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
             {(record.reply || record.reason) && (
                 <div onClick={goToPrependItem} className={"PostPrepend"}>
                     {(record.reason) ? <ArrowSwitchIcon size={"small"} fill="var(--record-prepend-primary)" /> : (record.reply) && <ReplyIcon size={"small"} fill="var(--record-prepend-primary)" />}
-                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? ((apiInterface.isHiddenHydrated(record.reply.parent.author) == false) || (authorized == true)) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
+                    <p>{(record.reason && record.reason.$type == "app.bsky.feed.defs#reasonRepost") ? `Reposted by ${record.reason.by.displayName}` : (record.reply) ? ((record.reply.parent.$type != "app.bsky.feed.defs#blockedPost" && record.reply.parent.$type != "app.bsky.feed.defs#notFoundPost") && ((apiInterface.isHiddenHydrated(record.reply.parent.author) == false) || (authorized == true))) ? `Replied to ${(record.reply.parent.author.displayName) ? record.reply.parent.author.displayName : record.reply.parent.author.handle}` : " Replied to a user" : ""}</p>
                 </div>
             )}
             <div className={"Post"}>

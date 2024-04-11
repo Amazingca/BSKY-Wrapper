@@ -1,4 +1,5 @@
 import Facets from "./Facets";
+import Label from "./Label";
 
 const Profile = ({user}) => {
     
@@ -8,9 +9,15 @@ const Profile = ({user}) => {
             <div style={{marginTop: ((!user.banner) || (!user.avatar)) && "0rem"}} className={"Inline"}>
                 {(user.avatar) && <img src={user.avatar} className={"Avatar"} />}
                 <div className={"Details"}>
-                    <div>
-                        <p className={"DisplayName"}>{user.displayName}</p>
-                        <p className={"Handle"}>@{user.handle}</p>
+                    <div className={"FeatureStack"}>
+                        <div>
+                            <p className={"DisplayName"}>{user.displayName}</p>
+                            <p className={"Handle"}>@{user.handle}</p>
+                        </div>
+                        <div>
+                            {(user.viewer?.followedBy && !user.viewer?.following) && <Label label="followedBy" />}
+                            {(user.viewer?.followedBy && user.viewer?.following) && <Label label="mutuals" />}
+                        </div>
                     </div>
                     {(user.description) && <Facets text={user.description} />}
                     <div className={"Metrics"}>
