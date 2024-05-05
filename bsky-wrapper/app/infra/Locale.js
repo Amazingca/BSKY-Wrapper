@@ -49,7 +49,7 @@ export default class Locale {
     updatePrimaryUser = (accessJwt, refreshJwt) => {
 
         this.locale.users[this.locale.users.length - 1].accessJwt = accessJwt;
-        this.locale.users[this.locale.users.length - 1].accessJwt = refreshJwt;
+        this.locale.users[this.locale.users.length - 1].refreshJwt = refreshJwt;
 
         this.push();
     }
