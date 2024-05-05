@@ -46,6 +46,14 @@ export default class Locale {
         return (this.locale.users) ? this.locale.users[this.locale.users.length - 1] : {};
     }
 
+    updatePrimaryUser = (accessJwt, refreshJwt) => {
+
+        this.locale.users[this.locale.users.length - 1].accessJwt = accessJwt;
+        this.locale.users[this.locale.users.length - 1].accessJwt = refreshJwt;
+
+        this.push();
+    }
+
     addUser = (authorizationObject) => {
 
         if (this.locale.users == undefined) {

@@ -36,11 +36,12 @@ export default class Api {
      * @param {object} param1 The object that contains the authorization data. Pass an empty object if you are not authenticating a user.
      * @param {integer} recordLimit Optional parameter which sets a universal record return limit (useful for machines that can't handle as much data). Maximum can be 100.
      */
-    constructor ({pdsUrl, authorization=null, recordLimit=50}) {
+    constructor ({pdsUrl, authorization=null, locale=null, recordLimit=50}) {
 
         this.plcRouting = "https://plc.directory";
         this.pdsUrl = (pdsUrl.includes("https://")) ? pdsUrl : "https://" + pdsUrl;
         this.authorization = authorization;
+        this.locale = locale;
         this.recordLimit = recordLimit;
         this.doSanitize = true;
     }
@@ -82,6 +83,9 @@ export default class Api {
             if (authorizationObject.accessJwt) {
 
                 this.authorization = authorizationObject;
+
+                if (this.locale.getPrimaryUser().did && this.locale.getPrimaryUser().did == this.authorization.did) this.locale.updatePrimaryUser(this.authorization.accessJwt, this.authorization.refreshJwt);
+
                 this.authorization["expirationDate"] = Math.round(Date.now() / 1000) + this.tokenRefresh;
 
                 const pdsUrl = await this.queryLocalizedPDS();
@@ -132,6 +136,9 @@ export default class Api {
             if (authorizationObject.accessJwt) {
 
                 this.authorization = authorizationObject;
+
+                if (this.locale.getPrimaryUser().did && this.locale.getPrimaryUser().did == this.authorization.did) this.locale.updatePrimaryUser(this.authorization.accessJwt, this.authorization.refreshJwt);
+
                 this.authorization["expirationDate"] = Math.round(Date.now() / 1000) + this.tokenRefresh;
 
                 if (returnAccessJwt) {

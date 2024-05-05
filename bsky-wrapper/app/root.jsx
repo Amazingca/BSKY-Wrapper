@@ -135,7 +135,7 @@ const App = () => {
         }
     }, []);
 
-    const apiInterface = new Api({pdsUrl: server, authorization: authorization, recordLimit: 30});
+    const apiInterface = new Api({pdsUrl: server, authorization: authorization, locale: localData, recordLimit: 30});
 
     // Overrides sanitization on returned data.
     apiInterface.setSanitize(false);
