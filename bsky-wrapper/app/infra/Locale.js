@@ -30,6 +30,17 @@ export default class Locale {
         this.push();
     }
 
+    getPreferNativeView = () => {
+
+        return (this.locale.nativeView) ? this.locale.nativeView : false;
+    }
+
+    setPreferNativeView = (nativeView) => {
+
+        this.locale.nativeView = nativeView;
+        this.push();
+    }
+
     getTheme = () => {
 
         return this.locale.theme;

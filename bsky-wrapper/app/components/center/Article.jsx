@@ -25,7 +25,7 @@ const Article = ({content}) => {
                 :
                     <Fragment key={"article-" + index++}>
                         <h4>{row}</h4>
-                        <br /><br />
+                        <br />
                     </Fragment>
             ))}
         </div>

@@ -27,7 +27,7 @@ export const meta = ({matches, location}) => {
 
 const Feed = () => {
 
-    const {apiInterface, authorized, setShowComposer} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer, preferNativeView} = useOutletContext();
     const params = useParams();
     
     var tag = (params.tag.slice(1) != "#") ? "#" + params.tag : params.tag;
@@ -36,22 +36,39 @@ const Feed = () => {
 
     const queryPosts = async () => {
 
-        if (postsCache.posts.length == 0) {
+        if (authorized == true || preferNativeView == false) {
+            
+            if (postsCache.posts.length == 0) {
 
-            var query = await apiInterface.queryPosts({term: tag});
+                var query = await apiInterface.queryPosts({term: tag});
 
-            console.log(query);
+                console.log(query);
 
-            setPosts(query);
-            postsCache = query;
+                setPosts(query);
+                postsCache = query;
+            } else {
+
+                var newPosts = await apiInterface.queryPosts({term: tag, cursor: postsCache.cursor});
+                newPosts.posts = newPosts.posts.filter(n => postsCache.posts.filter(a => a.uri != n.uri).length == postsCache.posts.length);
+                newPosts.posts = [...postsCache.posts, ...newPosts.posts];
+
+                setPosts(newPosts);
+                postsCache = newPosts;
+            }
         } else {
 
-            var newPosts = await apiInterface.queryPosts({term: tag, cursor: postsCache.cursor});
-            newPosts.posts = newPosts.posts.filter(n => postsCache.posts.filter(a => a.uri != n.uri).length == postsCache.posts.length);
-            newPosts.posts = [...postsCache.posts, ...newPosts.posts];
-
-            setPosts(newPosts);
-            postsCache = newPosts;
+            setPosts({
+                posts: [
+                    {
+                        $system: {
+                            message: "This feature is not supported when native AT Proto viewing is on. To re-enable it, go to Settings > AppView."
+                        },
+                        author: {
+                            labels: []
+                        }
+                    }
+                ]
+            });
         }
     }
 

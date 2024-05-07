@@ -309,7 +309,23 @@ export default class Api {
      */
     getProfile = async (user) => {
         
-        if (this.authorization == null) if (await this.isHidden(user)) return {};
+        if (this.authorization == null) {
+
+            if ((this.locale) && this.locale.getPreferNativeView() == true) {
+
+                const profile = await this.listRecords("app.bsky.actor.profile", user);
+                
+                return {
+                    did: profile.records[0].uri.split("/")[2],
+                    handle: user,
+                    displayName: profile.records[0].value.displayName,
+                    description: profile.records[0].value.description,
+                    labels: (profile.records[0].value.labels) ? profile.records[0].value.labels.values.map(value => value.val) : []
+                }
+            }
+
+            if (await this.isHidden(user)) return {};
+        }
 
         var requestData = {
             method: "GET",
@@ -346,7 +362,38 @@ export default class Api {
      */
     getProfileFeed = async ({user, cursor=null}) => {
 
-        if (this.authorization == null) if (await this.isHidden(user)) return {};
+        if (this.authorization == null) {
+
+            if ((this.locale) && this.locale.getPreferNativeView() == true) {
+
+                const postsAt = await this.listRecords("app.bsky.feed.post", user, cursor);
+
+                var formattedPostsAt = {
+                    cursor: postsAt.cursor,
+                    feed: []
+                }
+
+                for (const post of postsAt.records) {
+
+                    formattedPostsAt.feed.push({
+                        post: {
+                            uri: post.uri,
+                            cid: post.cid,
+                            author: {
+                                handle: user,
+                                labels: []
+                            },
+                            record: post.value
+                        },
+                        replies: []
+                    });
+                }
+
+                return formattedPostsAt;
+            }
+
+            if (await this.isHidden(user)) return {};
+        }
 
         var requestData = {
             method: "GET",
@@ -384,7 +431,41 @@ export default class Api {
      */
     getPostThread = async (user, postId) => {
 
-        if (this.authorization == null) if (await this.isHidden(user.ref)) return {};
+        if (this.authorization == null) {
+
+            if ((this.locale) && this.locale.getPreferNativeView() == true) {
+
+                var postThread = {
+                    thread: {}
+                }
+
+                const getParent = async (user, postId) => {
+
+                    const parent = await this.getRecord("app.bsky.feed.post", user, postId);
+                    const author = await this.getProfile(user);
+
+                    var postParent = {
+                        post: {
+                            uri: parent.uri,
+                            cid: parent.cid,
+                            author: author,
+                            record: parent.value
+                        },
+                        replies: []
+                    }
+
+                    if (parent.value.reply) postParent.parent = await getParent(parent.value.reply.parent.uri.split("/")[2], parent.value.reply.parent.uri.split("/")[4]);
+
+                    return postParent;
+                }
+
+                postThread.thread = await getParent(user.ref, postId);
+
+                return postThread;
+            }
+
+            if (await this.isHidden(user.ref)) return {};
+        }
 
         var requestData = {
             method: "GET",
@@ -415,6 +496,52 @@ export default class Api {
     }
 
     /**
+     * Retrieves a record that is contained within a user's repository.
+     * @param {string} collection Collection that the record is in
+     * @param {string} userId User associated with the bucket
+     * @param {string} rkey Key associated with the record
+     * @returns Collection record
+     */
+    getRecord = async (collection, userId, rkey) => {
+
+        const supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.feed.threadgate", "app.bsky.graph.follow"];
+        var isSupported = false;
+        
+        for (const supportedCollection of supportedCollections) {
+            
+            if (supportedCollection === collection) {
+            
+                isSupported = true;
+            }
+        }
+        
+        if (isSupported === false) {
+            
+            console.warn("Provided collection not supported! =>", collection);
+            return null;
+        }
+
+        try {
+
+            const xrpcRequest = "com.atproto.repo.getRecord";
+
+            const record = await fetch(`${this.pdsUrl}/xrpc/${xrpcRequest}?repo=${userId}&collection=${collection}&rkey=${rkey}&limit=${this.recordLimit}`).then(r => r.json());
+
+            if (record.uri) {
+
+                return this.sanitize(record);
+            } else {
+
+                return null;
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    /**
      * This is a low-level method which is responsible for all non-authenticated record retrievals.
      * It will return all records (in consideration with the record retrieval limit) inside the provided collection.
      * Before making an XRPC request, the method will perform a check beforehand to ensure that the provided collection exists within the supportedCollections array.
@@ -422,7 +549,7 @@ export default class Api {
      * @param {string} userId The optionally-provided user repository to retrieve those records from. Default is the authenticated user, if one exists.
      * @returns The collection records associated with the provided user.
      */
-    listRecords = async (collection, userId=(this.authorization) && this.authorization.did) => {
+    listRecords = async (collection, userId=(this.authorization) && this.authorization.did, cursor=null) => {
 
         if (userId == null) return null;
 
@@ -447,7 +574,7 @@ export default class Api {
 
             const xrpcRequest = "com.atproto.repo.listRecords";
 
-            const recordList = await fetch(`${this.pdsUrl}/xrpc/${xrpcRequest}?repo=${userId}&collection=${collection}&limit=${this.recordLimit}`).then(r => r.json());
+            const recordList = await fetch(`${this.pdsUrl}/xrpc/${xrpcRequest}?repo=${userId}&collection=${collection}&limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`).then(r => r.json());
 
             if (recordList.records.length > 0) {
 

@@ -57,6 +57,7 @@ const App = () => {
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
     const [showComposer, setShowComposer] = useState([false, null]);
+    const [preferNativeView, setPreferNativeView] = useState(false);
 
     const navigate = useNavigate();
 
@@ -65,6 +66,7 @@ const App = () => {
     useEffect(() => {
 
         setServer(localData.getServer());
+        setPreferNativeView(localData.getPreferNativeView());
 
         if (Object.keys(localData.getPrimaryUser()).length > 0) {
 
@@ -148,7 +150,9 @@ const App = () => {
         authorized: authorized,
         setAuthorized: setAuthorized,
         setAuthorization: setAuthorization,
-        setShowComposer: setShowComposer
+        setShowComposer: setShowComposer,
+        preferNativeView: preferNativeView,
+        setPreferNativeView: setPreferNativeView
     };
 
     const display = new Themes(localData, theme, setTheme);

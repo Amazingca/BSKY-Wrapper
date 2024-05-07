@@ -99,8 +99,12 @@ const UserProfile = () => {
     return (
         <div className={"UserProfile"}>
             {(false) && <Header title="Profile" />}
-            {(user.did) ? <Profile user={user} /> : (Object.keys(user) == 0) && <NoView />}
-            {(posts.feed) && posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={record.post.uri + "/target/" + index++} />)}
+            {((user.did && posts.feed) && (apiInterface.isHiddenHydrated(user) == false) || (authorized == true)) ? (
+                <>
+                    {(user.did) && <Profile user={user} />}
+                    {(posts.feed) && posts.feed.map((record) => ((apiInterface.isHiddenHydrated(record.post.author) == false) || (authorized == true)) && <Post record={record} apiInterface={apiInterface} authorized={authorized} setShowComposer={setShowComposer} key={record.post.uri + "/target/" + index++} />)}
+                </>
+            ) : <NoView />}
         </div>
     )
 }

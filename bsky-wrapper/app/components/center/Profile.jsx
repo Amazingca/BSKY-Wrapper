@@ -12,7 +12,7 @@ const Profile = ({user}) => {
                     <div className={"FeatureStack"}>
                         <div>
                             <p className={"DisplayName"}>{user.displayName}</p>
-                            <p className={"Handle"}>@{user.handle}</p>
+                            <p className={"Handle"}>{(user.handle.includes("did:")) ? user.handle : "@" + user.handle}</p>
                         </div>
                         <div>
                             {(user.viewer?.followedBy && !user.viewer?.following) && <Label label="followedBy" />}
@@ -20,11 +20,11 @@ const Profile = ({user}) => {
                         </div>
                     </div>
                     {(user.description) && <Facets text={user.description} />}
-                    <div className={"Metrics"}>
+                    {(user.followersCount) && <div className={"Metrics"}>
                         <div><p>{user.followersCount}</p><p className={"Accent"}>Follower{(user.followersCount > 1) && "s"}</p></div>
                         <div><p>{user.followsCount}</p><p className={"Accent"}>Following</p></div>
                         <div><p>{user.postsCount}</p><p className={"Accent"}>Post{(user.postsCount > 1) && "s"}</p></div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

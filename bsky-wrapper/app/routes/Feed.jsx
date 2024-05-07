@@ -1,30 +1,50 @@
 import Header from "../components/center/Header";
+import NoView from "../components/center/NoView";
 import Post from "../components/center/Post";
 import { useOutletContext } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
 const Feed = () => {
 
-    const {apiInterface, authorized, setShowComposer} = useOutletContext();
+    const {apiInterface, authorized, setShowComposer, preferNativeView} = useOutletContext();
     const [posts, setPosts] = useState({feed: []});
     var postsCache = {feed: []};
 
     const getPosts = async () => {
 
-        if (postsCache.feed.length == 0) {
+        if (authorized == true || preferNativeView == false) {
 
-            var feed = await apiInterface.getFeed({});
+            if (postsCache.feed.length == 0) {
 
-            setPosts(feed);
-            postsCache = feed;
+                var feed = await apiInterface.getFeed({});
+
+                setPosts(feed);
+                postsCache = feed;
+            } else {
+
+                var newFeed = await apiInterface.getFeed({cursor: postsCache.cursor});
+                newFeed.feed = newFeed.feed.filter(n => postsCache.feed.filter(a => a.post.uri != n.post.uri).length == postsCache.feed.length);
+                newFeed.feed = [...postsCache.feed, ...newFeed.feed];
+
+                setPosts(newFeed);
+                postsCache = newFeed;
+            }
         } else {
 
-            var newFeed = await apiInterface.getFeed({cursor: postsCache.cursor});
-            newFeed.feed = newFeed.feed.filter(n => postsCache.feed.filter(a => a.post.uri != n.post.uri).length == postsCache.feed.length);
-            newFeed.feed = [...postsCache.feed, ...newFeed.feed];
-
-            setPosts(newFeed);
-            postsCache = newFeed;
+            setPosts({
+                feed: [
+                    {
+                        post: {
+                            $system: {
+                                message: "This feature is not supported when native AT Proto viewing is on. To re-enable it, go to Settings > AppView."
+                            },
+                            author: {
+                                labels: []
+                            }
+                        }
+                    }
+                ]
+            });
         }
     }
 

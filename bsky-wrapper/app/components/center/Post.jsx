@@ -14,8 +14,12 @@ import Facets from "./Facets";
 import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
+import Label from "./Label";
+import NoView from "./NoView";
 
 const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
+
+    if (record.post.$system) return <NoView message={record.post.$system.message} />
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -42,7 +46,8 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
 
     const replyToPost = () => {
 
-        setShowComposer([true, {root: {uri: (record.post.record.reply) ? record.post.record.reply.root.uri : record.post.uri, cid: (record.post.record.reply) ? record.post.record.reply.root.cid : record.post.cid}, parent: {uri: record.post.uri, cid: record.post.cid}}]);
+        if (authorized == true) setShowComposer([true, {root: {uri: (record.post.record.reply) ? record.post.record.reply.root.uri : record.post.uri, cid: (record.post.record.reply) ? record.post.record.reply.root.cid : record.post.cid}, parent: {uri: record.post.uri, cid: record.post.cid}}]);
+        else happeningSoon();
     }
 
     const repostPost = () => {
@@ -69,7 +74,7 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
                         {(record.post.author.avatar) && <img src={record.post.author.avatar} className={`Avatar${(focused == false) ? " Regular" : ""}`} />}
                         <div className={"Details"}>
                             <p className={`DisplayName${(focused == false) ? " Regular" : ""}`}>{record.post.author.displayName}</p>
-                            <Link to={`/profile/${record.post.author.handle}`} className={`Handle${(focused == false) ? " Regular" : ""}`} unstable_viewTransition>@{record.post.author.handle}</Link>
+                            <Link to={`/profile/${record.post.author.handle}`} className={`Handle${(focused == false) ? " Regular" : ""}`} unstable_viewTransition>{(record.post.author.handle.includes("did:")) ? record.post.author.handle : "@" + record.post.author.handle}</Link>
                         </div>
                     </div>
                     {(focused == false) && (

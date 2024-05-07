@@ -22,6 +22,11 @@ const Label = ({label}) => {
             text = "Mutuals";
             Symbol = ArrowSwitchIcon;
             break;
+        case "system":
+            backgroundColor = "--metric-comment-primary";
+            textColor = "--background-primary";
+            text = "Client";
+            break;
     }
 
     return (
