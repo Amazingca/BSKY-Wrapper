@@ -6,7 +6,7 @@ export async function getPost(userId, postId) {
     
     const post = await fetch(`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${userId}&collection=app.bsky.feed.post&rkey=${postId}`).then(r => r.json());
     
-    return post;
+    return santizer(post);
   } catch (e) {
     
     console.error(e);
@@ -37,7 +37,7 @@ export async function getPostFull(userId, postId) {
     
     if (req.error === undefined) {
       
-      return [userId, req];
+      return [userId, santizer(req)];
     } else {
       
       console.log(req);
@@ -56,7 +56,7 @@ export async function getUserRepo(userId) {
     
     const userRepo = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${userId}`).then(r => r.json());
     
-    return userRepo;
+    return santizer(userRepo);
   } catch (e) {
     
     console.error(e);
@@ -91,7 +91,7 @@ export async function listRecords(userId, collection) {
       return null;
     } else {
       
-      return records.records;
+      return santizer(records.records);
     }
   } catch (e) {
     
@@ -102,7 +102,6 @@ export async function listRecords(userId, collection) {
 
 export async function getUserFeed() {
   
-  const userIf = localStorage.getItem("userDid");
   const token = await getToken();
   
   const req = {
@@ -116,11 +115,11 @@ export async function getUserFeed() {
     
     const feedReq = await fetch("https://bsky.social/xrpc/app.bsky.feed.getTimeline?limit=100", req).then(r => r.json());
     
-    return feedReq;
+    return santizer(feedReq);
   } catch (e) {
     
-    return null;
     console.log(e);
+    return null;
   }
 }
 
@@ -242,7 +241,7 @@ export async function getUserInfo() {
     
     const reqObj = await fetch("https://bsky.social/xrpc/app.bsky.actor.getProfile?actor=" + userId, req).then(r => r.json());
     
-    return reqObj;
+    return santizer(reqObj);
   } catch (e) {
     
     console.log(e);
@@ -403,4 +402,9 @@ export async function createAccountReq(inviteCode, userEmail, userHandle, userPa
     console.log(e);
     return "Error: The request could not be made! Try clicking the button again.";
   }
+}
+
+function santizer(item) {
+
+  return JSON.parse(JSON.stringify(item).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\\\"", "&quot;"));
 }
