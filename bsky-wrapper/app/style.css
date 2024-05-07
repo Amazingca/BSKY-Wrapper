@@ -1,0 +1,1073 @@
+@font-face {
+    font-family: 'Mona Sans';
+    src:
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Mona-Sans.woff2') format('woff2-variations');
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+}
+  @font-face {
+    font-family: 'Hubot Sans';
+    src:
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2 supports variations'),
+        url('https://cdn.amazingca.dev/assets/fonts/Hubot-Sans.woff2') format('woff2-variations');
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+}
+body {
+    margin: 0rem;
+
+    --accent-primary: #0099FFFF;
+    --accent-secondary: #3b82f6FF;
+    --accent-tertiary: #0099ff26;
+
+    --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+    --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
+
+    --accent-primary: #0099FF;
+
+    --sidebar-background: #1a1a1a;
+    --sidebar-background-translucent: #1a1a1acf;
+    --background-primary: #fff;
+
+    --title-primary: #ddd;
+    --title-accent: linear-gradient(to bottom right, var(--accent-primary), var(--accent-secondary));
+
+    --action-item-primary: #fff;
+    --action-item-secondary: #ddd;
+
+    --action-icon-primary: #fff;
+    --action-icon-background: #2a2a2a;
+    --action-icon-background-secondary: #fff;
+    
+    --primary-shadow: #000;
+
+    --login-button-primary: #222;
+    --login-button-background: #fff;
+
+    --header-primary: #1a1a1a;
+    --header-accent: #3a3a3a;
+
+    --input-box-accent: #0099ff54;
+    --input-box-focus: #0099FF99;
+
+    --input-name: #fff;
+    --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
+
+    --cover-dash: silver;
+
+    --record-prepend-primary: #555;
+    --record-background: #f5f5f5;
+    --record-author-name: #222;
+    --record-author-handle: #555;
+    --record-text-primary: #000;
+    --record-external-background: #99999922;
+    --record-metric-shadow: #00000055;
+    --record-metrics-text: #000;
+
+    --context-primary: var(--accent-primary);
+    --context-background: #38a4f744;
+
+    --metric-primary: #222;
+    --metric-accent: #99999922;
+    --metric-accent-darker: #99999944;
+
+    --metric-comment-primary: #38a4f7;
+    --metric-comment-accent: #38a4f722;
+    --metric-comment-accent-darker: #38a4f744;
+    --metric-repost-primary: #40a930;
+    --metric-repost-accent: #40a93022;
+    --metric-repost-accent-darker: #40a93044;
+    --metric-like-primary: #fa4355;
+    --metric-like-accent: #fa435522;
+    --metric-like-accent-darker: #fa435544;
+
+    --footer-primary: #555;
+    
+    --transition-main: 0.1s cubic-bezier(0.3,0.09,0.46,1.01) 0s;
+
+    background-color: var(--background-primary);
+
+    transition: var(--transition-main);
+}
+body.dark {
+
+    --background-primary: #000;
+
+    --header-primary: #ddd;
+    --header-accent: #ccc;
+
+    --cover-dash: gainsboro;
+
+    --record-prepend-primary: #ddd;
+    --record-background: #1a1a1a;
+    --record-author-name: #fff;
+    --record-author-handle: #ddd;
+    --record-text-primary: #fff;
+    --record-metrics-icon: #ddd;
+    --record-metrics-text: #fff;
+
+    --metric-primary: #fff;
+
+    --footer-primary: #fff;
+}
+#main {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    min-height: 100vh;
+}
+#main.hasDevBanner {
+    min-height: calc(100vh - 51px);
+}
+.devBanner {
+    position: sticky;
+    z-index: 10;
+    top: 0px;
+    width: -webkit-fill-available;
+    background-color: lightsalmon;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 750 !important;
+    color: white;
+    font-family: "Hubot Sans";
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+}
+#bodyCover {
+    z-index: 10;
+    position: fixed;
+    bottom: 0rem;
+    top: 0rem;
+    left: 0rem;
+    right: 0rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--sidebar-background-translucent);
+}
+/* NOTE: Removing to test new view */
+/*#bodyCover ~ #main div {
+    filter: blur(10px);
+}*/
+h1, h2, h3, h4, footer, p, a, .InputName, .InputEntry {
+    font-family: "Mona Sans";
+}
+h1 {
+    font-size: 2rem;
+    font-weight: 900 !important;
+}
+h2 {
+    font-size: 1.5rem;
+    color: var(--action-item-primary);
+    font-weight: 750 !important;
+}
+h3 {
+    font-size: 1.25rem;
+    color: var(--header-primary);
+    font-weight: 700 !important;
+}
+h4, p, a {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+p, a {
+    word-break: break-word;
+
+    color: var(--record-text-primary);
+    font-weight: 400 !important;
+}
+p.DisplayName, a.Handle {
+    font-size: 1.25rem;
+    color: var(--record-author-name);
+    font-weight: 700 !important;
+}
+p.DisplayName.Regular, a.Handle.Regular {
+    font-size: 1rem;
+}
+p.Handle {
+    font-weight: 550 !important;
+}
+.Profile .Details .DisplayName, .Profile .Details .Handle {
+    font-size: 1.35rem;
+}
+p.Handle, a.Handle, .InlineAuthor a, .FeedRecord .Headers div a p {
+    color: var(--record-author-handle);
+    /* TODO: Figure out text decoration inheritence so underlines on feed record creator isn't mismatched */
+}
+a.Handle {
+    font-weight: 600 !important;
+}
+.Profile .Details .FeatureStack {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.Flag {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600 !important;
+    padding: 0.25rem;
+    border-radius: 0.45rem;
+}
+.PostPrepend p {
+    color: var(--record-prepend-primary);
+}
+.Timestamp {
+    color: var(--record-author-handle);
+}
+.ExternalLink .ExternalHeader {
+    font-size: 1.25rem;
+    font-weight: 600 !important;
+    color: var(--record-author-handle);
+}
+.Metrics div p {
+    font-weight: 600 !important;
+}
+.Metrics div p.Accent {
+    color: var(--record-author-handle);
+}
+footer, h4 {
+    font-size: 1rem;
+    color: var(--footer-primary);
+    font-weight: 400 !important;
+}
+p.DisplayName a, p.Handle a, footer a, h4 a {
+    color: inherit;
+    font-weight: 500 !important;
+    text-underline-offset: 0.1rem;
+}
+.InputName {
+    color: var(--input-name);
+    font-weight: 750 !important;
+}
+.InputEntry {
+    color: var(--header-primary);
+    font-weight: 750 !important;
+}
+.InlinePost .InlineAuthor p, .InlinePost .InlineAuthor a, .FeedRecord .Headers div a p {
+    font-size: 1rem;
+    font-weight: 500 !important
+}
+.FeedRecord .Headers div p {
+    font-size: 1.1rem;
+    font-weight: 600 !important
+}
+.NoView p, .Subject p {
+    font-weight: 500 !important;
+    letter-spacing: 0.02rem;
+}
+.Post .Subject p a {
+    text-decoration: none;
+    font-weight: 600 !important;
+}
+.Post .Subject p a:hover {
+    text-decoration: underline;
+}
+.CoverModal {
+    width: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: var(--record-background);
+    border-radius: 2rem;
+    outline: var(--cover-dash) dashed 2px;
+}
+.CoverModal h2, .CoverModal h3 {
+    margin: 0rem;
+    color: var(--header-primary);
+}
+.CoverModal .Heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+.CoverModal .Heading svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    transition: var(--transition-main);
+    cursor: pointer;
+}
+.CoverModal .Heading svg:hover {
+    transform: scale(1.05);
+}
+.CoverModal .Heading svg:active {
+    transform: scale(0.9);
+    filter: opacity(0.70);
+}
+.CoverModal .Content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.CoverModal .Composer {
+    display: flex;
+    flex-direction: column;
+}
+.Keybind {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.Key {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--background-primary);
+    border-radius: 1rem;
+    padding: 1rem;
+    height: fit-content;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    outline: var(--accent-primary) solid 2px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.SideBar {
+    flex: 1;
+    background-color: var(--sidebar-background);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 2rem;
+    padding-top: 2rem;
+    z-index: 1;
+}
+.About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    flex: 1;
+    min-width: 12rem;
+    max-width: 28vw;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2rem;
+    scrollbar-width: none;
+}
+.Replies {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.About::-webkit-scrollbar, .Acknowledgments::-webkit-scrollbar, .Feed::-webkit-scrollbar, .Tag::-webkit-scrollbar, .UserProfile::-webkit-scrollbar, .UserPost::-webkit-scrollbar, .Login::-webkit-scrollbar, .Settings::-webkit-scrollbar, .Unsupported::-webkit-scrollbar {
+    display: none;
+}
+.Login, .Settings {
+    gap: 1rem;
+    overflow-y: clip;
+}
+.Feed, .Tag, .Notifications, .UserProfile, .UserPost {
+    gap: 2rem;
+}
+.SideBar-Heading {
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+#main.hasDevBanner .SideBar-Heading {
+    top: calc(2rem + 51px);
+}
+.Title {
+    display: flex;
+    gap: 0.5rem;
+}
+.TitleAccent, body.dark .LoginWith h2, .Key h3 {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.TaskBar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 23rem;
+    margin-top: 4rem;
+}
+.TaskBar a {
+    text-decoration: none;
+}
+.ActionItem {
+    display: flex;
+    gap: 1rem;
+}
+.ActionItem, .LoginWith {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.ActionIcon {
+    width: 2rem;
+    height: 2rem;
+    padding: 1rem;
+    border-radius: 50%;
+}
+.ActionIcon, .LoginWith, .InputPointer {
+    transition: var(--transition-main);
+    cursor: pointer;
+}
+.ActionItem:hover .ActionIcon {
+    transform: scale(1.05);
+}
+.ActionIcon:hover {
+    transform: scale(1.05);
+}
+.ActionItem:active .ActionIcon {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
+}
+.ActionIcon:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
+}
+.ActionIcon .Status {
+    position: relative;
+    margin-bottom: -1.5rem;
+    left: 2rem;
+    top: -1rem;
+    display: flex;
+    justify-content: center;
+    height: 1rem;
+    width: fit-content;
+    min-width: 1rem;
+    white-space: nowrap;
+    padding: 0.25rem;
+    border-radius: 2rem;
+    background-color: var(--action-icon-background-secondary);
+    outline: var(--sidebar-background) solid 0.3rem; /* NOTE: Might remove depending on use case. */
+}
+.ActionIcon .Status p {
+    font-weight: 800 !important;
+    color: var(--sidebar-background);
+}
+body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .ComposeIcon {
+    background-image: var(--secondary-accent);
+    background-clip: padding-box;
+}
+.UserBar {
+    position: sticky;
+    bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+}
+.ProfileThemeIcon img {
+    position: absolute;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    transition: var(--transition-main);
+}
+.ProfileThemeIcon:hover img, .ProfileThemeIcon:active img {
+    opacity: 0;
+    z-index: -1;
+}
+.ProfileThemeIcon img + div {
+    filter: unset !important;
+}
+.LoginWith {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    width: 15rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    height: 4rem;
+    border-radius: 4rem;
+    background-color: var(--login-button-background);
+}
+a.LoginWith {
+    text-decoration: none;
+    white-space: nowrap;
+}
+.LoginWith:hover, .InputPointer:hover, .ProfileThemeIcon:hover img {
+    transform: scale(1.015);
+}
+.LoginWith:active, .InputPointer:active, .ProfileThemeIcon:active img {
+    transform: scale(0.985);
+}
+.LoginWith:active {
+    box-shadow: 0 0 10px 0px var(--primary-shadow);
+}
+body.dark .LoginWith {
+    background-image: var(--secondary-accent);
+    background-color: currentcolor;
+}
+body.dark .LoginWith h2 {
+    background-image: var(--primary-accent);
+}
+.LoginWith h2 {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    color: var(--login-button-primary);
+}
+.Header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+}
+.Header h1.Accent {
+    color: var(--header-accent);
+}
+.Header svg {
+    width: 2rem;
+    height: 2rem;
+}
+.Header h1 {
+    color: var(--header-primary);
+}
+.CenterSpacer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.InputName {
+    font-size: 1.25rem;
+    background-image: var(--input-accent);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    padding: 0.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    margin-bottom: -1rem;
+    width: max-content;
+    height: 2.25rem;
+}
+.InputEntry {
+    width: 20.75rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    background-color: var(--background-primary);
+    border: 0.2rem solid var(--accent-primary);
+    border-radius: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    outline: none;
+    box-shadow: 0 0 20px 4px var(--input-box-accent);
+    transition: var(--transition-main);
+}
+.InputEntry:focus {
+    box-shadow: 0 0 20px 3px var(--input-box-focus);
+}
+.InputPointer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background-color: var(--accent-primary);
+    width: 3rem;
+    height: 2rem;
+    border-radius: 1rem;
+    margin-top: -3rem;
+    margin-left: 19rem;
+}
+.InputPointerIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.PostRoot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.Post, .Profile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-color: var(--record-background);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+}
+.Unread {
+    outline: var(--accent-primary) dashed 2px;
+    background-color: var(--accent-tertiary);
+}
+.ReplyConnector {
+    height: 2rem;
+    width: 0.5rem;
+    background-color: var(--record-background);
+    margin-left: 2rem;
+}
+.PostPrepend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    cursor: pointer;
+}
+.Post .PostHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+.PostHeader .Timestamp, .InlineHeader .Timestamp {
+    white-space: nowrap;
+}
+.PostHeader a.Timestamp, .InlinePost a.Timestamp {
+    text-decoration: none;
+}
+.PostHeader a.Timestamp:hover, .InlinePost a.Timestamp:hover {
+    text-decoration: underline;
+}
+.Post .Author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.Post .Author .Avatar, .FeedRecord .Headers .Avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+.Post .Author .Avatar.Regular, .FeedRecord .Headers .Avatar.Regular {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.Author .Details, .InlineAuthor .Titlers {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.Post .Author, .Profile .Details p, .InlinePost .InlineAuthor, .FeedRecord .Headers {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ImageGrid {
+    display: grid;
+    gap: 0.75rem;
+}
+.ImageGridItem {
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.ImageGridItem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+a.ExternalLink {
+    text-decoration: none;
+}
+.ExternalLink {
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    background-color: var(--record-external-background);
+    /*user-select: none; ** Might put this back in depending on what's more accessible for the user.
+    -webkit-user-select: none;*/
+    cursor: pointer;
+}
+.InlinePost .ExternalLink {
+    display: table-row-group;
+    background-color: unset;
+}
+.ExternalLink:active {
+    transform: scale(0.99);
+    box-shadow: 0 0 10px 0px var(--record-metric-shadow);
+}
+.ExternalLink img {
+    width: 100%;
+}
+.ExternalLink .ExternalTitling {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+}
+.ExternalLink:hover .ExternalHeader {
+    text-decoration: underline;
+}
+.PostFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+.PostFooter .Metrics {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 25rem;
+    gap: 1rem;
+}
+.PostFooter .MetricItem {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    /*width: 5rem; ** Fixed width for consistency on desktop applications. Will need to do more testing to see if this is a viable path to take. */
+}
+.PostFooter .Metrics div p {
+    color: var(--record-metrics-text);
+}
+.PostFooter div svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+@keyframes MetricHover {
+    from {background-size: auto 0rem}
+    to {background-size: auto 2.2rem}
+}
+@keyframes MetricDefault { 
+    from {background-size: auto 2.2rem}
+    to {background-size: auto 0rem}
+}
+.PostFooter .MetricIcon {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+
+    padding: 0.4rem;
+    border-radius: 4rem;
+
+    background-image: var(--primary-accent);
+    background-repeat: no-repeat;
+
+    transition-duration: 0.1s;
+
+    animation-name: MetricDefault;
+    animation-duration: 0.3s;
+    background-size: auto 0rem;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+.PostFooter .MetricIcon:hover {
+    transform: scale(1.05);
+    animation-name: MetricHover;
+    background-size: auto 2.2rem;
+    animation-duration: 0.3s;
+    cursor: pointer;
+}
+.PostFooter .MetricIcon:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 5px var(--record-metric-shadow);
+}
+.UserProfile .NoView {
+    margin-top: 2rem;
+}
+.Profile {
+    padding: 0rem;
+    margin-top: 2rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.Profile .Banner {
+    width: 100%;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+.Profile .Details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.Profile .Inline {
+    padding: 0.75rem;
+    margin-top: -4.5rem;
+}
+.Profile .Avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: 0.2rem solid var(--record-background);
+    background: var(--record-background);
+}
+.Profile .Details .Metrics, .FeedRecord .Metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.Profile .Details .Metrics div, .FeedRecord .Metrics div {
+    display: flex;
+    gap: 0.25rem;
+}
+.Post .NoView, .InlinePost, .FeedRecord {
+    margin-top: unset;
+    background-color: var(--record-external-background);
+}
+.NoView, .Subject {
+    display: flex;
+    flex-direction: unset;
+    align-items: center;
+    gap: 0.75rem;
+}
+.NoView div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--context-background);
+}
+.Post .Subject .Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+.Post .Subject p {
+    letter-spacing: unset;
+}
+.InlinePost, .FeedRecord {
+    border-radius: 0.5rem;
+}
+.InlineNest, .FeedRecord {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+}
+.InlinePost .InlineHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.InlinePost .InlineAuthor, .InlineAuthor .Titlers {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+.Titlers {
+    flex-wrap: wrap;
+}
+.InlineAuthor img {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+}
+.FeedRecord .Headers, .FeedRecord .Headers div a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.FeedRecord .Headers div {
+    display: flex;
+    flex-direction: column;
+}
+.FeedRecord .Headers div a {
+    flex-direction: unset;
+    gap: 0.25rem;
+    align-items: center;
+    width: fit-content;
+    padding: 0.2rem;
+    padding-right: 0.3rem;
+    border-radius: 1rem;
+    background-color: var(--record-external-background);
+    text-decoration: none;
+}
+.FeedRecord .Headers div a:hover {
+    text-decoration: underline;
+}
+.FeedRecord .Headers .Creator {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+.FooterBar {
+    flex: 1;
+    top: 0rem;
+    bottom: 0rem;
+    width: auto;
+    height: auto;
+    padding-right: 2rem;
+    display: flex;
+    align-items: flex-end;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+.Footer {
+    position: sticky;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+input[type="password"] {
+    letter-spacing: 0.25rem;
+}
+.Checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 0.2rem solid var(--accent-primary);
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+.Checkbox.Small {
+    align-items: flex-start;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+.Checkbox:active {
+    box-shadow: 0 0 6px 1px var(--input-box-focus);
+}
+.Checkbox, .Checkbox div svg {
+    transition: var(--transition-main);
+    fill: var(--accent-primary);
+    stroke: var(--accent-primary);
+}
+.Checkbox.checked {
+    background-color: var(--accent-primary);
+}
+.Checkbox div {
+    width: 1.25rem;
+    height: 1.25rem;
+    position: absolute;
+    overflow: hidden;
+}
+.Checkbox.Small div {
+    width: 1rem;
+    height: 1rem;
+}
+.Checkbox div svg {
+    width: 0rem;
+    height: 0rem;
+}
+.Checkbox.unChecked .notChecked svg, .Checkbox.checked .isChecked svg {
+    width: inherit;
+    height: inherit;
+}
+.Checkbox.checked .isChecked svg {
+    fill: var(--background-primary);
+    stroke: var(--background-primary);
+}
+.Checkbox.unChecked:active .notChecked svg, .Checkbox.checked:active .isChecked svg {
+    transform: scale(0.9);
+}
+@media screen and (max-width: 1222px) {
+    #main {
+        justify-content: space-between;
+    }
+    .SideBar {
+        flex: unset;
+        width: 4rem;
+    }
+    .Title {
+        display: none;
+    }
+    .TaskBar {
+        align-items: flex-end;
+        margin-top: 0rem;
+    }
+    .ActionItem h2 {
+        display: none;
+    }
+    .LoginWith {
+        display: none;
+    }
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+        max-width: 28rem;
+    }
+    .FooterBar {
+        flex: unset;
+    }
+}
+@media screen and (max-width: 722px) {
+    .devBanner {
+        align-items: center;
+    }
+    .FooterBar {
+        padding-right: 0rem;
+    }
+    .Footer {
+        display: none;
+    }
+}
+@media screen and (max-width: 565px) {
+    #main {
+        flex-direction: column-reverse;
+    }
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+        max-width: unset;
+        padding: 1rem;
+    }
+    .Login, .Settings {
+        gap: 0rem;
+    }
+    .Feed, .Tag, .Notifications, .UserProfile, .UserPost {
+        gap: 1rem;
+    }
+    .SideBar {
+        position: sticky;
+        background-color: var(--sidebar-background-translucent);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        bottom: 0px;
+        flex-direction: row;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+        width: auto;
+        overflow-x: scroll;
+    }
+    .TaskBar {
+        width: auto;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    .LoginWith {
+        display: flex;
+        width: auto;
+    }
+    .LoginWith h2 {
+        font-size: 1.25rem;
+    }
+    .ProfileThemeIcon {
+        display: none;
+    }
+    .Header {
+        padding-top: 0rem;
+        overflow-x: scroll;
+    }
+    .InputEntry {
+        width: -webkit-fill-available;
+    }
+    .InputPointer {
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+    .Profile {
+        margin-top: 0rem;
+    }
+    .Replies {
+        gap: 1rem;
+    }
+    .FooterBar {
+        display: none;
+    }
+    input[type="password"] {
+        letter-spacing: 0rem;
+    }
+}
+.ActionIcon svg {
+    width: 2rem;
+    height: 2rem;
+}
+input {
+    padding-block: 1px;
+}
+input:disabled {
+    opacity: 1.0;
+}
+#bodyLocked {
+    overflow: hidden;
+}
