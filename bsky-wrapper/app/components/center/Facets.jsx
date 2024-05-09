@@ -13,11 +13,11 @@ const Facets = ({text, facets}) => {
 
         switch (facet.features[index].$type) {
             case "app.bsky.richtext.facet#mention":
-                return (<Link to={`/profile/${facet.features[index].did}`} unstable_viewTransition>{innerContent}</Link>);
+                return (<Link to={`/profile/${facet.features[index].did}`}>{innerContent}</Link>);
             case "app.bsky.richtext.facet#link":
-                return (<Link to={facet.features[index].uri} unstable_viewTransition>{innerContent}</Link>);
+                return (<Link to={facet.features[index].uri}>{innerContent}</Link>);
             case "app.bsky.richtext.facet#tag":
-                return (<Link to={`/hashtag/${innerContent.slice(1)}`} unstable_viewTransition>{innerContent}</Link>);
+                return (<Link to={`/hashtag/${innerContent.slice(1)}`}>{innerContent}</Link>);
             case "dev.amazingca.blue.facet#bolden":
                 return (<b>{innerContent}</b>);
             case "dev.amazingca.blue.facet#italicize":
@@ -57,7 +57,7 @@ const Facets = ({text, facets}) => {
             for (var o = 0; o < facetLength; o++) {
 
                 facetedArray[o] = byteArray[i];
-                //i++;
+                
                 if (o + 1 != facetLength) i++;
             }
 

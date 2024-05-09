@@ -13,10 +13,10 @@ const InlinePost = ({record}) => {
                         {(record.author.avatar) && <img src={record.author.avatar} />}
                         <div className={"Titlers"}>
                             {(record.author.displayName) && <p>{record.author.displayName}</p>}
-                            <Link to={`/profile/${record.author.handle}`} unstable_viewTransition>@{record.author.handle}</Link>
+                            <Link to={`/profile/${record.author.handle}`}>@{record.author.handle}</Link>
                         </div>
                     </div>
-                    <Link to={`/profile/${record.author.handle}/post/${record.uri.split("/").pop()}`} title={new Date(record.value.createdAt).toUTCString()} className={"Timestamp"} unstable_viewTransition>
+                    <Link to={`/profile/${record.author.handle}/post/${record.uri.split("/").pop()}`} title={new Date(record.value.createdAt).toUTCString()} className={"Timestamp"}>
                         {Time.relative(record.value.createdAt)}
                     </Link>
                 </div>

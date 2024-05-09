@@ -60,7 +60,7 @@ const Notification = ({record}) => {
                     <SubjectIcon size={"small"} fill={`var(${iconFillColor})`} />
                 </div>
                 <div>
-                    <p><Link to={`/profile/${record.author.handle}`} unstable_viewTransition>@{record.author.handle}</Link> {subjectText}</p>
+                    <p><Link to={`/profile/${record.author.handle}`}>@{record.author.handle}</Link> {subjectText}</p>
                 </div>
             </div>
         </div>

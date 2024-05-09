@@ -14,7 +14,6 @@ import Facets from "./Facets";
 import Embed from "./Embed";
 import MetricItem from "./MetricItem";
 import Time from "../../infra/Time";
-import Label from "./Label";
 import NoView from "./NoView";
 
 const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
@@ -74,11 +73,11 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
                         {(record.post.author.avatar) && <img src={record.post.author.avatar} className={`Avatar${(focused == false) ? " Regular" : ""}`} />}
                         <div className={"Details"}>
                             <p className={`DisplayName${(focused == false) ? " Regular" : ""}`}>{record.post.author.displayName}</p>
-                            <Link to={`/profile/${record.post.author.handle}`} className={`Handle${(focused == false) ? " Regular" : ""}`} unstable_viewTransition>{(record.post.author.handle.includes("did:")) ? record.post.author.handle : "@" + record.post.author.handle}</Link>
+                            <Link to={`/profile/${record.post.author.handle}`} className={`Handle${(focused == false) ? " Regular" : ""}`}>{(record.post.author.handle.includes("did:")) ? record.post.author.handle : "@" + record.post.author.handle}</Link>
                         </div>
                     </div>
                     {(focused == false) && (
-                        <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={Time.format(record.post.record.createdAt)} className={"Timestamp"} unstable_viewTransition>
+                        <Link to={`/profile/${record.post.author.handle}/post/${record.post.uri.split("/").pop()}`} title={Time.format(record.post.record.createdAt)} className={"Timestamp"}>
                             {Time.relative(record.post.record.createdAt)}
                         </Link>
                     )}

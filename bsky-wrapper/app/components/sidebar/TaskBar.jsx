@@ -52,20 +52,20 @@ const TaskBar = ({authorized, apiInterface, setShowComposer}) => {
 
     return (
         <div className={"TaskBar"}>
-            <Link to="/" unstable_viewTransition>
+            <Link to="/">
                 <ActionItem Icon={HomeIcon} description="Home" mainColor="--action-item-secondary"/>
             </Link>
             {(authorized) && (
-                <Link to="/notifications" unstable_viewTransition>
+                <Link to="/notifications">
                     <ActionItem Icon={BellIcon} description="Notifications" mainColor="--action-item-secondary" status={notificationCount} />
                 </Link>
             )}
             {(authorized) && (
-                <Link to={`/profile/${apiInterface.getAuthorization().handle}`} unstable_viewTransition>
+                <Link to={`/profile/${apiInterface.getAuthorization().handle}`}>
                     <ActionItem Icon={PersonIcon} description="Profile" mainColor="--action-item-secondary"/>
                 </Link>
             )}
-            <Link to="/settings" unstable_viewTransition>
+            <Link to="/settings">
                 <ActionItem Icon={ToolsIcon} description="Settings" mainColor="--action-item-secondary"/>
             </Link>
             {(authorized) && <ActionItem Icon={PaintbrushIcon} description="Compose" mainColor="--primary-accent" backgroundColor="--action-icon-background-secondary" intent={() => setShowComposer([true, null])}/>}
