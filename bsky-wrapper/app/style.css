@@ -1024,6 +1024,9 @@ input[type="password"] {
         flex-direction: row;
         gap: 1rem;
     }
+    .ActionIcon .Status {
+        outline: unset;
+    }
     .LoginWith {
         display: flex;
         width: auto;
