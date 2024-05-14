@@ -53,6 +53,8 @@ const Notification = ({record}) => {
         subjectText = "quoted your post";
     }
 
+    //console.log(record);
+
     return (
         <div className={`Post${(record.isRead == false) ? " Unread" : ""}`}>
             <div className={"Subject"}>

@@ -890,7 +890,7 @@ export default class Api {
 
         try {
 
-            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+            if (this.authorization == null) throw new Error("Object instance is not authorized with any account!");
 
             const requestData = {
                 method: "GET",
@@ -924,7 +924,7 @@ export default class Api {
 
         try {
 
-            if (this.authorization == null) throw new Error("Object instance is not authorized to post from any account!");
+            if (this.authorization == null) throw new Error("Object instance is not authorized with any account!");
 
             const requestData = {
                 method: "GET",
@@ -946,6 +946,38 @@ export default class Api {
 
             console.error(e);
             return null;
+        }
+    }
+
+    /**
+     * Updates the seenAt field for a specified account upon a provided ISO date.
+     * @param {string} date ISO date that you want notifications to be "seen" at
+     * @returns Updates with the given ISO date or the current date if none is given
+     */
+    markNotificationsAsRead = async (date) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized with any account!");
+
+            const requestData = {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    seenAt: (date) ? date : new Date().toISOString()
+                })
+            };
+
+            const postRequest = await fetch(`${this.pdsUrl}/xrpc/app.bsky.notification.updateSeen`, requestData);
+
+            if (postRequest.status == 200) return true;
+        } catch (e) {
+
+            console.warn(e);
+            return false;
         }
     }
 

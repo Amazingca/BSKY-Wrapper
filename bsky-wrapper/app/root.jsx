@@ -54,6 +54,7 @@ const App = () => {
     const [server, setServer] = useState("https://bsky.social");
     const [authorized, setAuthorized] = useState(false);
     const [authorization, setAuthorization] = useState(null);
+    const [notificationCount, setNotificationCount] = useState(null);
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
     const [showComposer, setShowComposer] = useState([false, null]);
@@ -150,6 +151,7 @@ const App = () => {
         authorized: authorized,
         setAuthorized: setAuthorized,
         setAuthorization: setAuthorization,
+        setNotificationCount: setNotificationCount,
         setShowComposer: setShowComposer,
         preferNativeView: preferNativeView,
         setPreferNativeView: setPreferNativeView
@@ -188,7 +190,7 @@ const App = () => {
                             </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} setShowComposer={setShowComposer} />
+                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>

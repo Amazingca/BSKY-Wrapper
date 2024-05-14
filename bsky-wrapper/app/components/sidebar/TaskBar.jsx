@@ -9,7 +9,7 @@ import {
 import { useLocation, useNavigate, Link } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
-const TaskBar = ({authorized, apiInterface, setShowComposer}) => {
+const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, setNotificationCount}, setShowComposer}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,8 +38,6 @@ const TaskBar = ({authorized, apiInterface, setShowComposer}) => {
 
         return redirect("/");
     }
-
-    const [notificationCount, setNotificationCount] = useState(null);
 
     const getNotificationCount = async () => {
 

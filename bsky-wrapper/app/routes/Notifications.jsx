@@ -2,6 +2,7 @@ import Header from "../components/center/Header";
 import Notification from "../components/center/Notification";
 import { useOutletContext } from "@remix-run/react";
 import { useState, useEffect } from "react";
+import Button from "../components/interactable/Button";
 
 export const meta = ({matches}) => {
 
@@ -22,7 +23,7 @@ const Notifications = () => {
 
     var index = 0;
 
-    const {apiInterface} = useOutletContext();
+    const {apiInterface, setNotificationCount} = useOutletContext();
     const [notifications, setNotifications] = useState({notifications: []});
     var notificationsCache = {notifications: []};
 
@@ -41,6 +42,7 @@ const Notifications = () => {
 
             var newNotifications = await apiInterface.getNotifications(notificationsCache.cursor);
             newNotifications.notifications = [...notificationsCache.notifications, ...newNotifications.notifications];
+            newNotifications.cursor = newNotifications.notifications[newNotifications.notifications.length - 1].record.createdAt;
 
             setNotifications(newNotifications);
             notificationsCache = newNotifications;
@@ -50,17 +52,15 @@ const Notifications = () => {
     useEffect(() => {
 
         var isTriggered = false;
-        window.onscroll = function () {
+        window.onscroll = async function () {
             
             if ((document.getElementsByTagName("body")[0].getBoundingClientRect().height - 1000) < (window.visualViewport.height + window.visualViewport.pageTop)) {
-
-                console.log("in");
                 
                 if (isTriggered == false) {
                     
                     isTriggered = true;
-                    getNotifications();
-                    //isTriggered = false;
+                    await getNotifications();
+                    isTriggered = false;
                 }
             }
         }
@@ -68,9 +68,33 @@ const Notifications = () => {
         getNotifications();
     }, []);
 
+    const markAsRead = async (date=null) => {
+
+        const seenAt = (date) ? date + ":00.000Z" : new Date().toISOString();
+
+        const tryRead = await apiInterface.markNotificationsAsRead(seenAt);
+
+        if (tryRead) {
+
+            var tempNotifs = notifications;
+            tempNotifs.seenAt = seenAt;
+
+            for (var i = 0; i < tempNotifs.notifications.length; i++) {
+
+                if (tempNotifs.notifications[i].record.createdAt <= seenAt) tempNotifs.notifications[i].isRead = true;
+                else tempNotifs.notifications[i].isRead = false;
+            }
+
+            const notificationCount = tempNotifs.notifications.filter((notification) => notification.isRead == false).length;
+            
+            setNotificationCount((notificationCount > 0) ? notificationCount : null);
+            setNotifications(tempNotifs);
+        }
+    }
+
     return (
         <div className={"Notifications"}>
-            <Header title="Notifications" />
+            <Header title="Notifications" side={<Button text="Mark as read until" clicker={markAsRead} conditional="datetime" conditionalData={(notifications.notifications.length > 0) && {max: new Date().toISOString().replace("Z", "")}} />} />
             {(notifications) && notifications.notifications.map(notification => <Notification record={notification} key={notification.uri + "/target/" + index++} />)}
         </div>
     )

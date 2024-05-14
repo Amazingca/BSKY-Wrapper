@@ -506,11 +506,14 @@ body.dark .LoginWith h2 {
     text-overflow: ellipsis;
     color: var(--login-button-primary);
 }
-.Header {
+.Header, .Header div {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+.Header {
     padding-top: 2rem;
+    justify-content: space-between;
 }
 .Header h1.Accent {
     color: var(--header-accent);
@@ -571,6 +574,16 @@ body.dark .LoginWith h2 {
 .InputPointerIcon {
     width: 1.5rem;
     height: 1.5rem;
+}
+.Button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem;
+    outline: var(--accent-primary) solid 2px;
+    background-color: var(--accent-tertiary);
+    border-radius: 0.75rem;
+    gap: 0.5rem;
+    cursor: pointer;
 }
 .PostRoot {
     display: flex;
