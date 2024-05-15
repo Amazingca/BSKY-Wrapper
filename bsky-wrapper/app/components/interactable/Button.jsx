@@ -1,4 +1,4 @@
-import { CalendarIcon } from "@primer/octicons-react";
+import { CalendarIcon, PlusIcon } from "@primer/octicons-react";
 import { useState } from "react";
 
 const Button = ({text, clicker, conditional, conditionalData}) => {
@@ -16,6 +16,9 @@ const Button = ({text, clicker, conditional, conditionalData}) => {
         case "datetime":
             ConditionalComponent = (<input type="datetime-local" value={conditionalValue} onChange={updateValue} max={(conditionalData.max) ? conditionalData.max : ""}></input>)
             break;
+        case "add":
+            ConditionalComponent = (<PlusIcon size="16" />);
+            break;
     }
 
     const performClick = () => {
@@ -26,7 +29,7 @@ const Button = ({text, clicker, conditional, conditionalData}) => {
     
     return (
         <div onClick={performClick} className={"Button"}>
-            <p>{text}</p>
+            <h3>{text}</h3>
             {(ConditionalComponent) && ConditionalComponent}
         </div>
     )

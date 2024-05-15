@@ -16,6 +16,12 @@ const Keybinds = ({operatingSystem, authorized}) => {
             authorized: true
         },
         {
+            name: "Rooms",
+            trigger: "r",
+            route: "/rooms",
+            authorized: true
+        },
+        {
             name: "Profile",
             trigger: "p",
             route: "",

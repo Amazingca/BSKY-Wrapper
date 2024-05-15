@@ -11,6 +11,9 @@ export default class Api {
     // Public Bluesky API node.
     publicBlueskyApi = "https://api.bsky.app";
 
+    // Message service proxy.
+    messageServiceProxy = "did:web:dms.divy.zone#bsky_chat";
+
     // Limit for valid blob (in bytes) to upload to a repo. Any file must be under this limit to be included within a record.
     static blobSizeLimit = 976560;
 
@@ -18,6 +21,10 @@ export default class Api {
     // NOTE: Audio and video types are not referenced in the ATP lexicon, though are still valid blob types when uploading.
     //       They are included for when they are likely supported in future versions of the ATP.
     static supportedEmbedTypes = ["app.bsky.embed.record", "app.bsky.embed.images", "app.bsky.embed.audio", "app.bsky.embed.video", "app.bsky.embed.external"];
+
+    // Supported repository collections for this handler.
+    // NOTE: There are more collections within the ATP, though these are the ones which are used here.
+    static supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.feed.threadgate", "app.bsky.graph.follow", "chat.bsky.actor.declaration"];
 
     // Supported facet types for an app.bsky.feed.post record.
     // NOTE: Naming schemas under "dev.amazingca.blue.facets" are NOT currently supported by Bluesky.
@@ -265,7 +272,7 @@ export default class Api {
     getPreferredDataServer = () => {
 
         // TODO: Add synchronization fixes to allow for personal PDS syncing across all component branches; root works fine.
-        return (this.authorization != null) ? this.pdsUrl : this.publicBlueskyApi;
+        return (this.authorization != null) ? this.authorization.didDoc.service.filter(service => service.id == "#atproto_pds")[0].serviceEndpoint : this.publicBlueskyApi;
     }
 
     /**
@@ -504,10 +511,9 @@ export default class Api {
      */
     getRecord = async (collection, userId, rkey) => {
 
-        const supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.feed.threadgate", "app.bsky.graph.follow"];
         var isSupported = false;
         
-        for (const supportedCollection of supportedCollections) {
+        for (const supportedCollection of Api.supportedCollections) {
             
             if (supportedCollection === collection) {
             
@@ -553,10 +559,9 @@ export default class Api {
 
         if (userId == null) return null;
 
-        const supportedCollections = ["app.bsky.actor.profile", "app.bsky.feed.generator", "app.bsky.feed.like", "app.bsky.feed.post", "app.bsky.feed.repost", "app.bsky.feed.threadgate", "app.bsky.graph.follow"];
         var isSupported = false;
         
-        for (const supportedCollection of supportedCollections) {
+        for (const supportedCollection of Api.supportedCollections) {
             
             if (supportedCollection === collection) {
             
@@ -882,6 +887,67 @@ export default class Api {
         }
     }
 
+    getMessageUnreadCount = async () => {
+
+        var messagesOpen = await this.listOpenMessages();
+
+        if (messagesOpen == null) return null;
+
+        var count = 0;
+
+        for (const room of messagesOpen.convos) {
+
+            count += room.unreadCount;
+        }
+
+        return count;
+    }
+
+    /**
+     * Retrieves open conversations for an authenticated user
+     * @param {string} cursor Cursor pointer
+     * @returns Open conversation references
+     */
+    listOpenMessages = async (cursor=null) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized with from any account!");
+
+            const requestData = {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Atproto-Proxy": this.messageServiceProxy
+                }
+            }
+
+            const getRecords = await fetch(`${this.getPreferredDataServer()}/xrpc/chat.bsky.convo.listConvos?limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
+
+            if (getRecords.convos) {
+
+                return getRecords;
+            } else {
+
+                throw new Error("Could not retrieve open conversations!");
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    getMessageFeed = async (roomId) => {
+
+
+    }
+
+    sendMessageToRoom = async (roomId, messageRecord) => {
+
+
+    }
+
     /**
      * Getter for the current unread notifications for a user.
      * @returns Notifications count for the user.
@@ -978,6 +1044,68 @@ export default class Api {
 
             console.warn(e);
             return false;
+        }
+    }
+
+    /**
+     * Updates user-specific data with the PDS by providing the collection target (Api.supportedConnections).
+     * @param {string} collection Collection to put updated data in
+     * @param {any} data Data to update collection with
+     * @returns Pointer to URI / CID if update was successful, null if not
+     */
+    setPreferences = async (collection, data) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized with any account!");
+
+            var isSupported = false;
+        
+            for (const supportedCollection of Api.supportedCollections) {
+                
+                if (supportedCollection === collection) {
+                
+                    isSupported = true;
+                }
+            }
+
+            if (isSupported == false) throw new Error("The provided collection is not supported! -> " + type);
+
+            var recordBody;
+
+            if (collection == "chat.bsky.actor.declaration") recordBody = {
+                $type: collection,
+                allowIncoming: data
+            };
+
+            const requestData = {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    collection: collection,
+                    record: recordBody,
+                    repo: this.authorization.did,
+                    rkey: "self",
+                    validate: false
+                })
+            }
+
+            const postRequest = await fetch(`${this.getPreferredDataServer()}/xrpc/com.atproto.repo.putRecord`, requestData).then(r => r.json());
+
+            if (postRequest.uri) {
+
+                return postRequest;
+            } else {
+
+                throw new Error("Unable to put record to collection!");
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
         }
     }
 

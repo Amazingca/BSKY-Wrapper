@@ -55,6 +55,7 @@ const App = () => {
     const [authorized, setAuthorized] = useState(false);
     const [authorization, setAuthorization] = useState(null);
     const [notificationCount, setNotificationCount] = useState(null);
+    const [messagesUnreadCount, setMessagesUnreadCount] = useState(null);
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
     const [showComposer, setShowComposer] = useState([false, null]);
@@ -114,7 +115,7 @@ const App = () => {
                     setShowKeybinds(false);
                 }
 
-                if (keypress.ctrlKey == true) {
+                if ((keypress.ctrlKey == true) && (keypress.altKey == true)) {
 
                     switch (keypress.key) {
                         case "h":
@@ -122,6 +123,9 @@ const App = () => {
                             break;
                         case "n":
                             if (varAuthorized[0]) navigate("/notifications");
+                            break;
+                        case "r":
+                            if (varAuthorized[0]) navigate("/rooms");
                             break;
                         case "p":
                             if (varAuthorized[0]) navigate(`/profile/${varAuthorized[1]}`);
@@ -152,6 +156,7 @@ const App = () => {
         setAuthorized: setAuthorized,
         setAuthorization: setAuthorization,
         setNotificationCount: setNotificationCount,
+        setMessagesUnreadCount: setMessagesUnreadCount,
         setShowComposer: setShowComposer,
         preferNativeView: preferNativeView,
         setPreferNativeView: setPreferNativeView
@@ -190,7 +195,7 @@ const App = () => {
                             </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} setShowComposer={setShowComposer} />
+                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>
