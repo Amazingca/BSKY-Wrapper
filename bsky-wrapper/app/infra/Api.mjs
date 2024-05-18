@@ -12,7 +12,7 @@ export default class Api {
     publicBlueskyApi = "https://api.bsky.app";
 
     // Message service proxy.
-    messageServiceProxy = "did:web:dms.divy.zone#bsky_chat";
+    messageServiceProxy = "did:web:api.bsky.chat#bsky_chat";
 
     // Limit for valid blob (in bytes) to upload to a repo. Any file must be under this limit to be included within a record.
     static blobSizeLimit = 976560;

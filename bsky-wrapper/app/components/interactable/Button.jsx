@@ -17,7 +17,7 @@ const Button = ({text, clicker, conditional, conditionalData}) => {
             ConditionalComponent = (<input type="datetime-local" value={conditionalValue} onChange={updateValue} max={(conditionalData.max) ? conditionalData.max : ""}></input>)
             break;
         case "add":
-            ConditionalComponent = (<PlusIcon size="16" />);
+            ConditionalComponent = (<PlusIcon size="16" fill="var(--header-primary)" />);
             break;
     }
 
