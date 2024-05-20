@@ -154,6 +154,40 @@ export default class Api {
     }
 
     /**
+     * Deletes the session currently associated with the object instance, if one exists.
+     * @returns Boolean on whether session deletion was successful. If there is no session currently associated with the instance, a vacuous truth is returned.
+     */
+    deleteSession = async () => {
+
+        if (this.authorization == null) return true;
+
+        try {
+
+            const requestData = {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${this.authorization.refreshJwt}`
+                }
+            }
+
+            const deleteSession = await fetch(`${this.getPreferredDataServer()}/xrpc/com.atproto.server.deleteSession`, requestData);
+
+            if (deleteSession.status == 200) {
+                
+                return true;
+            } else {
+
+                throw new Error("Could not delete the session! ~> ", deleteSession);
+            }
+        } catch (e) {
+
+            console.warn(e);
+
+            return false;
+        }
+    }
+
+    /**
      * Getter to retrieve the authorization object.
      * @returns Authorization object, null if one does not exist.
      */

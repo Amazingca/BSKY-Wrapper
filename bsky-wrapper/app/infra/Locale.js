@@ -52,6 +52,11 @@ export default class Locale {
         this.push();
     }
 
+    getUsers = () => {
+
+        return (this.locale.users) ? this.locale.users : [];
+    }
+
     getPrimaryUser = () => {
 
         return (this.locale.users) ? this.locale.users[this.locale.users.length - 1] : {};
@@ -63,6 +68,33 @@ export default class Locale {
         this.locale.users[this.locale.users.length - 1].refreshJwt = refreshJwt;
 
         this.push();
+    }
+
+    switchPrimaryUser = (authorizationObject) => {
+
+        var found = false;
+
+        if (this.locale.users.length == 0) return found;
+
+        for (var i = 0; i < this.locale.users.length; i++) {
+
+            if (this.locale.users[i].accessJwt == authorizationObject.accessJwt && this.locale.users[i].refreshJwt == authorizationObject.refreshJwt) {
+
+                const match = this.locale.users[i];
+
+                if (i + 1 < this.locale.users.length) {
+
+                    found = true;
+
+                    this.locale.users[i] = this.locale.users[i + 1];
+                    this.locale.users[i + 1] = match;
+                }
+            }
+        }
+
+        this.push();
+
+        return found;
     }
 
     addUser = (authorizationObject) => {
@@ -78,9 +110,9 @@ export default class Locale {
         this.push();
     }
 
-    removeUser = (userDid) => {
+    removeUser = (authorizationObject) => {
 
-        this.locale.users = this.locale.users.filter(user => user.did != userDid);
+        this.locale.users = this.locale.users.filter(user => user.accessJwt != authorizationObject.accessJwt && user.refreshJwt != authorizationObject.refreshJwt);
 
         if (this.locale.users.length == 0) delete this.locale.users;
 
