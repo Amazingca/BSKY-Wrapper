@@ -453,6 +453,7 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     position: sticky;
     bottom: 2rem;
     display: flex;
+    align-items: flex-end;
     gap: 2rem;
 }
 .ProfileThemeIcon img {
@@ -481,6 +482,13 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
     border-radius: 4rem;
     background-color: var(--login-button-background);
 }
+.LoginWith .Options {
+    display: none;
+}
+.LoginWith .Options svg {
+    width: 2rem;
+    height: 2rem;
+}
 a.LoginWith {
     text-decoration: none;
     white-space: nowrap;
@@ -493,6 +501,29 @@ a.LoginWith {
 }
 .LoginWith:active {
     box-shadow: 0 0 10px 0px var(--primary-shadow);
+}
+.LoginWith.Authorized.Enabled {
+    flex-direction: column;
+    height: auto;
+    gap: 0rem;
+    border-radius: 2rem;
+}
+.LoginWith .UserOptions {
+    display: flex;
+    gap: 1rem;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+}
+.SeparationLine {
+    width: inherit;
+    height: 1px;
+    background-color: var(--sidebar-background);
+}
+.LoginWith.Authorized.NotEnabled:hover h2 {
+    display: none;
+}
+.LoginWith.Authorized.NotEnabled:hover .Options {
+    display: unset;
 }
 body.dark .LoginWith {
     background-image: var(--secondary-accent);
