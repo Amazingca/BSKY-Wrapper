@@ -17,6 +17,7 @@ import manifest from "./app.webmanifest";
 import CoverModal from "./components/cover/CoverModal.jsx";
 import Keybinds from "./components/cover/Keybinds.jsx";
 import Composer from "./components/cover/composer/Composer.jsx";
+import AddUser from "./components/cover/AddUser.jsx";
 
 export const meta = () => {
 
@@ -59,6 +60,7 @@ const App = () => {
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
     const [showComposer, setShowComposer] = useState([false, null]);
+    const [showAddModal, setShowAddModal] = useState([false, null]);
     const [preferNativeView, setPreferNativeView] = useState(false);
 
     const navigate = useNavigate();
@@ -157,6 +159,7 @@ const App = () => {
         setAuthorization: setAuthorization,
         setNotificationCount: setNotificationCount,
         setMessagesUnreadCount: setMessagesUnreadCount,
+        setShowAddModal: setShowAddModal,
         setShowComposer: setShowComposer,
         preferNativeView: preferNativeView,
         setPreferNativeView: setPreferNativeView
@@ -192,6 +195,10 @@ const App = () => {
                         ) : (showComposer[0]) ? (
                             <div id="bodyCover">
                                 <CoverModal title={(!showComposer[1]) ? "Compose" : "Reply"} InnerModal={Composer} apiInterface={apiInterface} authorized={authorized} operatingSystem={operatingSystem} display={setShowComposer} to={(showComposer[1]) ? showComposer[1] : null} />
+                            </div>
+                        ) : (showAddModal[0]) ? (
+                            <div id="bodyCover">
+                                <CoverModal title={"Add User"} InnerModal={AddUser} apiInterface={apiInterface} authorized={authorized} operatingSystem={operatingSystem} display={setShowAddModal} data={showAddModal[1]} />
                             </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>

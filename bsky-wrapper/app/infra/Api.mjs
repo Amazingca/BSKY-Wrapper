@@ -363,6 +363,72 @@ export default class Api {
     }
 
     /**
+     * Returns a hydrated array of provided users.
+     * @param {array} users List of users to query for
+     * @returns Hydrated array of users
+     */
+    getProfiles = async (users) => {
+
+        if (this.authorization == null) {
+
+            if ((this.locale) && this.locale.getPreferNativeView() == true) {
+
+                var users = [];
+
+                for (const user of users) {
+
+                    const profile = await this.listRecords("app.bsky.actor.profile", user);
+                
+                    if (!await this.isHidden(user)) users.push({
+                        did: profile.records[0].uri.split("/")[2],
+                        handle: user,
+                        displayName: profile.records[0].value.displayName,
+                        description: profile.records[0].value.description,
+                        labels: (profile.records[0].value.labels) ? profile.records[0].value.labels.values.map(value => value.val) : []
+                    });
+                }
+
+                return users;
+            }
+        }
+
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        var queryString = "";
+
+        for (var i = 0; i < users.length; i++) {
+
+            if (i == 0) queryString += "?actors=" + users[i];
+            else queryString += "&actors=" + users[i];
+        }
+
+        if (this.authorization) {
+
+            requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+        }
+
+        try {
+
+            const usersProfilesObj = await fetch(`${this.getPreferredDataServer()}/xrpc/app.bsky.actor.getProfiles${queryString}`, requestData).then(r => r.json());
+
+            if (!usersProfilesObj.error) {
+
+                return usersProfilesObj;
+            } else {
+
+                throw new Error(usersProfilesObj);
+            }
+        } catch (e) {
+
+            console.warn("There was an error fetching the profiles! =>", e);
+            return {};
+        }
+    }
+
+    /**
      * Returns an author's feed.
      * @param {object} options The user pointer and an optional cursor. 
      * @returns The author's feed.
@@ -764,6 +830,72 @@ export default class Api {
     }
 
     /**
+     * Returns a hydrated list of actors that are similar to the search term provided.
+     * @param {object} options The actor to search for and the optional cursor.
+     * @returns Hydrated list of similar actors.
+     */
+    queryActors = async ({actor, cursor=null}) => {
+
+        var xrpcRequest = "app.bsky.actor.searchActors";
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+
+        try {
+
+            const queryResults = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}?q=${actor}&limit=${5}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
+
+            if (queryResults) {
+
+                return this.sanitize(queryResults);
+            } else {
+
+                throw new Error("Unable to query actors! =>", term, queryResults);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    /**
+     * Returns a hydrated list of actors that are similar to the search term provided. Has less data than a full query.
+     * @param {object} options The actor to search for and the optional cursor.
+     * @returns Hydrated list of similar actors.
+     */
+    queryActorsTypeahead = async ({actor, cursor=null}) => {
+
+        var xrpcRequest = "app.bsky.actor.searchActorsTypeahead";
+        var requestData = {
+            method: "GET",
+            headers: {}
+        }
+
+        if (this.authorization) requestData.headers["Authorization"] = `Bearer ${await this.getAccessJwt()}`;
+
+        try {
+
+            const queryResults = await fetch(`${this.getPreferredDataServer()}/xrpc/${xrpcRequest}?q=${actor}&limit=${5}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
+
+            if (queryResults) {
+
+                return this.sanitize(queryResults);
+            } else {
+
+                throw new Error("Unable to query actors! =>", term, queryResults);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
+    /**
      * Responsible for uploading a file to the specified PDS. Most checkers are handled by the server on upload to reduce complexity here.
      * Developer note: This has NOT been tested yet. Will do once higher-level code has been finished, like the file picker.
      * @param {object} file The chosen file to upload as a blob.
@@ -946,6 +1078,44 @@ export default class Api {
     sendMessageToRoom = async (roomId, messageRecord) => {
 
 
+    }
+
+    getRoom = async (users) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to message with any account!");
+
+            const requestData = {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Atproto-Proxy": this.messageServiceProxy
+                }
+            }
+
+            var membersParams = "";
+
+            for (var i = 0; i < users.length; i++) {
+
+                if (i == 0) membersParams += "?members=" + users[i];
+                else membersParams += "&members=" + users[i];
+            }
+
+            const roomDetails = await fetch(`${this.getPreferredDataServer()}/xrpc/chat.bsky.convo.getConvoForMembers${membersParams}`, requestData).then(r => r.json());
+
+            if (roomDetails?.convo) {
+
+                return roomDetails;
+            } else {
+
+                throw new Error("Could not retrieve room details! ~>", roomDetails);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
     }
 
     /**

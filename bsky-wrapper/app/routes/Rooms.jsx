@@ -23,7 +23,7 @@ export const meta = ({matches}) => {
 
 const Rooms = () => {
 
-    const {apiInterface} = useOutletContext();
+    const {apiInterface, setShowAddModal} = useOutletContext();
     const [openConversations, setOpenConversations] = useState({convos: []});
 
     const getConversations = async () => {
@@ -71,9 +71,30 @@ const Rooms = () => {
         getConversations();
     }, []);
 
+    const CanInitiateDM = (actor) => {
+
+        if (actor.associated.chat) {
+
+            if (actor.associated.chat.allowIncoming) {
+
+                if (actor.associated.chat.allowIncoming == "all") return true;
+                else if (actor.associated.chat.allowIncoming == "following" && actor.viewer.followedBy) return true;
+            }
+        }
+
+        return false;
+    }
+
+    const CallbackAdd = async (actor) => {
+
+        const creationSuccessful = await apiInterface.getRoom([apiInterface.getAuthorization().did, actor.did]);
+
+        console.log(creationSuccessful);
+    }
+
     const HeaderSide = (
         <div>
-            <Button text="New" conditional="add" />
+            <Button text="New" clicker={() => setShowAddModal([true, [CanInitiateDM, CallbackAdd]])} conditional="add" />
             <Link to="/settings#rooms.privacy"><ShieldCheckIcon size="16" /></Link>
         </div>)
 
