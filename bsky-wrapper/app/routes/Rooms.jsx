@@ -108,7 +108,7 @@ const Rooms = () => {
                 <div className={"Grid"}>
                     {(openConversations.convos && openConversations.convos.length > 0) ? openConversations.convos.map((conversation) => <RoomPill roomRecord={conversation} key={conversation.id} />) : (openConversations.error) ? <NoView message={(openConversations.error == "InvalidToken") ? "The App Password you used to login is not authorized to access your messages — please use a privileged one instead!" : "There was an issue accessing your "} /> : <></>}
                 </div> :
-                <NoView message="Thanks for being curious! I'm still working on this feature, but feel free to test things out in a local environment." />
+                <NoView message="Thanks for being curious! I'm still working on getting this implemented, but feel free to test things out in a local environment." />
             }
             
         </div>
