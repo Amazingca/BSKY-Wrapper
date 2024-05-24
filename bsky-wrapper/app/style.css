@@ -1103,6 +1103,12 @@ input[type="password"] {
     .LoginWith h2 {
         font-size: 1.25rem;
     }
+    .LoginWith.Authorized.NotEnabled:hover h2 {
+        display: unset;
+    }
+    .LoginWith.Authorized.NotEnabled:hover .Options {
+        display: none;
+    }
     .ProfileThemeIcon {
         display: none;
     }
