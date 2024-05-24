@@ -4,12 +4,12 @@ import {
     BellIcon,
     PersonIcon,
     ToolsIcon,
-    PaintbrushIcon
+    PaintbrushIcon,
+    CommentDiscussionIcon
 } from "@primer/octicons-react";
 import { useLocation, useNavigate, Link } from "@remix-run/react";
-import { useState, useEffect } from "react";
 
-const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, setNotificationCount}, setShowComposer}) => {
+const TaskBar = ({flags, authorized, apiInterface, notifications: {notificationCount, setNotificationCount}, messages: {messagesUnreadCount, setMessagesUnreadCount}, setShowComposer}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -46,7 +46,18 @@ const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, s
         if (currentNotificationCount && (currentNotificationCount > 0)) setNotificationCount((currentNotificationCount >= 1000) ? "999+" : currentNotificationCount);
     }
 
-    if (authorized == true) getNotificationCount();
+    const getUnreadMessagesCount = async () => {
+
+        const messageUnreadCount = await apiInterface.getMessageUnreadCount();
+
+        if (messageUnreadCount && (messageUnreadCount > 0)) setMessagesUnreadCount((messageUnreadCount >= 1000) ? "999+" : messageUnreadCount);
+    }
+
+    if (authorized == true && flags.getGate("ENABLED_ROOMS")) {
+        
+        getNotificationCount();
+        getUnreadMessagesCount();
+    }
 
     return (
         <div className={"TaskBar"}>
@@ -56,6 +67,11 @@ const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, s
             {(authorized) && (
                 <Link to="/notifications">
                     <ActionItem Icon={BellIcon} description="Notifications" mainColor="--action-item-secondary" status={notificationCount} />
+                </Link>
+            )}
+            {(authorized && flags.getGate("ENABLED_ROOMS")) && (
+                <Link to="/rooms">
+                    <ActionItem Icon={CommentDiscussionIcon} description="Rooms" mainColor="--action-item-secondary" status={messagesUnreadCount} />
                 </Link>
             )}
             {(authorized) && (

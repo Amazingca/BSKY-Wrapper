@@ -11,12 +11,14 @@ import FooterBar from "./components/footerbar/FooterBar";
 import { BeakerIcon } from "@primer/octicons-react";
 import Locale from "./infra/Locale.js";
 import Api from "./infra/Api.mjs";
+import Flags from "./infra/Flags.js";
 import Themes from "./infra/Themes.js";
 import stylesheet from "./style.css";
 import manifest from "./app.webmanifest";
 import CoverModal from "./components/cover/CoverModal.jsx";
 import Keybinds from "./components/cover/Keybinds.jsx";
 import Composer from "./components/cover/composer/Composer.jsx";
+import AddUser from "./components/cover/AddUser.jsx";
 
 export const meta = () => {
 
@@ -55,9 +57,11 @@ const App = () => {
     const [authorized, setAuthorized] = useState(false);
     const [authorization, setAuthorization] = useState(null);
     const [notificationCount, setNotificationCount] = useState(null);
+    const [messagesUnreadCount, setMessagesUnreadCount] = useState(null);
     const [operatingSystem, setOperatingSystem] = useState("");
     const [showKeybinds, setShowKeybinds] = useState(false);
     const [showComposer, setShowComposer] = useState([false, null]);
+    const [showAddModal, setShowAddModal] = useState([false, null]);
     const [preferNativeView, setPreferNativeView] = useState(false);
 
     const navigate = useNavigate();
@@ -119,7 +123,7 @@ const App = () => {
                     setShowKeybinds(false);
                 }
 
-                if (keypress.ctrlKey == true) {
+                if ((keypress.ctrlKey == true) && (keypress.altKey == true)) {
 
                     switch (keypress.key) {
                         case "h":
@@ -127,6 +131,9 @@ const App = () => {
                             break;
                         case "n":
                             if (varAuthorized[0]) navigate("/notifications");
+                            break;
+                        case "r":
+                            if (varAuthorized[0]) navigate("/rooms");
                             break;
                         case "p":
                             if (varAuthorized[0]) navigate(`/profile/${varAuthorized[1]}`);
@@ -148,8 +155,13 @@ const App = () => {
     // Overrides sanitization on returned data.
     apiInterface.setSanitize(false);
 
+    const flags = new Flags(process.env.NODE_ENV == "development");
+
+    flags.register("ENABLED_ROOMS", useState(false));
+
     const context = {
         localData: localData,
+        flags: flags,
         apiInterface: apiInterface,
         server: server,
         setServer: setServer,
@@ -157,6 +169,8 @@ const App = () => {
         setAuthorized: setAuthorized,
         setAuthorization: setAuthorization,
         setNotificationCount: setNotificationCount,
+        setMessagesUnreadCount: setMessagesUnreadCount,
+        setShowAddModal: setShowAddModal,
         setShowComposer: setShowComposer,
         preferNativeView: preferNativeView,
         setPreferNativeView: setPreferNativeView
@@ -193,9 +207,13 @@ const App = () => {
                             <div id="bodyCover">
                                 <CoverModal title={(!showComposer[1]) ? "Compose" : "Reply"} InnerModal={Composer} apiInterface={apiInterface} authorized={authorized} operatingSystem={operatingSystem} display={setShowComposer} to={(showComposer[1]) ? showComposer[1] : null} />
                             </div>
+                        ) : (showAddModal[0]) ? (
+                            <div id="bodyCover">
+                                <CoverModal title={"Add User"} InnerModal={AddUser} apiInterface={apiInterface} authorized={authorized} operatingSystem={operatingSystem} display={setShowAddModal} data={showAddModal[1]} />
+                            </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar tryAuthorize={tryAuthorize} localData={localData} display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} setShowComposer={setShowComposer} />
+                            <SideBar flags={flags} tryAuthorize={tryAuthorize} localData={localData} display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>

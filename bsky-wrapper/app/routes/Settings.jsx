@@ -1,7 +1,7 @@
 import Header from "../components/center/Header";
 import Input from "../components/center/Input";
 import { useOutletContext, useLocation } from "@remix-run/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Checkbox from "../components/interactable/Checkbox";
 
 export const meta = ({matches}) => {
@@ -25,18 +25,72 @@ export const meta = ({matches}) => {
 
 const Settings = () => {
 
-    const {localData, apiInterface, server, setServer, preferNativeView, setPreferNativeView} = useOutletContext();
+    const {localData, apiInterface, server, setServer, authorized, preferNativeView, setPreferNativeView} = useOutletContext();
 
     const location = useLocation();
     const serverInput = useRef(null);
+    const roomsPrivacyToggle = useRef(null);
 
     useEffect(() => {
 
         if (location.hash == "#server") {
             
             serverInput.current.focus();
+        } else if (location.hash == "rooms.privacy") {
+
+            roomsPrivacyToggle.current.focus();
+        }
+
+        if (authorized) {
+
+            const getPrefs = async () => {
+            
+                const actorPrefsForMessages = await apiInterface.listRecords("chat.bsky.actor.declaration");
+
+                for (const record of actorPrefsForMessages.records) {
+
+                    if (record.value.$type == "chat.bsky.actor.declaration") setMessageGatePrefs(record.value.allowIncoming, false);
+                }
+            }
+
+            getPrefs();
         }
     }, []);
+
+    const [messageGateAllowNone, setMessageGateAllowNone] = useState(false);
+    const [messageGateAllowFollows, setMessageGateAllowFollows] = useState(false);
+    const [messageGateAllowEveryone, setMessageGateAllowEveryone] = useState(false);
+
+    const setMessageGatePrefs = async (pref, update=true) => {
+
+        if (update == true) {
+
+            const updateSetting = await apiInterface.setPreferences("chat.bsky.actor.declaration", pref);
+
+            if (!updateSetting.uri) return;
+        }
+
+        const setAllFalse = () => {
+
+            setMessageGateAllowNone(false);
+            setMessageGateAllowFollows(false);
+            setMessageGateAllowEveryone(false);
+        }
+
+        if (pref == "none") {
+
+            setAllFalse();
+            setMessageGateAllowNone(true);
+        } else if (pref == "following") {
+
+            setAllFalse();
+            setMessageGateAllowFollows(true);
+        } else if (pref == "all") {
+
+            setAllFalse();
+            setMessageGateAllowEveryone(true);
+        }
+    }
 
     const toSetServer = (server) => {
 
@@ -63,6 +117,24 @@ const Settings = () => {
                     <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
                         <Checkbox checked={preferNativeView} setChecked={toSetTogglePreferNativeView} />
                         <p>Prefer rendering through native AT Proto view</p>
+                    </div>
+                </div>
+                <div>
+                    <h2 style={{color: "var(--header-primary"}}>Rooms</h2>
+                    <h3 ref={roomsPrivacyToggle}>Allow messages from</h3>
+                    <div style={{display: "flex", flexDirection: "column", gap: "0.75rem"}}>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={messageGateAllowNone} setChecked={setMessageGatePrefs} setCheckedType="none" />
+                            <p>No one</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={messageGateAllowFollows} setChecked={setMessageGatePrefs} setCheckedType="following" />
+                            <p>Follows</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={messageGateAllowEveryone} setChecked={setMessageGatePrefs} setCheckedType="all" />
+                            <p>Everyone</p>
+                        </div>
                     </div>
                 </div>
             </div>
