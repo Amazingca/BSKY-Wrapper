@@ -68,31 +68,36 @@ const App = () => {
 
     var varAuthorized = [false, null];
 
+    const tryAuthorize = async () => {
+
+        setLoad(false);
+
+        const successfulAuthorization = await apiInterface.authorize("refresh", localData.getPrimaryUser());
+
+        if (successfulAuthorization == true) {
+
+            setAuthorized(true);
+            varAuthorized = [true, apiInterface.getAuthorization().handle];
+            setAuthorization(apiInterface.getAuthorization());
+        } else {
+
+            console.log("Removing user:", localData.getPrimaryUser());
+
+            localData.removeUser(localData.getPrimaryUser());
+
+            if (Object.keys(localData.getPrimaryUser()).length > 0) tryAuthorize();
+            else location.reload();
+        }
+
+        setLoad(true);
+    }
+
     useEffect(() => {
 
         setServer(localData.getServer());
         setPreferNativeView(localData.getPreferNativeView());
 
         if (Object.keys(localData.getPrimaryUser()).length > 0) {
-
-            const tryAuthorize = async () => {
-
-                const successfulAuthorization = await apiInterface.authorize("refresh", localData.getPrimaryUser());
-
-                if (successfulAuthorization == true) {
-
-                    setAuthorized(true);
-                    varAuthorized = [true, apiInterface.getAuthorization().handle];
-                    setAuthorization(apiInterface.getAuthorization());
-                } else {
-
-                    console.log("Removing user:", localData.getPrimaryUser());
-
-                    //localData.removeUser(localData.getPrimaryUser().did);
-                }
-
-                setLoad(true);
-            }
 
             tryAuthorize();
         } else {
@@ -208,7 +213,7 @@ const App = () => {
                             </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar flags={flags} display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
+                            <SideBar flags={flags} tryAuthorize={tryAuthorize} localData={localData} display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>
