@@ -8,9 +8,8 @@ import {
     CommentDiscussionIcon
 } from "@primer/octicons-react";
 import { useLocation, useNavigate, Link } from "@remix-run/react";
-import { useState, useEffect } from "react";
 
-const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, setNotificationCount}, messages: {messagesUnreadCount, setMessagesUnreadCount}, setShowComposer}) => {
+const TaskBar = ({flags, authorized, apiInterface, notifications: {notificationCount, setNotificationCount}, messages: {messagesUnreadCount, setMessagesUnreadCount}, setShowComposer}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -54,7 +53,7 @@ const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, s
         if (messageUnreadCount && (messageUnreadCount > 0)) setMessagesUnreadCount((messageUnreadCount >= 1000) ? "999+" : messageUnreadCount);
     }
 
-    if (authorized == true) {
+    if (authorized == true && flags.getGate("ENABLED_ROOMS")) {
         
         getNotificationCount();
         getUnreadMessagesCount();
@@ -70,7 +69,7 @@ const TaskBar = ({authorized, apiInterface, notifications: {notificationCount, s
                     <ActionItem Icon={BellIcon} description="Notifications" mainColor="--action-item-secondary" status={notificationCount} />
                 </Link>
             )}
-            {(authorized) && (
+            {(authorized && flags.getGate("ENABLED_ROOMS")) && (
                 <Link to="/rooms">
                     <ActionItem Icon={CommentDiscussionIcon} description="Rooms" mainColor="--action-item-secondary" status={messagesUnreadCount} />
                 </Link>

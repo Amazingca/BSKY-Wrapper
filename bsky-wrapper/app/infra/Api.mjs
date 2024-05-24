@@ -8,7 +8,7 @@ export default class Api {
     // Default non-authenticated feed.
     defaultFeedUri = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot";
 
-    // Public Bluesky API node.
+    // Public Bluesky AppView.
     publicBlueskyApi = "https://api.bsky.app";
 
     // Message service proxy.
@@ -1027,7 +1027,7 @@ export default class Api {
 
         var count = 0;
 
-        for (const room of messagesOpen.convos) {
+        if (messagesOpen.convos) for (const room of messagesOpen.convos) {
 
             count += room.unreadCount;
         }
@@ -1056,7 +1056,7 @@ export default class Api {
 
             const getRecords = await fetch(`${this.getPreferredDataServer()}/xrpc/chat.bsky.convo.listConvos?limit=${this.recordLimit}${(cursor) ? "&cursor=" + cursor : ""}`, requestData).then(r => r.json());
 
-            if (getRecords.convos) {
+            if (getRecords.convos || getRecords.error == "InvalidToken") {
 
                 return getRecords;
             } else {

@@ -11,6 +11,7 @@ import FooterBar from "./components/footerbar/FooterBar";
 import { BeakerIcon } from "@primer/octicons-react";
 import Locale from "./infra/Locale.js";
 import Api from "./infra/Api.mjs";
+import Flags from "./infra/Flags.js";
 import Themes from "./infra/Themes.js";
 import stylesheet from "./style.css";
 import manifest from "./app.webmanifest";
@@ -149,8 +150,13 @@ const App = () => {
     // Overrides sanitization on returned data.
     apiInterface.setSanitize(false);
 
+    const flags = new Flags(process.env.NODE_ENV == "development");
+
+    flags.register("ENABLED_ROOMS", useState(false));
+
     const context = {
         localData: localData,
+        flags: flags,
         apiInterface: apiInterface,
         server: server,
         setServer: setServer,
@@ -202,7 +208,7 @@ const App = () => {
                             </div>
                         ) : (<></>)}
                         <div id="main" className={(process.env.NODE_ENV == "development") && "hasDevBanner"}>
-                            <SideBar display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
+                            <SideBar flags={flags} display={display} authorized={authorized} apiInterface={apiInterface} notifications={{notificationCount: notificationCount, setNotificationCount: setNotificationCount}} messages={{messagesUnreadCount: messagesUnreadCount, setMessagesUnreadCount: setMessagesUnreadCount}} setShowComposer={setShowComposer} />
                             <Outlet context={context} />
                             <FooterBar />
                         </div>
