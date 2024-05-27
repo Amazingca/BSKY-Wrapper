@@ -2,11 +2,13 @@ import { useEffect } from "react";
 
 export default class Themes {
     
-    constructor(localData, theme, setTheme) {
+    constructor(localData, theme, setTheme, colorway, setColorway) {
 
         this.localData = localData;
         this.theme = theme;
         this.setTheme = setTheme;
+        this.colorway = colorway;
+        this.setColorway = setColorway;
 
         useEffect(() => {
             
@@ -25,6 +27,11 @@ export default class Themes {
         } else {
 
             this.auto(true);
+        }
+
+        if (this.localData.getColorway()) {
+
+            this.setColorway(this.localData.getColorway());
         }
     }
 
@@ -72,5 +79,11 @@ export default class Themes {
     #saveTheme = (newTheme) => {
 
         this.localData.saveTheme(newTheme);
+    }
+
+    updateColorway = (newColorway) => {
+
+        this.setColorway(newColorway);
+        this.localData.saveColorway(newColorway);
     }
 }

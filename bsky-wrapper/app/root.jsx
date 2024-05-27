@@ -53,6 +53,7 @@ const App = () => {
     const [load, setLoad] = useState(false);
 
     const [theme, setTheme] = useState("light");
+    const [colorway, setColorway] = useState("blue");
     const [server, setServer] = useState("https://bsky.social");
     const [authorized, setAuthorized] = useState(false);
     const [authorization, setAuthorization] = useState(null);
@@ -158,12 +159,17 @@ const App = () => {
     const flags = new Flags(process.env.NODE_ENV == "development");
 
     flags.register("ENABLED_ROOMS", useState(false));
+    flags.register("ENABLED_COLORWAYS", useState(false));
+
+    const display = new Themes(localData, theme, setTheme, colorway, setColorway);
 
     const context = {
+        display: display,
         localData: localData,
         flags: flags,
         apiInterface: apiInterface,
         server: server,
+        colorway: colorway,
         setServer: setServer,
         authorized: authorized,
         setAuthorized: setAuthorized,
@@ -175,8 +181,6 @@ const App = () => {
         preferNativeView: preferNativeView,
         setPreferNativeView: setPreferNativeView
     };
-
-    const display = new Themes(localData, theme, setTheme);
 
     return (
         <html>
@@ -195,7 +199,7 @@ const App = () => {
                 <Meta />
                 <Links />
             </head>
-            <body className={theme} id={(showKeybinds) ? "bodyLocked" : ""}>
+            <body className={theme + ((flags.getGate("ENABLED_COLORWAYS")) ? " " + colorway : "")} id={(showKeybinds) ? "bodyLocked" : ""}>
                 {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                 {(load) && (
                     <>

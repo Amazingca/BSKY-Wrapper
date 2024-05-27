@@ -25,7 +25,7 @@ export const meta = ({matches}) => {
 
 const Settings = () => {
 
-    const {localData, apiInterface, server, setServer, authorized, preferNativeView, setPreferNativeView} = useOutletContext();
+    const {display, localData, flags, apiInterface, server, colorway, setServer, authorized, preferNativeView, setPreferNativeView} = useOutletContext();
 
     const location = useLocation();
     const serverInput = useRef(null);
@@ -40,6 +40,8 @@ const Settings = () => {
 
             roomsPrivacyToggle.current.focus();
         }
+
+        setColorway(colorway);
 
         if (authorized) {
 
@@ -104,6 +106,61 @@ const Settings = () => {
         localData.setPreferNativeView(preferNativeView);
     }
 
+    const [blueColorway, enableBlueColorway] = useState(false);
+    const [greenColorway, enableGreenColorway] = useState(false);
+    const [yellowColorway, enableYellowColorway] = useState(false);
+    const [orangeColorway, enableOrangeColorway] = useState(false);
+    const [redColorway, enableRedColorway] = useState(false);
+    const [purpleColorway, enablePurpleColorway] = useState(false);
+    const [lavenderColorway, enableLavenderColorway] = useState(false);
+
+    const resetAllColorways = () => {
+
+        enableBlueColorway(false);
+        enableGreenColorway(false);
+        enableYellowColorway(false);
+        enableOrangeColorway(false);
+        enableRedColorway(false);
+        enablePurpleColorway(false);
+        enableLavenderColorway(false);
+    }
+
+    const setColorway = (pref) => {
+
+        resetAllColorways();
+
+        switch (pref) {
+            case "blue":
+                enableBlueColorway(true);
+                display.updateColorway("blue");
+                break;
+            case "green":
+                enableGreenColorway(true);
+                display.updateColorway("green");
+                break;
+            case "yellow":
+                enableYellowColorway(true);
+                display.updateColorway("yellow");
+                break;
+            case "orange":
+                enableOrangeColorway(true);
+                display.updateColorway("orange");
+                break;
+            case "red":
+                enableRedColorway(true);
+                display.updateColorway("red");
+                break;
+            case "purple":
+                enablePurpleColorway(true);
+                display.updateColorway("purple");
+                break;
+            case "lavender":
+                enableLavenderColorway(true);
+                display.updateColorway("lavender");
+                break;
+        }
+    }
+
     return (
         <div className={"Settings"}>
             <Header title="Settings" />
@@ -137,6 +194,40 @@ const Settings = () => {
                         </div>
                     </div>
                 </div>
+                {(flags.getGate("ENABLED_COLORWAYS")) && <div>
+                    <h2 style={{color: "var(--header-primary"}}>Display</h2>
+                    <h3>Colorways</h3>
+                    <div style={{display: "flex", flexDirection: "column", gap: "0.75rem"}}>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={blueColorway} setChecked={setColorway} setCheckedType="blue" color="var(--colorway-blue-primary)" />
+                            <p>Blue</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={greenColorway} setChecked={setColorway} setCheckedType="green" color="var(--colorway-green-primary)" />
+                            <p>Green</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={yellowColorway} setChecked={setColorway} setCheckedType="yellow" color="var(--colorway-yellow-primary)" />
+                            <p>Yellow</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={orangeColorway} setChecked={setColorway} setCheckedType="orange" color="var(--colorway-orange-primary)" />
+                            <p>Orange</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={redColorway} setChecked={setColorway} setCheckedType="red" color="var(--colorway-red-primary)" />
+                            <p>Red</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={purpleColorway} setChecked={setColorway} setCheckedType="purple" color="var(--colorway-purple-primary)" />
+                            <p>Purple</p>
+                        </div>
+                        <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                            <Checkbox checked={lavenderColorway} setChecked={setColorway} setCheckedType="lavender" color="var(--colorway-lavender-primary)" />
+                            <p>Lavender</p>
+                        </div>
+                    </div>
+                </div>}
             </div>
         </div>
     )
