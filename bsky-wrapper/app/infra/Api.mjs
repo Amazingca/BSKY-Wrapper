@@ -1152,6 +1152,36 @@ export default class Api {
         }
     }
 
+    getRoomFromId = async (convoId) => {
+
+        try {
+
+            if (this.authorization == null) throw new Error("Object instance is not authorized to message with any account!");
+
+            const requestData = {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${await this.getAccessJwt()}`,
+                    "Atproto-Proxy": this.messageServiceProxy
+                }
+            }
+
+            const roomDetails = await fetch(`${this.getPreferredDataServer()}/xrpc/chat.bsky.convo.getConvo?convoId=${convoId}`, requestData).then(r => r.json());
+
+            if (roomDetails?.convo) {
+
+                return roomDetails;
+            } else {
+
+                throw new Error("Could not retrieve room details! ~>", roomDetails);
+            }
+        } catch (e) {
+
+            console.warn(e);
+            return null;
+        }
+    }
+
     /**
      * Getter for the current unread notifications for a user.
      * @returns Notifications count for the user.

@@ -364,7 +364,7 @@ p.DisplayName a, p.Handle a, footer a, h4 a {
     gap: 1rem;
     overflow-y: clip;
 }
-.Feed, .Tag, .Notifications, .Rooms, .UserProfile, .UserPost {
+.Feed, .Tag, .Notifications, .Rooms, .Room, .UserProfile, .UserPost {
     gap: 2rem;
 }
 .SideBar-Heading {
@@ -628,7 +628,7 @@ body.dark .LoginWith h2 {
     flex-direction: column;
     gap: 0.5rem;
 }
-.Post, .Profile, .RoomPill {
+.Post, .Profile, .RoomPill, .RoomHeader {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -678,6 +678,11 @@ body.dark .LoginWith h2 {
     height: 3rem;
     border-radius: 50%;
 }
+.RoomHeader .Info img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
 .Post .Author .Avatar.Regular, .FeedRecord .Headers .Avatar.Regular {
     width: 2.5rem;
     height: 2.5rem;
@@ -690,6 +695,16 @@ body.dark .LoginWith h2 {
 .Post .Author, .Profile .Details p, .InlinePost .InlineAuthor, .FeedRecord .Headers {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.RoomHeader {
+    margin-top: 2rem;
+    justify-content: center;
+}
+.RoomHeader .Info {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 1rem;
 }
 .ImageGrid {
     display: grid;
@@ -1043,7 +1058,7 @@ input[type="password"] {
     .LoginWith {
         display: none;
     }
-    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .UserProfile, .Room, .UserPost, .Login, .Settings, .Unsupported {
         max-width: 28rem;
     }
     .FooterBar {
@@ -1065,7 +1080,7 @@ input[type="password"] {
     #main {
         flex-direction: column-reverse;
     }
-    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .Rooms, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
+    .About, .Acknowledgments, .Feed, .Tag, .Notifications, .Rooms, .Room, .UserProfile, .UserPost, .Login, .Settings, .Unsupported {
         max-width: unset;
         padding: 1rem;
     }
@@ -1123,7 +1138,7 @@ input[type="password"] {
         margin-left: auto;
         margin-right: 1rem;
     }
-    .Profile {
+    .Profile, .RoomHeader {
         margin-top: 0rem;
     }
     .Replies {
