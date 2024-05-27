@@ -17,14 +17,40 @@
 body {
     margin: 0rem;
 
-    --accent-primary: #0099FFFF;
-    --accent-secondary: #3b82f6FF;
-    --accent-tertiary: #0099ff26;
+    --colorway-blue-primary: #0099FFFF;
+    --colorway-blue-secondary: #3b82f6FF;
+    --colorway-blue-tertiary: #0099ff26;
 
-    --primary-accent: linear-gradient(to bottom right, #0099ffAA, #3b82f6FF);
+    --accent-primary: var(--colorway-blue-primary);
+    --accent-secondary: var(--colorway-blue-secondary);
+    --accent-tertiary: var(--colorway-blue-tertiary);
+
+    --colorway-green-primary: green;
+    --colorway-green-secondary: darkGreen;
+    --colorway-green-tertiary: rgba(2, 59, 2, calc(26/255));
+    
+    --colorway-yellow-primary: #ebeb12;
+    --colorway-yellow-secondary: #b5b51a;
+    --colorway-yellow-tertiary: rgba(113, 113, 0, calc(26/255));
+    
+    --colorway-orange-primary: orange;
+    --colorway-orange-secondary: #d56f07;
+    --colorway-orange-tertiary: rgba(175, 97, 2, calc(26/255));
+    
+    --colorway-red-primary: red;
+    --colorway-red-secondary: #b90606;
+    --colorway-red-tertiary: rgba(87, 0, 0, calc(26/255));
+    
+    --colorway-purple-primary: #b908b9;
+    --colorway-purple-secondary: #850a85;
+    --colorway-purple-tertiary: rgba(71, 0, 71, calc(26/255));
+
+    --colorway-lavender-primary: rgb(192, 168, 248);
+    --colorway-lavender-secondary: #897799;
+    --colorway-lavender-tertiary: rgba(91, 83, 109, calc(26/255));
+
+    --primary-accent: linear-gradient(to bottom right, var(--accent-primary), var(--accent-secondary));
     --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
-
-    --accent-primary: #0099FF;
 
     --sidebar-background: #1a1a1a;
     --sidebar-background-translucent: #1a1a1acf;
@@ -48,8 +74,8 @@ body {
     --header-primary: #1a1a1a;
     --header-accent: #3a3a3a;
 
-    --input-box-accent: #0099ff54;
-    --input-box-focus: #0099FF99;
+    --input-box-accent: #00000054; /* Saved: 54-hex affix */
+    --input-box-focus: #00000070; /* NOTE: There's some advanced visual logic to get this to work with colorways. Will keep monotone at the moment. Saved: 99-hex affix */
 
     --input-name: #fff;
     --input-accent: linear-gradient(to top, var(--accent-primary) 30%, var(--accent-secondary));
@@ -110,6 +136,48 @@ body.dark {
     --metric-primary: #fff;
 
     --footer-primary: #fff;
+}
+body.green {
+    --accent-primary: var(--colorway-green-primary);
+    --accent-secondary: var(--colorway-green-secondary);
+    --accent-tertiary: var(--colorway-green-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #0a2108, #172b15);
+}
+body.yellow {
+    --accent-primary: var(--colorway-yellow-primary);
+    --accent-secondary: var(--colorway-yellow-secondary);
+    --accent-tertiary: var(--colorway-yellow-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #312D22, #23230D);
+}
+body.orange {
+    --accent-primary: var(--colorway-orange-primary);
+    --accent-secondary: var(--colorway-orange-secondary);
+    --accent-tertiary: var(--colorway-orange-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #251709, #2a1d15);
+}
+body.red {
+    --accent-primary: var(--colorway-red-primary);
+    --accent-secondary: var(--colorway-red-secondary);
+    --accent-tertiary: var(--colorway-red-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #280a0a, #2f1717);
+}
+body.purple {
+    --accent-primary: var(--colorway-purple-primary);
+    --accent-secondary: var(--colorway-purple-secondary);
+    --accent-tertiary: var(--colorway-purple-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #210b2b, #2c1831);
+}
+body.lavender {
+    --accent-primary: var(--colorway-lavender-primary);
+    --accent-secondary: var(--colorway-lavender-secondary);
+    --accent-tertiary: var(--colorway-lavender-tertiary);
+
+    --secondary-accent: linear-gradient(to bottom right, #2C262E, #302034);
 }
 #main {
     display: flex;
@@ -586,7 +654,7 @@ body.dark .LoginWith h2 {
     padding-left: 1rem;
     padding-right: 1rem;
     outline: none;
-    box-shadow: 0 0 20px 4px var(--input-box-accent);
+    /* box-shadow: 0 0 20px 4px var(--input-box-accent); NOTE: Might add later if/when colorways are supported for accents. */
     transition: var(--transition-main);
 }
 .InputEntry:focus {
@@ -1004,7 +1072,7 @@ input[type="password"] {
 .Checkbox:active {
     box-shadow: 0 0 6px 1px var(--input-box-focus);
 }
-.Checkbox, .Checkbox div svg {
+.Checkbox {
     transition: var(--transition-main);
     fill: var(--accent-primary);
     stroke: var(--accent-primary);

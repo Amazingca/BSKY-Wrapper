@@ -52,6 +52,17 @@ export default class Locale {
         this.push();
     }
 
+    getColorway = () => {
+
+        return this.locale.colorway;
+    }
+
+    saveColorway = (colorway) => {
+
+        this.locale.colorway = colorway;
+        this.push();
+    }
+
     getUsers = () => {
 
         return (this.locale.users) ? this.locale.users : [];
