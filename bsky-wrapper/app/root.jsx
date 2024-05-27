@@ -199,7 +199,7 @@ const App = () => {
                 <Meta />
                 <Links />
             </head>
-            <body className={theme + (flags.getGate("ENABLED_COLORWAYS")) ? " " + colorway : ""} id={(showKeybinds) ? "bodyLocked" : ""}>
+            <body className={theme + ((flags.getGate("ENABLED_COLORWAYS")) ? " " + colorway : "")} id={(showKeybinds) ? "bodyLocked" : ""}>
                 {process.env.NODE_ENV == "development" && <div className="devBanner"><BeakerIcon size={16} />You are currently running the dev environment for the Blue Wrapper.</div>}
                 {(load) && (
                     <>

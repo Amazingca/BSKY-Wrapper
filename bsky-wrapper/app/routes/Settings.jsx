@@ -129,8 +129,6 @@ const Settings = () => {
 
         resetAllColorways();
 
-        display
-
         switch (pref) {
             case "blue":
                 enableBlueColorway(true);
