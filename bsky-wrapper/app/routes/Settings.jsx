@@ -176,7 +176,7 @@ const Settings = () => {
                         <p>Prefer rendering through native AT Proto view</p>
                     </div>
                 </div>
-                <div>
+                {(authorized == true) && <div>
                     <h2 style={{color: "var(--header-primary"}}>Rooms</h2>
                     <h3 ref={roomsPrivacyToggle}>Allow messages from</h3>
                     <div style={{display: "flex", flexDirection: "column", gap: "0.75rem"}}>
@@ -193,7 +193,7 @@ const Settings = () => {
                             <p>Everyone</p>
                         </div>
                     </div>
-                </div>
+                </div>}
                 {(flags.getGate("ENABLED_COLORWAYS")) && <div>
                     <h2 style={{color: "var(--header-primary"}}>Display</h2>
                     <h3>Colorways</h3>
