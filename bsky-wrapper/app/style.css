@@ -30,7 +30,7 @@ body {
     --colorway-green-tertiary: rgba(2, 59, 2, calc(26/255));
     
     --colorway-yellow-primary: #ebeb12;
-    --colorway-yellow-secondary: #b5b51a;
+    --colorway-yellow-secondary: #c9c90d;
     --colorway-yellow-tertiary: rgba(113, 113, 0, calc(26/255));
     
     --colorway-orange-primary: orange;
@@ -46,7 +46,7 @@ body {
     --colorway-purple-tertiary: rgba(71, 0, 71, calc(26/255));
 
     --colorway-lavender-primary: rgb(192, 168, 248);
-    --colorway-lavender-secondary: #897799;
+    --colorway-lavender-secondary: #978ad9;
     --colorway-lavender-tertiary: rgba(91, 83, 109, calc(26/255));
 
     --primary-accent: linear-gradient(to bottom right, var(--accent-primary), var(--accent-secondary));
@@ -92,7 +92,7 @@ body {
     --record-metrics-text: #000;
 
     --context-primary: var(--accent-primary);
-    --context-background: #38a4f744;
+    --context-background: var(--accent-tertiary); /* #38a4f744 */;
 
     --metric-primary: #222;
     --metric-accent: #99999922;
@@ -559,6 +559,10 @@ body.dark .ComposeIcon, .ActionItem:hover .ComposeIcon, .ActionItem:active .Comp
 .LoginWith .Options svg {
     width: 2rem;
     height: 2rem;
+    fill: var(--sidebar-background);
+}
+body.dark .LoginWith .Options svg {
+    fill: var(--accent-primary);
 }
 a.LoginWith {
     text-decoration: none;

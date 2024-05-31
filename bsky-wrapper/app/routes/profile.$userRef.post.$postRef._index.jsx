@@ -14,8 +14,8 @@ export const loader = async ({request, params}) => {
 
     return json({
         userRef: params.userRef,
-        userObj: await apiInterface.getProfile(params.userRef),
-        postObj: await apiInterface.getPostThread({type: (params.userRef.includes("did:")) ? "did": "handle", ref: params.userRef}, params.postRef),
+        userObj: await apiInterface.getProfile(params.userRef) || {},
+        postObj: await apiInterface.getPostThread({type: (params.userRef.includes("did:")) ? "did": "handle", ref: params.userRef}, params.postRef) || {},
         urlParams: (urlParams && urlParams.get("prefersImage")) ? urlParams.get("prefersImage") : null
     });
 }
@@ -24,7 +24,7 @@ export const meta = ({data, matches}) => {
 
     const affix = matches.filter(item => item.id == "root")[0].meta.filter(item => item.name == "titleAffix")[0].content;
 
-    var displayName = (data.userObj.displayName) ? data.userObj.displayName + " ": "";
+    var displayName = (data.userObj.displayName) ? data.userObj.displayName + " " : "";
     var handle = (displayName != "") ? `(${(!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef})` : (!data.userRef.includes("did:")) ? "@" + data.userRef : data.userRef;
 
     //console.log(data.postObj.thread.post.record.text.replaceAll("&quot;", "\""));
@@ -39,13 +39,13 @@ export const meta = ({data, matches}) => {
         },
         {
             property: "og:description",
-            content: ((Object.keys(data.userObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text.replaceAll("&quot;", "\"") : ""
+            content: ((Object.keys(data.postObj).length > 0) && (data.postObj.thread.post.record.text != "")) ? data.postObj.thread.post.record.text.replaceAll("&quot;", "\"") : ""
         },
         {
             property: "og:image",
-            content: (Object.keys(data.userObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[(data.urlParams) ? data.urlParams - 1 : 0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
+            content: (Object.keys(data.postObj).length > 0) ? (data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? data.postObj.thread.post.embed.images[(data.urlParams) ? data.urlParams - 1 : 0].fullsize : (data.userObj.avatar) ? data.userObj.avatar : "" : ""
         },
-        ...((Object.keys(data.userObj).length > 0) && data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
+        ...((Object.keys(data.postObj).length > 0) && data.postObj.thread.post.embed && (data.postObj.thread.post.embed.$type == "app.bsky.embed.images#view")) ? [{
             property: "twitter:card",
             content: "summary_large_image"
         }] : []

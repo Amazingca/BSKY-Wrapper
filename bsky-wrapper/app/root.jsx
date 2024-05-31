@@ -159,7 +159,7 @@ const App = () => {
     const flags = new Flags(process.env.NODE_ENV == "development");
 
     flags.register("ENABLED_ROOMS", useState(false));
-    flags.register("ENABLED_COLORWAYS", useState(false));
+    flags.register("ENABLED_COLORWAYS", useState(true));
 
     const display = new Themes(localData, theme, setTheme, colorway, setColorway);
 
