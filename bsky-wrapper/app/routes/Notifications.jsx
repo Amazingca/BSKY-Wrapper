@@ -3,6 +3,7 @@ import Notification from "../components/center/Notification";
 import { useOutletContext } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import Button from "../components/interactable/Button";
+import { CheckIcon } from "@primer/octicons-react";
 
 export const meta = ({matches}) => {
 
@@ -94,7 +95,7 @@ const Notifications = () => {
 
     return (
         <div className={"Notifications"}>
-            <Header title="Notifications" side={<Button text="Mark as read until" clicker={markAsRead} conditional="datetime" conditionalData={(notifications.notifications.length > 0) && {max: new Date().toISOString().replace("Z", "")}} />} />
+            <Header title="Notifications" side={<Button text={(<CheckIcon />)} clicker={markAsRead} conditional="datetime" conditionalData={(notifications.notifications.length > 0) && {max: new Date().toISOString().replace("Z", "")}} />} />
             {(notifications) && notifications.notifications.map(notification => <Notification record={notification} key={notification.uri + "/target/" + index++} />)}
         </div>
     )

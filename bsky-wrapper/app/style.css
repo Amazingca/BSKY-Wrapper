@@ -27,27 +27,27 @@ body {
 
     --colorway-green-primary: green;
     --colorway-green-secondary: darkGreen;
-    --colorway-green-tertiary: rgba(2, 59, 2, calc(26/255));
+    --colorway-green-tertiary: rgba(0, 128, 0, calc(26/255));
     
     --colorway-yellow-primary: #ebeb12;
     --colorway-yellow-secondary: #c9c90d;
-    --colorway-yellow-tertiary: rgba(113, 113, 0, calc(26/255));
+    --colorway-yellow-tertiary: #ebeb1226;
     
     --colorway-orange-primary: orange;
     --colorway-orange-secondary: #d56f07;
-    --colorway-orange-tertiary: rgba(175, 97, 2, calc(26/255));
+    --colorway-orange-tertiary: rgba(255, 165, 0, calc(26/255));
     
     --colorway-red-primary: red;
     --colorway-red-secondary: #b90606;
-    --colorway-red-tertiary: rgba(87, 0, 0, calc(26/255));
+    --colorway-red-tertiary: rgba(255, 0, 0, calc(26/255));
     
     --colorway-purple-primary: #b908b9;
     --colorway-purple-secondary: #850a85;
-    --colorway-purple-tertiary: rgba(71, 0, 71, calc(26/255));
+    --colorway-purple-tertiary: #b908b926;
 
     --colorway-lavender-primary: rgb(192, 168, 248);
     --colorway-lavender-secondary: #978ad9;
-    --colorway-lavender-tertiary: rgba(91, 83, 109, calc(26/255));
+    --colorway-lavender-tertiary: rgba(192, 168, 248, calc(26/255));
 
     --primary-accent: linear-gradient(to bottom right, var(--accent-primary), var(--accent-secondary));
     --secondary-accent: linear-gradient(to bottom right, #102D3EFF, #1C2A3CFF);
