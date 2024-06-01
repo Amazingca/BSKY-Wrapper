@@ -8,7 +8,8 @@ import {
     ArrowSwitchIcon,
     CommentIcon,
     KebabHorizontalIcon,
-    ReplyIcon
+    ReplyIcon,
+    HeartFillIcon
 } from "@primer/octicons-react";
 import Facets from "./Facets";
 import Embed from "./Embed";
@@ -89,7 +90,7 @@ const Post = ({record, apiInterface, authorized, focused, setShowComposer}) => {
                     <div className={"Metrics"}>
                         <MetricItem Icon={CommentIcon} onClick={replyToPost} fillColor="--metric-comment-primary" backgroundColor="--metric-comment-accent" metricData={record.post.replyCount} />
                         <MetricItem Icon={ArrowSwitchIcon} onClick={repostPost} fillColor="--metric-repost-primary" backgroundColor="--metric-repost-accent" metricData={record.post.repostCount} />
-                        <MetricItem Icon={HeartIcon} onClick={likePost} fillColor="--metric-like-primary" backgroundColor="--metric-like-accent" metricData={record.post.likeCount} />
+                        <MetricItem Icon={(record.post.viewer && record.post.viewer.like) ? HeartFillIcon : HeartIcon} onClick={likePost} fillColor="--metric-like-primary" backgroundColor={(record.post.viewer && record.post.viewer.like) ? "--metric-like-accent-darker" : "--metric-like-accent"} metricData={record.post.likeCount} />
                     </div>
                     <div className={"Options"}>
                         <MetricItem Icon={KebabHorizontalIcon} onClick={() => happeningSoon(true)} />
