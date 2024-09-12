@@ -55,6 +55,11 @@ const Embed = ({embed, apiInterface, authorized}) => {
                     ))}
                 </div>
             )}
+            {(embed.$type == "app.bsky.embed.video#view" && false) && (
+                <video title={embed.alt} onClick={() => window.open(embed.playlist)} controls>
+                    <source src={embed.playlist} type="application/x-mpegURL" />
+                </video>
+            )}
             {(embed.$type == "app.bsky.embed.external#view") && (
                 <a href={embed.external.uri} target="_blank" className={"ExternalLink"}>
                     {(embed.external.thumb) && <img src={embed.external.thumb} draggable="false" />}

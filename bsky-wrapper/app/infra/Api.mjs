@@ -15,7 +15,10 @@ export default class Api {
     messageServiceProxy = "did:web:api.bsky.chat#bsky_chat";
 
     // Limit for valid blob (in bytes) to upload to a repo. Any file must be under this limit to be included within a record.
-    static blobSizeLimit = 976560;
+    static blobSizeLimit = {
+        "image": 1000000,
+        "video": 50000000
+    }
 
     // Supported embed inheritance of app.bsky.embed.*
     // NOTE: Audio and video types are not referenced in the ATP lexicon, though are still valid blob types when uploading.

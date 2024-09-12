@@ -280,7 +280,7 @@ export default class Post {
                 var supported = true;
                 for (const item of this.getEmbed().data) {
                     
-                    if (item.blob.size > Api.blobSizeLimit) supported = false;
+                    if (item.blob.size > Api.blobSizeLimit[item.blob.mimeType.split("/")[0]]) supported = false;
                 }
                 if (supported == false) throw new Error("Embed data is over set limit");
                 
@@ -417,22 +417,37 @@ export default class Post {
             const embedData = this.getEmbed().data;
 
             embed.$type = "app.bsky.embed." + this.preppedEmbedType;
-            embed[this.preppedEmbedType] = [];
 
-            for (const item of embedData) {
+            if (this.preppedEmbedType == "image") {
 
-                embed[this.preppedEmbedType].push({
-                    "alt": (item.alt) ? item.alt : "",
-                    [item.blob.mimeType.split("/")[0]]: {
-                        "$type": "blob",
-                        "mimeType": item.blob.mimeType,
-                        "ref": {
-                            "$link": item.blob.ref.$link,
-                        },
-                        "size": item.blob.size
-                    }
-                })
+                embed[this.preppedEmbedType] = [];
+
+                for (const item of embedData) {
+
+                    embed[this.preppedEmbedType].push({
+                        "alt": (item.alt) ? item.alt : "",
+                        [item.blob.mimeType.split("/")[0]]: {
+                            "$type": "blob",
+                            "mimeType": item.blob.mimeType,
+                            "ref": {
+                                "$link": item.blob.ref.$link,
+                            },
+                            "size": item.blob.size
+                        }
+                    })
+                }
+            } else if (this.preppedEmbedType == "video") {
+
+                embed["video"] = {
+                    "$type": "blob",
+                    "mimeType": embedData[0].blob.mimeType,
+                    "ref": {
+                        "$link": embedData[0].blob.ref.$link,
+                    },
+                    "size": embedData[0].blob.size
+                }
             }
+            
         }
 
         var facets = [];

@@ -2,7 +2,7 @@ const Options = ({addMedia, postObj}) => {
 
     return (
         <div className={"Options"}>
-            <input type="file" accept="image/*" onChange={(e) => addMedia(e)} multiple/>
+            <input type="file" accept="image/*,video/*" onChange={(e) => addMedia(e)} multiple/>
         </div>
     )
 }
