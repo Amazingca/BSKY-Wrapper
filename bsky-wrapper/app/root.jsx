@@ -41,6 +41,10 @@ export const meta = () => {
         {
             name: "titleAffix",
             content: " – Blue Wrapper"
+        },
+        {
+            name: "robots",
+            content: "noindex,nofollow"
         }
     ]
 }
